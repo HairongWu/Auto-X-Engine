@@ -4,7 +4,11 @@ Auto-X Engine is an open source deep learning training/inference framework that 
 
 Auto-X Engine Server is an open source inference serving software that streamlines AI inferencing. It enables users to deploy AI models from Auto-X Engine. It supports inference across cloud, data center, edge and embedded devices on NVIDIA GPUs, x86 and ARM CPU, or AWS Inferentia. It also delivers optimized performance for many query types, including real time, batched, ensembles and audio/video streaming.
 
-Auto-X Engine Lite written in pure C is a library for deploying deep learning models in ultra-low power devices.
+The Auto-X Engine Lite is a deep learning inference engine designed for MCUs/CPUs. It is written entirely in C. Most of the codes are adapted from [ggml](https://github.com/ggerganov/ggml), [Paddle Lite](https://github.com/PaddlePaddle/Paddle-Lite),
+[OpenCV](https://github.com/opencv/opencv), [onnx2c](https://github.com/kraiskil/onnx2c) and [llama2.c](https://github.com/karpathy/llama2.c).
+
+This engine only supports the model structures described in this repo at this time. And these models are needed in the built-in solutions.
+
 
 
 ## Model Pool
@@ -12,16 +16,38 @@ Auto-X Engine Lite written in pure C is a library for deploying deep learning mo
 > **Note** The following models could be modified from the originial ones.
 > We also provide guidelines and running code to customize and retrain the following models using your own data.
 
-### Tiny Models for MCU (such as ESP32 and Arm Cortex-M)
+### Tiny Models for MCU (such as ESP32 and Arm Cortex-M) (Lite)
 
 
-### Medium Models for CPU (such as Arm Cortex-A and X86)
+### Medium Models for single CPU (such as Arm Cortex-A and X86) (Lite)
 
+1. Llama2 & Llama3
+   
+The demo resides in the 'demos' folder with a MSVS project. As to the model downloading and other details, please refer to the following table:
 
-### Large-scale Models for CPU/GPU servers
+| model | dim | n_layers | n_heads | n_kv_heads | max context length | parameters | val loss | download
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 260K | 64 | 5 | 8 | 4 | 512 | 260K | 1.297 | [stories260K](https://huggingface.co/karpathy/tinyllamas/tree/main/stories260K)
+| OG | 288 | 6 | 6 | 6 | 256 | 15M | 1.072 | [stories15M.bin](https://huggingface.co/karpathy/tinyllamas/resolve/main/stories15M.bin) |
+| 42M| 512 | 8 | 8 | 8 | 1024 | 42M | 0.847 | [stories42M.bin](https://huggingface.co/karpathy/tinyllamas/resolve/main/stories42M.bin) |
+| 110M| 768 | 12 | 12 | 12 | 1024 | 110M | 0.760 | [stories110M.bin](https://huggingface.co/karpathy/tinyllamas/resolve/main/stories110M.bin) |
+  
+2. Whisper
+
+Please refer to [here](https://github.com/ggerganov/whisper.cpp) for details.
+
+| Model  | Disk    | Mem     |
+| ------ | ------- | ------- |
+| tiny   | 75 MiB  | ~273 MB |
+| base   | 142 MiB | ~388 MB |
+| small  | 466 MiB | ~852 MB |
+
+### Large-scale Models for CPUs/GPUs (Server)
+
 
 
 ## Reference
 
 - [Triton Inference Server](https://github.com/triton-inference-server/server?tab=readme-ov-file)
 - [MNN](https://github.com/alibaba/MNN)
+- [onnx2c](https://github.com/kraiskil/onnx2c)
