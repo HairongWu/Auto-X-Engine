@@ -18,6 +18,9 @@ This engine only supports the model structures described in this repo at this ti
 
 ### Tiny Models for MCU (such as ESP32 and Arm Cortex-M) (Lite)
 
+- [picodet](https://github.com/PaddlePaddle/PaddleDetection/blob/release/2.7/configs/picodet/README_en.md)
+- [tinypose](https://github.com/PaddlePaddle/PaddleDetection/blob/release/2.7/configs/keypoint/tiny_pose/README_en.md)
+- [PaddleOCR Mobile](https://github.com/PaddlePaddle/PaddleOCR/blob/main/doc/doc_en/models_list_en.md)
 
 ### Medium Models for single CPU (such as Arm Cortex-A and X86) (Lite)
 
