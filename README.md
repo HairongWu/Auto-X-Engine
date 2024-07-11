@@ -4,14 +4,12 @@ Auto-X Engine is an open source deep learning training/inference framework that 
 
 Auto-X Engine Server is an open source inference serving software that streamlines AI inferencing. It enables users to deploy AI models from Auto-X Engine. It supports inference across cloud, data center, edge and embedded devices on NVIDIA GPUs, x86 and ARM CPU, or AWS Inferentia. It also delivers optimized performance for many query types, including real time, batched, ensembles and audio/video streaming.
 
-The Auto-X Engine Core is a deep learning compute library designed for MCUs/CPUs. It is written entirely in C and provides elementary compute operator for other parts of this repo. Most of the codes are adapted from [ggml](https://github.com/ggerganov/ggml), [Paddle Lite](https://github.com/PaddlePaddle/Paddle-Lite),
+The Auto-X Engine Core is a deep learning compute library designed for MCUs/CPUs. It is written entirely in C and provides elementary compute operators for other parts of this repo. Most of the codes are adapted from [ggml](https://github.com/ggerganov/ggml), [Paddle Lite](https://github.com/PaddlePaddle/Paddle-Lite),
 [OpenCV](https://github.com/opencv/opencv), [onnx2c](https://github.com/kraiskil/onnx2c) and [llama2.c](https://github.com/karpathy/llama2.c).
 
 The Auto-X Engine AIOS is a RTOS system based on NuttX with native AI supported by Auto-X Engine.
 
 This engine only supports the model structures described in this repo at this time. And these models are needed in the built-in solutions.
-
-
 
 ## Model Pool
 
