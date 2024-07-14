@@ -10,6 +10,9 @@ The Auto-X Engine Core is a deep learning compute library designed for MCUs/CPUs
 The Auto-X Engine AIOS is a RTOS system based on NuttX with native AI supported by Auto-X Engine.
 
 This engine only supports the model structures described in this repo at this time. And these models are needed in the built-in solutions.
+<div  align="center">
+  <img src="imgs/framework.png" width="600"/>
+</div>
 
 ## Model Pool
 
