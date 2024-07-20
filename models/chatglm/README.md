@@ -1,19 +1,9 @@
-# ChatGLM.cpp
-
-[![CMake](https://github.com/li-plus/chatglm.cpp/actions/workflows/cmake.yml/badge.svg)](https://github.com/li-plus/chatglm.cpp/actions/workflows/cmake.yml)
-[![Python package](https://github.com/li-plus/chatglm.cpp/actions/workflows/python-package.yml/badge.svg)](https://github.com/li-plus/chatglm.cpp/actions/workflows/python-package.yml)
-[![PyPI](https://img.shields.io/pypi/v/chatglm-cpp)](https://pypi.org/project/chatglm-cpp/)
-![Python](https://img.shields.io/pypi/pyversions/chatglm-cpp)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-
-C++ implementation of [ChatGLM-6B](https://github.com/THUDM/ChatGLM-6B), [ChatGLM2-6B](https://github.com/THUDM/ChatGLM2-6B), [ChatGLM3](https://github.com/THUDM/ChatGLM3) and [GLM-4](https://github.com/THUDM/GLM-4) for real-time chatting on your MacBook.
-
-![demo](docs/demo.gif)
+# ChatGLM
 
 ## Features
 
 Highlights:
-* Pure C++ implementation based on [ggml](https://github.com/ggerganov/ggml), working in the same way as [llama.cpp](https://github.com/ggerganov/llama.cpp).
+
 * Accelerated memory-efficient CPU inference with int4/int8 quantization, optimized KV cache and parallel computing.
 * P-Tuning v2 and LoRA finetuned models support.
 * Streaming generation with typewriter effect.
@@ -25,18 +15,6 @@ Support Matrix:
 * Models: [ChatGLM-6B](https://github.com/THUDM/ChatGLM-6B), [ChatGLM2-6B](https://github.com/THUDM/ChatGLM2-6B), [ChatGLM3](https://github.com/THUDM/ChatGLM3), [GLM-4](https://github.com/THUDM/GLM-4), [CodeGeeX2](https://github.com/THUDM/CodeGeeX2)
 
 ## Getting Started
-
-**Preparation**
-
-Clone the ChatGLM.cpp repository into your local machine:
-```sh
-git clone --recursive https://github.com/li-plus/chatglm.cpp.git && cd chatglm.cpp
-```
-
-If you forgot the `--recursive` flag when cloning the repository, run the following command in the `chatglm.cpp` folder:
-```sh
-git submodule update --init --recursive
-```
 
 **Quantize Model**
 
@@ -559,35 +537,3 @@ Download and unzip the dataset from [link](https://s3.amazonaws.com/research.met
 [1]: https://huggingface.co/THUDM/chatglm3-6b-base
 [2]: https://huggingface.co/THUDM/glm-4-9b
 
-## Development
-
-**Unit Test & Benchmark**
-
-To perform unit tests, add this CMake flag `-DCHATGLM_ENABLE_TESTING=ON` to enable testing. Recompile and run the unit test (including benchmark).
-```sh
-mkdir -p build && cd build
-cmake .. -DCHATGLM_ENABLE_TESTING=ON && make -j
-./bin/chatglm_test
-```
-
-For benchmark only:
-```sh
-./bin/chatglm_test --gtest_filter='Benchmark.*'
-```
-
-**Lint**
-
-To format the code, run `make lint` inside the `build` folder. You should have `clang-format`, `black` and `isort` pre-installed.
-
-**Performance**
-
-To detect the performance bottleneck, add the CMake flag `-DGGML_PERF=ON`:
-```sh
-cmake .. -DGGML_PERF=ON && make -j
-```
-This will print timing for each graph operation when running the model.
-
-## Acknowledgements
-
-* This project is greatly inspired by [@ggerganov](https://github.com/ggerganov)'s [llama.cpp](https://github.com/ggerganov/llama.cpp) and is based on his NN library [ggml](https://github.com/ggerganov/ggml).
-* Thank [@THUDM](https://github.com/THUDM) for the amazing [ChatGLM-6B](https://github.com/THUDM/ChatGLM-6B), [ChatGLM2-6B](https://github.com/THUDM/ChatGLM2-6B), [ChatGLM3](https://github.com/THUDM/ChatGLM3) and [GLM-4](https://github.com/THUDM/GLM-4) and for releasing the model sources and checkpoints.

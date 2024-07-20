@@ -24,8 +24,6 @@ Sample performance on MacBook M1 Pro:
 | GPT-2 |  774M |  23 ms |
 | GPT-2 | 1558M |  42 ms |
 
-*TODO: add tables for Cerebras-GPT models*
-
 Sample output:
 
 ```

@@ -1,15 +1,11 @@
 # Auto-X Engine
 
-Auto-X Engine is a full-fledged, performance first, and model-oriented training/inference framework that could be used for mobile, edge and cloud scenarios. It comprises the following four main parts:
+Auto-X Engine is a full-fledged, performance first, and model-oriented training/inference framework that could be used for mobile, edge and cloud scenarios. It is written entirely in C and can also be migrated to nearly all edge devices. Most of the codes are adapted from [ggml](https://github.com/ggerganov/ggml), [Paddle Lite](https://github.com/PaddlePaddle/Paddle-Lite),
+[OpenCV](https://github.com/opencv/opencv), [onnx2c](https://github.com/kraiskil/onnx2c), [llama2.c](https://github.com/karpathy/llama2.c) and so on.
 
-- The Auto-X Engine Inference is a model-oriented inference library designed for MCUs/CPUs. It is written entirely in C and can also be migrated to nearly all edge devices. Most of the codes are adapted from [ggml](https://github.com/ggerganov/ggml), [Paddle Lite](https://github.com/PaddlePaddle/Paddle-Lite),
-[OpenCV](https://github.com/opencv/opencv), [onnx2c](https://github.com/kraiskil/onnx2c) and [llama2.c](https://github.com/karpathy/llama2.c).
+Auto-X Engine Serving is a serving software that streamlines AI inferencing. It enables users to deploy AI models using Auto-X Inference Engine. It supports inference across cloud, data center, edge and embedded devices on NVIDIA GPUs, x86 and ARM CPU, or AWS Inferentia. It also delivers optimized performance for many query types, including real time, batched, ensembles and audio/video streaming.
 
-- Auto-X Engine Serving is a serving software that streamlines AI inferencing. It enables users to deploy AI models using Auto-X Inference Engine. It supports inference across cloud, data center, edge and embedded devices on NVIDIA GPUs, x86 and ARM CPU, or AWS Inferentia. It also delivers optimized performance for many query types, including real time, batched, ensembles and audio/video streaming.
-
-- The Auto-X Engine Train is a high performance model-oriented training system written in C/C++.
-
-- The Auto-X Engine AIOS is a RTOS system based on NuttX powered by Auto-X Engine Inference and Train.
+The Auto-X Engine AIOS is a RTOS system based on NuttX powered by Auto-X Engine Inference and Train. The goal of Auto-X AIOS is to build an intelligent agent operating system for edge devices (such as PX4, Spresense boards), which intends to embed Auto-X Models into the OS.
 
 > **Note** This engine only supports the model structures described in this repo. 
 > These models could be modified from the originial ones.
@@ -22,19 +18,23 @@ Auto-X Engine is a full-fledged, performance first, and model-oriented training/
 
 ## Models
 
+### Tiny Models
+
+- [PaddleOCR](./models/paddleocr/)
+- [picodet](./models/picodet/)
+- [pp_liteseg](./models/pp_liteseg/)
+- [ShuffleNetV2](./models/shufflenetv2/)
+- [tinypose](./models/tinypose/)
+
+### Big Models
 - [chatglm](./models/chatglm/)
 - [clip](./models/clip/)
 - [gpt-2](./models/gpt-2/)
 - [llama](./models/llama/)
 - [minigpt4](./models/minigpt4/)
-- [PaddleOCR](./models/paddleocr/)
-- [picodet](./models/picodet/)
-- [pp_liteseg](./models/pp_liteseg/)
 - [qwen](./models/qwen/)
 - [sam](./models/sam/)
-- [ShuffleNetV2](./models/shufflenetv2/)
 - [stable-diffusion](./models/stable-diffusion/)
-- [tinypose](./models/tinypose/)
 - [vit](./models/vit/)
 - [whisper](./models/whisper/)
 
@@ -116,7 +116,7 @@ provide APIs to simplify this communication.
 
 ## AIOS
 
-The goal of Auto-X AIOS is to build an intelligent agent operating system for edge devices (such as PX4, Spresense boards), which intends to embed Auto-X Models into the OS.
+
 
 
 ## Reference

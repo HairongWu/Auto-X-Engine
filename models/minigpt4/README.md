@@ -1,32 +1,10 @@
 # minigpt4.cpp
 
-<a href='https://huggingface.co/spaces/maknee/minigpt4.cpp'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue'>
-[![Quickstart in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Maknee/minigpt4.cpp/blob/master/minigpt4/colab_webui.ipynb)
-
-Inference of [MiniGPT4](https://github.com/Vision-CAIR/MiniGPT-4) in pure C/C++.
-
-## Description
-
 The main goal of `minigpt4.cpp` is to run minigpt4 using 4-bit quantization with using the [ggml](https://github.com/ggerganov/ggml) library.
-
-## Demo
-
-![minigpt1](assets/webui_demo.png)
-
-![minigpt1](assets/minigpt4-demo1.gif)
 
 ## Usage
 
-### 1. Clone repo
-
-**Requirements**: [git](https://gitforwindows.org/)
-
-```bash
-git clone --recursive https://github.com/Maknee/minigpt4.cpp
-cd minigpt4.cpp
-```
-
-### 2. Getting the library
+### Getting the library
 
 #### Option 1: Download precompiled binary
 
@@ -125,7 +103,7 @@ python convert.py ~/Downloads/pretrained_minigpt4.pth --outtype f16
 
 `minigpt4-7B-f16.bin` or `minigpt4-13B-f16.bin` should be generated
 
-#### 4. Obtaining the vicuna model
+#### Obtaining the vicuna model
 
 #### Option 1: Download pre-quantized vicuna-v0 model
 
@@ -160,7 +138,7 @@ Quantize the model
 python quanitize <path-to-model> <output-model> Q4_1
 ```
 
-#### 5. Running
+#### Running
 
 Test if minigpt4 works by calling the following, replacing `minigpt4-13B-f16.bin` and `ggml-vicuna-13B-v0-q5_k.bin` with your respective models
 
