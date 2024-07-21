@@ -5,8 +5,6 @@ Auto-X Engine is a full-fledged, performance first, and model-oriented training/
 
 Auto-X Engine Serving is a serving software that streamlines AI inferencing. It enables users to deploy AI models using Auto-X Inference Engine. It supports inference across cloud, data center, edge and embedded devices on NVIDIA GPUs, x86 and ARM CPU, or AWS Inferentia. It also delivers optimized performance for many query types, including real time, batched, ensembles and audio/video streaming.
 
-The Auto-X Engine AIOS is a RTOS system based on NuttX powered by Auto-X Engine Inference and Train. The goal of Auto-X AIOS is to build an intelligent agent operating system for edge devices (such as PX4, Spresense boards), which intends to embed Auto-X Models into the OS.
-
 > **Note** This engine only supports the model structures described in this repo. 
 > These models could be modified from the originial ones.
 > We also provide guidelines or running code to customize and retrain the following models using your own data.
@@ -113,11 +111,6 @@ provide APIs to simplify this communication.
   client options
 - Send input data (e.g. a jpeg image) directly to Triton in the [body of an HTTP
   request without any additional metadata](https://github.com/triton-inference-server/server/blob/main/docs/protocol/extension_binary_data.md#raw-binary-request)
-
-## AIOS
-
-
-
 
 ## Reference
 

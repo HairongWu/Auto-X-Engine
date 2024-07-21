@@ -276,12 +276,11 @@ About parameter description, see [3.1.4 Model evaluation](#3.1.4) for details.
 <a name="3.3"></a>
 
 ## Model Convert
+Python3.7 is required.
 
 ```shell
-python tools/export_model.py
-    -c ./ShuffleNet/ShuffleNetV2_x0_25.yaml \
-    -o Global.pretrained_model=./cls_pretrain/ \
-    -o Global.save_inference_dir=./deploy/models/
+pip install paddlelite
+python tools/export_model.py -c ./tools/configs/ShuffleNetV2_x0_25.yaml -o Global.pretrained_model=./pretrain/ShuffleNetV2_x0_25_pretrained/  -o Global.save_inference_dir=./deploy/
 ```
 
 ## Migrate to MCU (STM32L4 and ESP32)
