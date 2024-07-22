@@ -11,8 +11,7 @@ inline uint16_t AdaptEndIndex(const uint16_t ph, const uint16_t input_size, cons
 		ceilf((ph + 1) * input_size) / output_size);
 }
 
-void autox_pool2d_ansi(const float *input_data, float *output_data, const uint16_t input_height, const uint16_t input_width, const uint16_t output_channels, const uint16_t output_height,
-    const uint16_t output_width, const uint8_t ksize, const uint8_t stride, const uint8_t padding, const uint8_t adaptive, const uint8_t type)
+void autox_pool2d_ansi(const float *input_data, float *output_data, uint16_t* x_dims, uint16_t* o_dims, const uint8_t ksize, const uint8_t stride, const uint8_t padding, const uint8_t adaptive, const uint8_t type)
 {
 
     const uint16_t input_stride = input_height * input_width;

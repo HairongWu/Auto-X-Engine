@@ -1,1 +1,17 @@
 .DS_Store
+
+__pycache__/
+*.pyc
+*.sw*
+*/workerlog*
+checkpoints/
+output*/
+pretrained/
+.ipynb_checkpoints/
+*.ipynb*
+_build/
+build/
+log/
+nohup.out
+.DS_Store
+.idea

@@ -188,7 +188,7 @@ static void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA,
 
 void autox_matmul_ansi(const float* X, const float* Y, float* Out, uint32_t *x_dims, uint16_t x_dims_size,
 	uint32_t *y_dims, uint16_t y_dims_size, uint32_t *o_dims, uint16_t o_dims_size,
-	int8_t x_transpose, int8_t y_transpose, float alpha) {
+	int8_t x_transpose, int8_t y_transpose) {
 	INIT_PARAM;
 	const float* x_data = X;
 	const float* y_data = Y;

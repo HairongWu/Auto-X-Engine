@@ -1,5 +1,37 @@
 #pragma once
-#include "../kernels/autox_nn.h"
+
+#include <stdint.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <math.h>
+#include <string.h>
+
+typedef int autox_err_t;
+
+/* Definitions for error constants. */
+#define AUTOX_OK          0       /*!< autox_err_t value indicating success (no error) */
+#define AUTOX_FAIL        -1      /*!< Generic autox_err_t code indicating failure */
+
+#define AUTOX_ERR_NO_MEM              0x101   /*!< Out of memory */
+#define AUTOX_ERR_INVALID_ARG         0x102   /*!< Invalid argument */
+#define AUTOX_ERR_INVALID_STATE       0x103   /*!< Invalid state */
+#define AUTOX_ERR_INVALID_SIZE        0x104   /*!< Invalid size */
+#define AUTOX_ERR_NOT_FOUND           0x105   /*!< Requested resource not found */
+#define AUTOX_ERR_NOT_SUPPORTED       0x106   /*!< Operation or feature not supported */
+#define AUTOX_ERR_TIMEOUT             0x107   /*!< Operation timed out */
+#define AUTOX_ERR_INVALID_RESPONSE    0x108   /*!< Received response was invalid */
+#define AUTOX_ERR_INVALID_CRC         0x109   /*!< CRC or checksum was invalid */
+#define AUTOX_ERR_INVALID_VERSION     0x10A   /*!< Version was invalid */
+#define AUTOX_ERR_INVALID_MAC         0x10B   /*!< MAC address was invalid */
+#define AUTOX_ERR_NOT_FINISHED        0x10C   /*!< Operation has not fully completed */
+#define AUTOX_ERR_NOT_ALLOWED         0x10D   /*!< Operation is not allowed */
+
+#define AUTOX_ERR_WIFI_BASE           0x3000  /*!< Starting number of WiFi error codes */
+#define AUTOX_ERR_MESH_BASE           0x4000  /*!< Starting number of MESH error codes */
+#define AUTOX_ERR_FLASH_BASE          0x6000  /*!< Starting number of flash error codes */
+#define AUTOX_ERR_HW_CRYPTO_BASE      0xc000  /*!< Starting number of HW cryptography module error codes */
+#define AUTOX_ERR_MEMPROT_BASE        0xd000  /*!< Starting number of Memory Protection API error codes */
 
 // ----------------------------------------------------------------------------
 // The Sampler, which takes logits and returns a sampled token
@@ -92,11 +124,29 @@ typedef struct {
     uint32_t file_size; // size of the checkpoint file in bytes
 } Transformer;
 
-int autox_sample(Sampler* sampler, float* logits);
-char* autox_tok_decode(Tokenizer* t, int prev_token, int token);
-int autox_tok_encode(Tokenizer* t, char *text, int8_t bos, int8_t eos, int *tokens, int *n_tokens);
-float* autox_transformer(Transformer* transformer, int token, int pos);
+#if defined(_MSC_VER)
+     /* Microsoft C/C++-compatible compiler */
+     #include <intrin.h>
+#elif defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
+     /* GCC-compatible compiler, targeting x86/x86-64 */
+     #include <x86intrin.h>
+#elif defined(__GNUC__) && defined(__ARM_NEON__)
+     /* GCC-compatible compiler, targeting ARM with NEON */
+     #include <arm_neon.h>
+#elif defined(__GNUC__) && defined(__IWMMXT__)
+     /* GCC-compatible compiler, targeting ARM with WMMX */
+     #include <mmintrin.h>
+#elif (defined(__GNUC__) || defined(__xlC__)) && (defined(__VEC__) || defined(__ALTIVEC__))
+     /* XLC or GCC-compatible compiler, targeting PowerPC with VMX/VSX */
+     #include <altivec.h>
+#elif defined(__GNUC__) && defined(__SPE__)
+     /* GCC-compatible compiler, targeting PowerPC with SPE */
+     #include <spe.h>
+#else
+     #include "avx_ansi.h"
+     
+     #include "../kernels/ansi/autox_nn_ansi.h"
+     #include "../kernels/ansi/autox_nn_ansi_headers.h"
+#endif
 
-float* autox_transformer3(Transformer* transformer, int token, int pos);
-void autox_multi_head_attention(int n_heads, int pos, int seq_len, float *sq, float *satt, float *sxb, float *key_cache,
-	float *value_cache, int kv_dim, int kv_mul, int head_size, int loff);
+

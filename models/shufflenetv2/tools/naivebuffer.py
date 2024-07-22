@@ -459,6 +459,56 @@ class DataType(IntEnum):
     COMPLEX64 = 23,
     COMPLEX128 = 24,
 
+class AttributeType(IntEnum):
+    INT = 0,
+    FLOAT = 1,
+    STRING = 2,
+    INTS = 3,
+    FLOATS = 4,
+    STRINGS = 5,
+    BOOLEAN = 6,
+    BOOLEANS = 7,
+    BLOCK = 8,
+    LONG = 9,
+    BLOCKS = 10,
+    LONGS = 11,
+    FLOAT64S = 12,
+    VAR = 13,
+    VARS = 14,
+    FLOAT64 = 15
+
+class ACTIVATION(IntEnum):
+    kIndentity = 0,
+    kRelu = 1,
+    kRelu6 = 2,
+    kPRelu = 3,
+    kLeakyRelu = 4,
+    kSigmoid = 5,
+    kTanh = 6,
+    kSwish = 7,
+    kExp = 8,
+    kAbs = 9,
+    kHardSwish = 10,
+    kReciprocal = 11,
+    kThresholdedRelu = 12,
+    kElu = 13,
+    kHardSigmoid = 14,
+    kLog = 15,
+    kSigmoid_v2 = 16,
+    kTanh_v2 = 17,
+    kGelu = 18,
+    kErf = 19,
+    kSign = 20,
+    kSoftPlus = 21,
+    kMish = 22,
+    kSilu = 23,
+    kLog1p = 24,
+    NUM = 25,
+
+class POOLING_TYPE(IntEnum):
+    MAX_POOLING = 0,
+    AVG_POOLING = 1,
+
 def read_nb(filename):
 
         layers = []

@@ -129,8 +129,6 @@ The output log examples are as follows:
 
 During training, you can view loss changes in real time through `VisualDL`, see [VisualDL](https://github.com/PaddlePaddle/PaddleClas/blob/release/2.2/docs/en/extension/VisualDL_en.md) for details.
 
-<a name="3.1.2"></a>
-
 ### Model Finetuning
 
 After correcting config file, you can load pretrained model  weight to finetune. The command is as follows:
@@ -145,8 +143,6 @@ python3 tools/train.py \
 Among them,`Arch.pretrained` is used to set the address to load the pretrained weights. When using it, you need to replace it with your own pretrained weights' path, or you can modify the path directly in the configuration file. You can also set it into `True` to use pretrained weights that trained in ImageNet1k.
 
 We also provide a lot of pre-trained models trained on the ImageNet-1k dataset. For the model list and download address, please refer to the [model library overview](../algorithm_introduction/ImageNet_models_en.md).
-
-<a name="3.1.3"></a>
 
 ### Resume Training
 
@@ -179,8 +175,6 @@ The configuration file does not need to be modified. You only need to add the `G
       .
   ```
 
-<a name="3.1.4"></a>
-
 ### Model Evaluation
 
 The model evaluation process can be started as follows.
@@ -202,13 +196,9 @@ Some of the configurable evaluation parameters are described as follows:
 
 When loading the model to be evaluated, you only need to specify the path of the model file stead of the suffix. PaddleClas will automatically add the `.pdparams` suffix, such as [3.1.3 Resume Training](../models_training/classification_en.md#3.1.3).
 
-<a name="3.2"></a>
-
 ## Training and Evaluation on Linux+ Multi-GPU
 
 If you want to run PaddleClas on Linux with GPU, it is highly recommended to use `paddle.distributed.launch` to start the model training script(`tools/train.py`) and evaluation script(`tools/eval.py`), which can start on multi-GPU environment more conveniently.
-
-<a name="3.2.1"></a>
 
 ### Model Training
 
@@ -257,7 +247,7 @@ python3 -m paddle.distributed.launch \
         -o Global.device=gpu
 ```
 
-The configuration file does not need to be modified. You only need to add the `Global.checkpoints` parameter during training, which represents the path of the checkpoints. The parameter weights, learning rate, optimizer and other information will be loaded using this parameter as described in [3.1.3 Resume training](#3.1.3).
+The configuration file does not need to be modified. You only need to add the `Global.checkpoints` parameter during training, which represents the path of the checkpoints. 
 
 ### Model Evaluation
 
@@ -273,16 +263,12 @@ python3 -m paddle.distributed.launch \
 
 About parameter description, see [3.1.4 Model evaluation](#3.1.4) for details.
 
-<a name="3.3"></a>
 
 ## Model Convert
 Python3.7 is required.
 
 ```shell
 pip install paddlelite
-python tools/export_model.py -c ./tools/configs/ShuffleNetV2_x0_25.yaml -o Global.pretrained_model=./pretrain/ShuffleNetV2_x0_25_pretrained/  -o Global.save_inference_dir=./deploy/
+python tools/export_model.py -c ./tools/configs/ShuffleNetV2_x0_25.yaml -o Global.pretrained_model=./pretrain/ShuffleNetV2_x0_25_pretrained  -o Global.save_inference_dir=./output/
 ```
-
-## Migrate to MCU (STM32L4 and ESP32)
-
 

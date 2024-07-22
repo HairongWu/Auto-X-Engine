@@ -14,9 +14,8 @@ Auto-X Engine Serving is a serving software that streamlines AI inferencing. It 
   <img src="imgs/framework.png" width="600"/>
 </div>
 
-## Models
 
-### Tiny Models
+## Tiny Models
 
 - [PaddleOCR](./models/paddleocr/)
 - [picodet](./models/picodet/)
@@ -24,7 +23,19 @@ Auto-X Engine Serving is a serving software that streamlines AI inferencing. It 
 - [ShuffleNetV2](./models/shufflenetv2/)
 - [tinypose](./models/tinypose/)
 
-### Big Models
+### Timer Camera X
+
+<div  align="center">
+  <img src="./imgs/m5stacktimer.webp" width="200"/>
+</div>
+
+### Sony Spresense
+
+<div  align="center">
+  <img src="./imgs/spresense.jpg" width="200"/>
+</div>
+
+## Big Models
 - [chatglm](./models/chatglm/)
 - [clip](./models/clip/)
 - [gpt-2](./models/gpt-2/)

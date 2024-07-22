@@ -14,18 +14,6 @@ void autox_swiglu_ansi(float* hb, float* hb2, uint32_t hidden_dim);
 void autox_accum_ansi(float *a, float *b, int size);
 void autox_rope_rotation_ansi(int pos, float *sq, float *sk, int dim, int kv_dim, int head_size);
 
-void autox_im2col_ansi(const float* data_im,
-	int channels,
-	int height,
-	int width,
-	int kernel_h,
-	int kernel_w,
-	int pad_top,
-	int pad_bottom,
-	int pad_left,
-	int pad_right,
-	int stride_h,
-	int stride_w,
-	int dilation_h,
-	int dilation_w,
-	float* data_col);
+void autox_conv2d_ansi(float* din, float* dout, const float* bias, float* weights, uint16_t* x_dims, uint16_t* o_dims, uint16_t* w_dims,
+	uint16_t group, uint8_t paddings, uint8_t strides, uint8_t dilations, int8_t act_type);
+void autox_pool2d_ansi(const float *input_data, float *output_data, uint16_t* x_dims, uint16_t* o_dims, const uint8_t ksize, const uint8_t stride, const uint8_t padding, const uint8_t adaptive, const uint8_t type);
