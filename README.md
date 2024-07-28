@@ -5,6 +5,8 @@ Auto-X Engine is a full-fledged, performance first, and model-oriented training/
 
 Auto-X Engine Serving is a serving software that streamlines AI inferencing. It enables users to deploy AI models using Auto-X Inference Engine. It supports inference across cloud, data center, edge and embedded devices on NVIDIA GPUs, x86 and ARM CPU, or AWS Inferentia. It also delivers optimized performance for many query types, including real time, batched, ensembles and audio/video streaming.
 
+[Auto-X AIOS](https://github.com/HairongWu/Auto-X-AIOS) (based on NuttX)
+
 > **Note** This engine only supports the model structures described in this repo. 
 > These models could be modified from the originial ones.
 > We also provide guidelines or running code to customize and retrain the following models using your own data.
@@ -16,12 +18,6 @@ Auto-X Engine Serving is a serving software that streamlines AI inferencing. It 
 
 
 ## Tiny Models
-
-- [PaddleOCR](./models/paddleocr/)
-- [picodet](./models/picodet/)
-- [pp_liteseg](./models/pp_liteseg/)
-- [ShuffleNetV2](./models/shufflenetv2/)
-- [tinypose](./models/tinypose/)
 
 ### Timer Camera X
 
@@ -35,17 +31,9 @@ Auto-X Engine Serving is a serving software that streamlines AI inferencing. It 
   <img src="./imgs/spresense.jpg" width="200"/>
 </div>
 
+## Medium Models
+
 ## Big Models
-- [chatglm](./models/chatglm/)
-- [clip](./models/clip/)
-- [gpt-2](./models/gpt-2/)
-- [llama](./models/llama/)
-- [minigpt4](./models/minigpt4/)
-- [qwen](./models/qwen/)
-- [sam](./models/sam/)
-- [stable-diffusion](./models/stable-diffusion/)
-- [vit](./models/vit/)
-- [whisper](./models/whisper/)
 
 ## Serving
 
