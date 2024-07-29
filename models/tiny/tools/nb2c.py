@@ -1,19 +1,23 @@
 import os
 from naivebuffer import *
 
-op_mapping = {'conv2d':'autox_conv2d','depthwise_conv2d':'autox_conv2d','pool2d':'autox_pool2d',
-              'concat':'autox_concat','transpose2':'autox_transpose2','split':'autox_split','matmul_v2':'autox_matmul_v2',
-            'elementwise_add':'autox_elementwise_add','softmax':'autox_softmax',
-            'hard_sigmoid':'autox_hard_sigmoid', 'elementwise_mul':'autox_elementwise_mul',
-            'nearest_interp_v2':'autox_nearest_interp_v2', 'sigmoid':'autox_sigmoid',
-            'scale':'autox_scale','sqrt':'autox_sqrt','elementwise_div':'autox_elementwise_div',
-            'multiclass_nms3':'autox_multiclass_nms3','relu':'autox_relu',
-            'fusion_elementwise_add_activation':'autox_fusion_elementwise_add_activation',
-            'bilinear_interp_v2':'autox_bilinear_interp_v2','arg_max':'autox_arg_max',
-            'swish':'autox_swish','layer_norm':'autox_layer_norm',}
+op_mapping = {
+    'conv2d':'autox_conv2d','depthwise_conv2d':'autox_conv2d','pool2d':'autox_pool2d',
+    'concat':'autox_concat','transpose2':'autox_transpose2',
+    'split':'autox_split','matmul_v2':'autox_matmul_v2',
+    'elementwise_add':'autox_elementwise_add','softmax':'autox_softmax',
+    'hard_sigmoid':'autox_hard_sigmoid', 'elementwise_mul':'autox_elementwise_mul',
+    'nearest_interp_v2':'autox_nearest_interp_v2', 'sigmoid':'autox_sigmoid',
+    'scale':'autox_scale','sqrt':'autox_sqrt','elementwise_div':'autox_elementwise_div',
+    'multiclass_nms3':'autox_multiclass_nms3','relu':'autox_relu',
+    'fusion_elementwise_add_activation':'autox_fusion_elementwise_add_activation',
+    'bilinear_interp_v2':'autox_bilinear_interp_v2','arg_max':'autox_arg_max',
+    'swish':'autox_swish','layer_norm':'autox_layer_norm',
+}
 
 attrs = ['act_type','dilations','groups','paddings','strides','adaptive','ksize','pooling_type','axis','start_axis','stop_axis',
              'trans_x','trans_y']
+
 ignore_layers = ['feed','shape','slice','fill_constant','reshape2','flatten_contiguous_range', 'fetch', 'assign', 'squeeze2']
 
 def nb2c(output_dir, ops, weights_dict, dim_dict):
@@ -34,6 +38,8 @@ def nb2c(output_dir, ops, weights_dict, dim_dict):
         operator = ''
         
         for i in op.outputs:
+            if op.type == "softmax" or  op.type == "hard_sigmoid" or op.type == "swish":
+                continue
             if 'XShape' == i.parameter:
                 continue
             for arg in i.arguments:
@@ -111,18 +117,22 @@ def nb2c(output_dir, ops, weights_dict, dim_dict):
 
             operator = operator + attributes['groups']
             operator = operator + ", "
-            operator = operator + attributes['paddings']
+            operator = operator + attributes['paddings'][0]
             operator = operator + ", "
-            operator = operator + attributes['strides']
+            operator = operator + attributes['strides'][0]
             operator = operator + ", "
-            operator = operator + attributes['dilations']
+            operator = operator + attributes['dilations'][0]
             operator = operator + ", "
 
             if 'act_type' in attributes:
-                if 'relu' == ACTIVATION.kRelu:
-                    operator = operator + str(ACTIVATION.kRelu)
+                if '"relu"' == attributes['act_type']:
+                    operator = operator + str(ACTIVATION.kRelu.value)
+                elif '"hard_swish"' == attributes['act_type']:
+                    operator = operator + str(ACTIVATION.kHardSwish.value)
+                else:
+                    print(attributes['act_type'])
             else:
-                operator = operator + str(ACTIVATION.kIndentity)
+                operator = operator + str(ACTIVATION.kIndentity.value)
             operator = operator + ", "
         elif op.type == "pool2d":
             for i in inputs:
@@ -139,13 +149,13 @@ def nb2c(output_dir, ops, weights_dict, dim_dict):
                 operator = operator + i
                 operator = operator + ", "
 
-            operator = operator + attributes['ksize']
+            operator = operator + attributes['ksize'][0]
             operator = operator + ", "
-            operator = operator + attributes['strides']
+            operator = operator + attributes['strides'][0]
             operator = operator + ", "
-            operator = operator + attributes['paddings']
+            operator = operator + attributes['paddings'][0]
             operator = operator + ", "
-            operator = operator + attributes['adaptive']
+            operator = operator + attributes['adaptive'][0]
             operator = operator + ", "
             if attributes['pooling_type'] == "avg":
                 operator = operator + str(1)
@@ -171,7 +181,7 @@ def nb2c(output_dir, ops, weights_dict, dim_dict):
             operator = operator + ", "
             operator = operator + str(4)
             operator = operator + ", "
-        elif op.type == "softmax" or  op.type == "hard_sigmoid":
+        elif op.type == "softmax" or op.type == "hard_sigmoid" or op.type == "swish":
             for i in inputs:
                 operator = operator + i
                 operator = operator + ", "
