@@ -35,7 +35,7 @@ pip install paddlelite
 Python3.7 is required.
 
 ```shell
-python tools/export_shufflenetv2.py -c ./configs/ShuffleNetV2_x0_25.yaml -o Global.pretrained_model=./pretrain/ShuffleNetV2_x0_25_pretrained  -o Global.save_inference_dir=./output/ShuffleNetV2_x0_25/
+python tools/export_ppcls.py -c ./configs/ShuffleNetV2_x0_25.yaml -o Global.pretrained_model=./pretrain/ShuffleNetV2_x0_25_pretrained  -o Global.save_inference_dir=./output/ShuffleNetV2_x0_25/
 ```
 
 ## PP-PicoDet
