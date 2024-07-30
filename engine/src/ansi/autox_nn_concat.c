@@ -1,6 +1,8 @@
 #include "autox_nn_ansi.h"
 #include <float.h>
 
+// Concatenate a list of tensors into a single tensor. 
+// All input tensors must have the same shape, except for the dimension size of the axis to concatenate on.
 void autox_concat_ansi(float** inputs,
                 float* output,
 				uint16_t input_size,

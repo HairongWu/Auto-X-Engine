@@ -2261,7 +2261,8 @@ void DepthwiseConv(const float* i_data, float* o_data, const float* w_data, cons
       (kh == 3) && (kw == 3) && (strides == 1 || strides == 2); \
   bool flag_dw_5x5 =                                                          \
       (kh == 5) && (kw == 5) && (strides == 1 || strides == 2);
-	  
+
+// The convolution operator consumes an input tensor and a filter, and computes the output.
 void autox_conv2d_ansi(float* din, float* dout, const float* bias, float* weights, uint16_t* x_dims, uint16_t* o_dims, uint16_t* w_dims,
 	uint16_t group, uint8_t paddings, uint8_t strides, uint8_t dilations, int8_t act_type)
 {
@@ -2307,7 +2308,7 @@ void autox_conv2d_ansi(float* din, float* dout, const float* bias, float* weight
 		float* dout_batch = dout + i * channel_out_size;
 		const float* din_data = din_batch;
 		if (!flag_1x1gemm_) {
-			im2col(din_batch,
+			autox_im2col(din_batch,
 				chin,
 				hin,
 				win,

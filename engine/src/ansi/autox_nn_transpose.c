@@ -1,6 +1,8 @@
 #include "autox_nn_ansi.h"
 #include <float.h>
 
+// Transpose the input tensor similar to numpy.transpose. 
+// For example, when perm=(1, 0, 2), given an input tensor of shape (1, 2, 3), the output shape will be (2, 1, 3).
 void autox_transpose_ansi(const float* input_ptr, float* output_ptr, uint16_t* in_dim, uint16_t* out_dim, float *axis, int permute)
 {
   // precompute inverted output dim and strides

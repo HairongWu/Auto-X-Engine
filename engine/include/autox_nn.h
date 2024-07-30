@@ -149,4 +149,15 @@ typedef struct {
      #include "../kernels/ansi/autox_nn_ansi_headers.h"
 #endif
 
-
+inline uint32_t count(const uint32_t *ddim, const int start, const int end)
+{
+  start = max(start, 0);
+  if (end < start) {
+    return 0;
+  }
+  uint32_t sum = 1;
+  for (uint32_t i = start; i < end; ++i) {
+    sum *= data_[i];
+  }
+  return sum;
+}

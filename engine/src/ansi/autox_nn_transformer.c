@@ -211,7 +211,7 @@ float *autox_transformer3(Transformer *transformer, int token, int pos) {
 		autox_matmul(s->xb, w->wo + l * dim*dim, s->xb2, x_dims, 1, y_dims, 2, o_dims, 1, false, true, 1.0);
 
         // residual connection back into x
-        autox_accum(x, s->xb2, dim);
+        autox_elementwise_add(x, s->xb2, dim);
 
         // ffn rmsnorm
         autox_rmsnorm(s->xb, x, w->rms_ffn_weight + l * dim, dim);

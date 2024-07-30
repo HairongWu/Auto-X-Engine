@@ -11,7 +11,6 @@ void autox_softmax_ansi(float* x, uint32_t height, uint32_t width);
 void autox_argmax_ansi(const float *X, uint32_t *Out, uint32_t size);
 void autox_swiglu_ansi(float* hb, float* hb2, uint32_t hidden_dim);
 
-void autox_accum_ansi(float *a, float *b, int size);
 void autox_rope_rotation_ansi(int pos, float *sq, float *sk, int dim, int kv_dim, int head_size);
 
 void autox_conv2d_ansi(float* din, float* dout, const float* bias, float* weights, uint16_t* x_dims, uint16_t* o_dims, uint16_t* w_dims,
