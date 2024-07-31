@@ -1,7 +1,6 @@
-#include "autox_nn_ansi.h"
-#include <float.h>
 
-void autox_split_ansi(float* input, float** output, int32_t axis, uint16_t *in_dim, uint16_t input_dims_size, uint16_t** output_ddim, uint16_t* output_ddim_size, uint16_t output_size)
+
+void autox_split(float* input, float** output, uint16_t *in_dim, uint16_t input_dims_size, uint16_t output_ddim[][4], uint16_t* output_ddim_size, uint16_t output_size, int32_t axis)
 {
   uint16_t* in_strides = (uint16_t*)calloc(input_dims_size, sizeof(uint16_t));
   for (int i = 0; i < input_dims_size; i++) {

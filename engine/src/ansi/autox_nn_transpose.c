@@ -3,14 +3,14 @@
 
 // Transpose the input tensor similar to numpy.transpose. 
 // For example, when perm=(1, 0, 2), given an input tensor of shape (1, 2, 3), the output shape will be (2, 1, 3).
-void autox_transpose_ansi(const float* input_ptr, float* output_ptr, uint16_t* in_dim, uint16_t* out_dim, float *axis, int permute)
+void autox_transpose(const float* input_ptr, float* output_ptr, uint16_t* in_dim, uint16_t* out_dim, uint16_t *axis, int permute)
 {
   // precompute inverted output dim and strides
   uint32_t rout_dim[6], strides[6];
   for (int i = 0; i < permute; ++i) {
     int k = permute - 1 - i;
     strides[k] = 1;
-    for (int j = (int)axis[i] + 1; j < permute; ++j) {
+    for (uint16_t j = axis[i] + 1; j < permute; ++j) {
       strides[k] *= in_dim[j];
     }
     rout_dim[k] = out_dim[i];

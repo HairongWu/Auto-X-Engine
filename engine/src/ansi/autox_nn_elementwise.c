@@ -628,10 +628,10 @@ void autox_elementwise_mul_ansi(float* x_data,
 	elementwise_op(x_data, y_data,out_data, axis,x_dims, y_dims,z_dims, x_dims_size,y_dims_size,z_dims_size);
 }
 
-void autox_elementwise_add_ansi(float* x_data,
+void autox_elementwise_add(float* x_data,
 	float* y_data,
-	float* out_data, int axis, uint16_t* x_dims, uint16_t* y_dims, uint16_t* z_dims, uint16_t x_dims_size,
-	uint16_t y_dims_size, uint16_t z_dims_size)
+	float* out_data, uint16_t* x_dims, uint16_t* y_dims, uint16_t* z_dims, uint16_t x_dims_size,
+	uint16_t y_dims_size, uint16_t z_dims_size, int axis)
 {
 	__m256 (*isa_op)(__m256, __m256) = &add_ps_inline;
 	float (*naive_op)(float, float) = &NaiveAdd;

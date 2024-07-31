@@ -1,4 +1,5 @@
-﻿#pragma once
+
+#pragma once
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -443,7 +444,7 @@ inline void _mm_storeu_si128(__m128i *p, __m128i a)
 {
 	*p = a;
 }
-//a ����λ 2 �Ĥ΅g���ȸ���С���ゎ�򡢥��ɥ쥹 p �˥��ȥ����ޤ���
+
 inline void _mm_storel_pi(__m64 *p, __m128 a)
 {
 	p[0].m64_i32[0] = a.f32[0];
@@ -593,7 +594,7 @@ inline __m256i _mm256_maskload_epi64(int64_t const * addr, __m256i mask)
 		r.i64[3] = addr[0];
 	return r;
 }
-// �������֥��`�ɤ򥤥�ǥå����ˤ�ä��x�k���줿�ѥå�����������Ҫ�ؤ��������ޤ���
+
 inline int  _mm_extract_epi32(__m128i src, const int ndx)
 {
 	return src.i32[ndx];

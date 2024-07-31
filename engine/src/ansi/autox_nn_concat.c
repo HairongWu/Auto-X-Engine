@@ -3,10 +3,10 @@
 
 // Concatenate a list of tensors into a single tensor. 
 // All input tensors must have the same shape, except for the dimension size of the axis to concatenate on.
-void autox_concat_ansi(float** inputs,
+void autox_concat(float** inputs,
                 float* output,
 				uint16_t input_size,
-				uint16_t **input_dims,
+				uint16_t input_dims[][4],
         uint16_t dim_0_size,
 				uint16_t* output_dims,
 				int8_t axis)

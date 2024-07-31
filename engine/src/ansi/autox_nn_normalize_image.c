@@ -1,7 +1,7 @@
-#include "autox_nn_ansi.h"
 
-void autox_normalize_image(uint8_t* p, float* out, uint16_t p_h, uint16_t p_w, uint8_t p_c, float scale)
+void autox_normalize_image(uint8_t* p, float* out, uint16_t p_h, uint16_t p_w, uint8_t p_c)
 {
+  float scale = 1.0/255.0;
 	const float means[3] = { 123.675f, 116.280f, 103.530f };
     const float stds[3] = {  58.395f,  57.120f,  57.375f };
 
@@ -13,9 +13,9 @@ void autox_normalize_image(uint8_t* p, float* out, uint16_t p_h, uint16_t p_w, u
 			temp[1] = (float)p[index + 1];
 			temp[2] = (float)p[index + 2];
 
-			temp[0] = temp[0] * scale - mean[0];
-			temp[1] = temp[1] * scale - mean[1];
-			temp[2] = temp[2] * scale - mean[2];
+			temp[0] = temp[0] * scale - means[0];
+			temp[1] = temp[1] * scale - means[1];
+			temp[2] = temp[2] * scale - means[2];
 
 			temp[0] /= stds[0];
 			temp[1] /= stds[1];

@@ -45,7 +45,7 @@ def nb2c(output_dir, ops, weights_dict, dim_dict):
             for arg in i.arguments:
                 operator = operator + '\tfloat *'
                 operator = operator + arg.replace('.','_')
-                operator = operator + " = (float *)calloc(%d*sizeof(float));\n"%abs(reduce(mul, dim_dict[arg]))
+                operator = operator + " = (float *)calloc(%d, sizeof(float));\n"%abs(reduce(mul, dim_dict[arg]))
         operator = operator +"\t"+ op_mapping[op.type]
         operator = operator + "("
         

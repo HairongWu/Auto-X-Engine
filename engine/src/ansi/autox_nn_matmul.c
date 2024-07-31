@@ -1,18 +1,5 @@
-#include "autox_nn_ansi.h"
-#include <stdbool.h>
+#include "autox_nn.h"
 
-static uint32_t count(const uint32_t* data_, uint16_t start, uint16_t end)
-{
-	start = max(start, 0);
-	if (end < start) {
-		return 0;
-	}
-	uint32_t sum = 1;
-	for (uint16_t i = start; i < end; ++i) {
-		sum *= data_[i];
-	}
-	return sum;
-}
 #define INIT_PARAM                                                           \
   int m=0, n=0, k=0;                                                               \
   int lda=0, ldb=0, ldc=0;                                                         \
@@ -186,10 +173,11 @@ static void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA,
 		gemm_tt(M, N, K, ALPHA, A, lda, B, ldb, C, ldc);
 }
 
-void autox_matmul_ansi(const float* X, const float* Y, float* Out, uint32_t *x_dims, uint16_t x_dims_size,
-	uint32_t *y_dims, uint16_t y_dims_size, uint32_t *o_dims, uint16_t o_dims_size,
+void autox_matmul(const float* X, const float* Y, float* Out, uint16_t *x_dims, uint16_t x_dims_size,
+	uint16_t *y_dims, uint16_t y_dims_size, uint16_t *o_dims, uint16_t o_dims_size,
 	int8_t x_transpose, int8_t y_transpose) {
 	INIT_PARAM;
+  float alpha = 0;
 	const float* x_data = X;
 	const float* y_data = Y;
 	float* o_data = Out;

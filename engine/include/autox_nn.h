@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include <stdint.h>
@@ -33,6 +34,34 @@ typedef int autox_err_t;
 #define AUTOX_ERR_HW_CRYPTO_BASE      0xc000  /*!< Starting number of HW cryptography module error codes */
 #define AUTOX_ERR_MEMPROT_BASE        0xd000  /*!< Starting number of Memory Protection API error codes */
 
+enum ActivationType {
+    kIndentity = 0,
+    kRelu = 1,
+    kRelu6 = 2,
+    kPRelu = 3,
+    kLeakyRelu = 4,
+    kSigmoid = 5,
+    kTanh = 6,
+    kSwish = 7,
+    kExp = 8,
+    kAbs = 9,
+    kHardSwish = 10,
+    kReciprocal = 11,
+    kThresholdedRelu = 12,
+    kElu = 13,
+    kHardSigmoid = 14,
+    kLog = 15,
+    kSigmoid_v2 = 16,
+    kTanh_v2 = 17,
+    kGelu = 18,
+    kErf = 19,
+    kSign = 20,
+    kSoftPlus = 21,
+    kMish = 22,
+    kSilu = 23,
+    kLog1p = 24,
+    NUM = 25,
+};
 // ----------------------------------------------------------------------------
 // The Sampler, which takes logits and returns a sampled token
 // sampling can be done in a few ways: greedy argmax, sampling, top-p sampling
@@ -124,6 +153,22 @@ typedef struct {
     uint32_t file_size; // size of the checkpoint file in bytes
 } Transformer;
 
+#define max(x, y) (((x) > (y)) ? (x) : (y))
+#define min(x, y) (((x) < (y)) ? (x) : (y))
+
+inline uint32_t count(const uint16_t *ddim, int start, int end)
+{
+  start = max(start, 0);
+  if (end < start) {
+    return 0;
+  }
+  uint32_t sum = 1;
+  for (uint32_t i = start; i < end; ++i) {
+    sum *= ddim[i];
+  }
+  return sum;
+}
+
 #if defined(_MSC_VER)
      /* Microsoft C/C++-compatible compiler */
      #include <intrin.h>
@@ -145,19 +190,7 @@ typedef struct {
 #else
      #include "avx_ansi.h"
      
-     #include "../kernels/ansi/autox_nn_ansi.h"
-     #include "../kernels/ansi/autox_nn_ansi_headers.h"
+     #include "autox_nn_ansi.h"
 #endif
 
-inline uint32_t count(const uint32_t *ddim, const int start, const int end)
-{
-  start = max(start, 0);
-  if (end < start) {
-    return 0;
-  }
-  uint32_t sum = 1;
-  for (uint32_t i = start; i < end; ++i) {
-    sum *= data_[i];
-  }
-  return sum;
-}
+
