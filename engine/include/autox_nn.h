@@ -7,6 +7,8 @@
 #include <ctype.h>
 #include <math.h>
 #include <string.h>
+#include <float.h>
+#include <stdio.h>
 
 typedef int autox_err_t;
 
@@ -156,14 +158,14 @@ typedef struct {
 #define max(x, y) (((x) > (y)) ? (x) : (y))
 #define min(x, y) (((x) < (y)) ? (x) : (y))
 
-inline uint32_t count(const uint16_t *ddim, int start, int end)
+inline uint32_t count(const uint16_t *ddim, uint8_t start, uint8_t end)
 {
   start = max(start, 0);
   if (end < start) {
     return 0;
   }
   uint32_t sum = 1;
-  for (uint32_t i = start; i < end; ++i) {
+  for (uint8_t i = start; i < end; ++i) {
     sum *= ddim[i];
   }
   return sum;
@@ -189,8 +191,75 @@ inline uint32_t count(const uint16_t *ddim, int start, int end)
      #include <spe.h>
 #else
      #include "avx_ansi.h"
-     
-     #include "autox_nn_ansi.h"
+
 #endif
 
+#ifdef  __cplusplus
+extern "C" {
+#endif
 
+    void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA,
+        const float* A, int lda,
+        const float* B, int ldb,
+        float BETA,
+        float* C, int ldc);
+
+    void autox_argmax(const float* input,
+        float* output,
+        const uint32_t* input_ddim,
+        const uint32_t* output_ddim,
+        const uint8_t input_ddim_size,
+        const uint8_t output_ddim_size,
+        int8_t axis);
+
+    void autox_concat(float** inputs, float* output, uint16_t* input_dims[], uint16_t* output_dims,
+        int8_t axis, uint8_t input_size, uint8_t dim_0_size);
+
+    void autox_conv2d_depthwise(const float* i_data, float* o_data, const float* w_data, const float* b_data,
+        uint16_t* x_dims, uint16_t* w_dims, uint16_t* o_dims, const int stride, int dilations, int paddings, int flag_bias, int act_param);
+
+    void autox_conv2d(float* din, float* dout, const float* bias, float* weights, uint16_t* x_dims, uint16_t* w_dims, uint16_t* o_dims,
+        uint16_t group, uint8_t paddings, uint8_t strides, uint8_t dilations, int8_t act_type);
+
+    void autox_elementwise_add(float* x_data,
+        float* y_data,
+        float* out_data, uint16_t* x_dims, uint16_t* y_dims, uint16_t* z_dims, int axis, uint16_t x_dims_size,
+        uint16_t y_dims_size, uint16_t z_dims_size);
+
+    void autox_im2col(const float* data_im,
+        int channels,
+        int height,
+        int width,
+        int kernel,
+        int pad,
+        int stride,
+        int dilation,
+        float* data_col);
+
+    void autox_matmul(const float* X, const float* Y, float* Out, uint16_t* x_dims,
+        uint16_t* y_dims, uint16_t* o_dims, int8_t x_transpose, int8_t y_transpose,
+        uint8_t x_dims_size, uint8_t y_dims_size, uint8_t o_dims_size);
+
+    void autox_pool2d(const float* input_data, float* output_data, uint16_t* x_dims, uint16_t* o_dims, const uint8_t ksize,
+        const uint8_t stride, const uint8_t padding, const uint8_t adaptive, const uint8_t type);
+    void autox_scale(float* data, uint32_t size, float scale, float bias, int8_t bias_before);
+    void autox_sqrt(float* data, uint32_t size);
+    void autox_sigmoid(float* data, uint32_t size);
+
+    void autox_split(float* input, float** output, uint16_t* in_dim, uint16_t* output_ddim[], int32_t axis,
+        uint16_t input_dims_size, uint16_t output_size, uint16_t output_ddim_size);
+
+    void autox_transpose(const float* input_ptr, float* output_ptr, uint16_t* in_dim, uint16_t* out_dim, uint16_t* axis, int permute);
+
+    char* autox_tok_decode(Tokenizer* t, int prev_token, int token);
+    int autox_tok_encode(Tokenizer* t, char* text, int8_t bos, int8_t eos, int* tokens, int* n_tokens);
+    float* autox_transformer(Transformer* transformer, int token, int pos);
+    void autox_rmsnorm(float* o, float* x, float* weight, uint32_t size);
+    void autox_rope_rotation(int pos, float* sq, float* sk, int dim, int kv_dim, int head_size);
+    void autox_multi_head_attention(int n_heads, int pos, int seq_len, float* sq, float* satt, float* sxb, float* key_cache,
+        float* value_cache, int kv_dim, int kv_mul, int head_size, int loff);
+    void autox_swiglu(float* hb, float* hb2, uint32_t hidden_dim);
+    void autox_softmax(float* x, uint32_t height, uint32_t width);
+#ifdef  __cplusplus
+}
+#endif

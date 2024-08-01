@@ -17,3 +17,5 @@ nohup.out
 .idea
 
 *.pdparams
+Debug/
+.vs/

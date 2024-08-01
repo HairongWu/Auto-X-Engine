@@ -58,7 +58,7 @@ python tools/export_ppcls.py -c ./configs/ShuffleNetV2_x0_25.yaml -o Global.pret
 ### Deployment
 
 ```shell
-python tools/export_picodet.py -c configs/picodet/picodet_xs_320_coco_lcnet.yml -o weights=./pretrain/picodet_xs_320_coco_lcnet.pdparams 
+>python tools/export_ppdet.py -c configs/picodet/picodet_xs_320_coco_lcnet.yml -o weights=./pretrain/picodet_xs_320_coco_lcnet.pdparams --output_dir ./output/picodet_xs_320_coco_lcnet
 ```
 
 - If no post processing is required, please specify: `-o export.post_process=False` (if -o has already appeared, delete -o here) or manually modify corresponding fields in [runtime.yml](https://github.com/PaddlePaddle/PaddleDetection/blob/develop/configs/runtime.yml).
@@ -78,7 +78,7 @@ PP-TinyPose is a real-time keypoint detection model optimized by PaddleDetecion 
 ### Deployment
 
 ```bash
-python tools/export_tinypose.py -c configs/keypoint/tiny_pose/tinypose_128x96.yml -o weights=pretrain/tinypose_128x96
+python tools/export_ppdet.py -c configs/keypoint/tiny_pose/tinypose_128x96.yml -o weights=pretrain/tinypose_128x96 --output_dir ./output/tinypose_128x96
 ```
 
 ## PaddleOCR

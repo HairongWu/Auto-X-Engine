@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="源文件\nn">
+      <UniqueIdentifier>{fe256067-9cfb-4ca6-9427-b6c6e14231e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\models">
+      <UniqueIdentifier>{29cc7b74-01c1-4589-9389-54f954b60382}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MSVS.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\models\autox_model_llama3.c">
+      <Filter>源文件\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\models\autox_model_shufflenetv2.c">
+      <Filter>源文件\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_argmax.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_concat.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_conv2d.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_conv2d_depthwise.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_elementwise.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_im2col.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_matmul.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_multi_head_attention.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_pool2d.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_rmsnorm.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_rope_rotation.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_softmax.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_split.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_swiglu.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_tokenizer.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_transformer.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_transpose.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\models\autox_model_picodet.c">
+      <Filter>源文件\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_sigmoid.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_scale.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_sqrt.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\models\autox_model_ppocr.c">
+      <Filter>源文件\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\models\autox_model_tinypose.c">
+      <Filter>源文件\models</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\engine\include\autox_nn.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\avx_ansi.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\engine\include\autox_models.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

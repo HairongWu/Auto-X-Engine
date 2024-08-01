@@ -47,7 +47,7 @@ def parse_args():
     parser.add_argument(
         "--output_dir",
         type=str,
-        default="output/picodet_xs_320_coco_lcnet/",
+        default="output/",
         help="Directory for storing the output model files.")
     parser.add_argument(
         "--export_serving_model",
