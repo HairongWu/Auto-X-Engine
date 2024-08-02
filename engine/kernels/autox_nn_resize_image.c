@@ -1,3 +1,4 @@
+#include "../include/autox_nn.h"
 
 static uint8_t get_pixel(const uint8_t* data, int m_h, int m_w, int x, int y, int c)
 {

@@ -1,9 +1,7 @@
 #include "../include/autox_models.h"
 
-void shufflenetv2_x_0_25(const uint8_t* image, const uint16_t ssize_h, const uint16_t ssize_w, float* weights, float* Out)
+void shufflenetv2_x_0_25(const float* x, const uint16_t ssize_h, const uint16_t ssize_w, void* weights, float* Out)
 {
-	float* x = (float*)calloc(3 * 224 * 224, sizeof(float));
-
 	uint16_t x_dim[] = { 1, 3, 224, 224 };
 	uint16_t batch_norm_0_tmp_4_dim[] = { 1, 24, 112, 112 };
 	uint16_t stage1_conv_bn_offset_dim[] = { 24 };
@@ -354,7 +352,7 @@ void shufflenetv2_x_0_25(const uint8_t* image, const uint16_t ssize_h, const uin
 	uint16_t softmax_1_tmp_0_dim[] = { 1, 1000 };
 
 	float* batch_norm_0_tmp_4 = (float*)calloc(301056, sizeof(float));
-	autox_conv2d(x, weights + 0, weights + 24, batch_norm_0_tmp_4, x_dim, stage1_conv_weights_dim, batch_norm_0_tmp_4_dim, 1, 1, 2, 1, 1);
+	autox_conv2d(x, (float*)((int8_t*)weights), (float*)((int8_t*)weights) + 24, batch_norm_0_tmp_4, x_dim, stage1_conv_weights_dim, batch_norm_0_tmp_4_dim, 1, 1, 2, 1, 1);
 	free(x);
 
 	float* pool2d_0_tmp_0 = (float*)calloc(75264, sizeof(float));
@@ -362,23 +360,23 @@ void shufflenetv2_x_0_25(const uint8_t* image, const uint16_t ssize_h, const uin
 	free(batch_norm_0_tmp_4);
 
 	float* batch_norm_1_tmp_3 = (float*)calloc(18816, sizeof(float));
-	autox_conv2d(pool2d_0_tmp_0, weights + 672, weights + 696, batch_norm_1_tmp_3, pool2d_0_tmp_0_dim, stage_2_1_conv4_weights_dim, batch_norm_1_tmp_3_dim, 24, 1, 2, 1, 0);
+	autox_conv2d(pool2d_0_tmp_0, (float*)((int8_t*)weights) + 672, (float*)((int8_t*)weights) + 696, batch_norm_1_tmp_3, pool2d_0_tmp_0_dim, stage_2_1_conv4_weights_dim, batch_norm_1_tmp_3_dim, 24, 1, 2, 1, 0);
 	// free(pool2d_0_tmp_0);
 
 	float* batch_norm_3_tmp_4 = (float*)calloc(37632, sizeof(float));
-	autox_conv2d(pool2d_0_tmp_0, weights + 912, weights + 924, batch_norm_3_tmp_4, pool2d_0_tmp_0_dim, stage_2_1_conv1_weights_dim, batch_norm_3_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(pool2d_0_tmp_0, (float*)((int8_t*)weights) + 912, (float*)((int8_t*)weights) + 924, batch_norm_3_tmp_4, pool2d_0_tmp_0_dim, stage_2_1_conv1_weights_dim, batch_norm_3_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(pool2d_0_tmp_0);
 
 	float* batch_norm_4_tmp_3 = (float*)calloc(9408, sizeof(float));
-	autox_conv2d(batch_norm_3_tmp_4, weights + 1212, weights + 1224, batch_norm_4_tmp_3, batch_norm_3_tmp_4_dim, stage_2_1_conv2_weights_dim, batch_norm_4_tmp_3_dim, 12, 1, 2, 1, 0);
+	autox_conv2d(batch_norm_3_tmp_4, (float*)((int8_t*)weights) + 1212, (float*)((int8_t*)weights) + 1224, batch_norm_4_tmp_3, batch_norm_3_tmp_4_dim, stage_2_1_conv2_weights_dim, batch_norm_4_tmp_3_dim, 12, 1, 2, 1, 0);
 	free(batch_norm_3_tmp_4);
 
 	float* batch_norm_2_tmp_4 = (float*)calloc(9408, sizeof(float));
-	autox_conv2d(batch_norm_1_tmp_3, weights + 1332, weights + 1344, batch_norm_2_tmp_4, batch_norm_1_tmp_3_dim, stage_2_1_conv5_weights_dim, batch_norm_2_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(batch_norm_1_tmp_3, (float*)((int8_t*)weights) + 1332, (float*)((int8_t*)weights) + 1344, batch_norm_2_tmp_4, batch_norm_1_tmp_3_dim, stage_2_1_conv5_weights_dim, batch_norm_2_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(batch_norm_1_tmp_3);
 
 	float* batch_norm_5_tmp_4 = (float*)calloc(9408, sizeof(float));
-	autox_conv2d(batch_norm_4_tmp_3, weights + 1632, weights + 1644, batch_norm_5_tmp_4, batch_norm_4_tmp_3_dim, stage_2_1_conv3_weights_dim, batch_norm_5_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(batch_norm_4_tmp_3, (float*)((int8_t*)weights) + 1632, (float*)((int8_t*)weights) + 1644, batch_norm_5_tmp_4, batch_norm_4_tmp_3_dim, stage_2_1_conv3_weights_dim, batch_norm_5_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(batch_norm_4_tmp_3);
 
 	float* p_7[] = { batch_norm_2_tmp_4, batch_norm_5_tmp_4, };
@@ -401,15 +399,15 @@ void shufflenetv2_x_0_25(const uint8_t* image, const uint16_t ssize_h, const uin
 	free(transpose_0_tmp_0);
 
 	float* batch_norm_6_tmp_4 = (float*)calloc(9408, sizeof(float));
-	autox_conv2d(split_0_tmp_1, weights + 1788, weights + 1800, batch_norm_6_tmp_4, split_0_tmp_1_dim, stage_2_2_conv1_weights_dim, batch_norm_6_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(split_0_tmp_1, (float*)((int8_t*)weights) + 1788, (float*)((int8_t*)weights) + 1800, batch_norm_6_tmp_4, split_0_tmp_1_dim, stage_2_2_conv1_weights_dim, batch_norm_6_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(split_0_tmp_1);
 
 	float* batch_norm_7_tmp_3 = (float*)calloc(9408, sizeof(float));
-	autox_conv2d(batch_norm_6_tmp_4, weights + 1944, weights + 1956, batch_norm_7_tmp_3, batch_norm_6_tmp_4_dim, stage_2_2_conv2_weights_dim, batch_norm_7_tmp_3_dim, 12, 1, 1, 1, 0);
+	autox_conv2d(batch_norm_6_tmp_4, (float*)((int8_t*)weights) + 1944, (float*)((int8_t*)weights) + 1956, batch_norm_7_tmp_3, batch_norm_6_tmp_4_dim, stage_2_2_conv2_weights_dim, batch_norm_7_tmp_3_dim, 12, 1, 1, 1, 0);
 	free(batch_norm_6_tmp_4);
 
 	float* batch_norm_8_tmp_4 = (float*)calloc(9408, sizeof(float));
-	autox_conv2d(batch_norm_7_tmp_3, weights + 2064, weights + 2076, batch_norm_8_tmp_4, batch_norm_7_tmp_3_dim, stage_2_2_conv3_weights_dim, batch_norm_8_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(batch_norm_7_tmp_3, (float*)((int8_t*)weights) + 2064, (float*)((int8_t*)weights) + 2076, batch_norm_8_tmp_4, batch_norm_7_tmp_3_dim, stage_2_2_conv3_weights_dim, batch_norm_8_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(batch_norm_7_tmp_3);
 
 	float* p_13[] = { split_0_tmp_0, batch_norm_8_tmp_4, };
@@ -432,15 +430,15 @@ void shufflenetv2_x_0_25(const uint8_t* image, const uint16_t ssize_h, const uin
 	free(transpose_1_tmp_0);
 
 	float* batch_norm_9_tmp_4 = (float*)calloc(9408, sizeof(float));
-	autox_conv2d(split_1_tmp_1, weights + 2220, weights + 2232, batch_norm_9_tmp_4, split_1_tmp_1_dim, stage_2_3_conv1_weights_dim, batch_norm_9_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(split_1_tmp_1, (float*)((int8_t*)weights) + 2220, (float*)((int8_t*)weights) + 2232, batch_norm_9_tmp_4, split_1_tmp_1_dim, stage_2_3_conv1_weights_dim, batch_norm_9_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(split_1_tmp_1);
 
 	float* batch_norm_10_tmp_3 = (float*)calloc(9408, sizeof(float));
-	autox_conv2d(batch_norm_9_tmp_4, weights + 2376, weights + 2388, batch_norm_10_tmp_3, batch_norm_9_tmp_4_dim, stage_2_3_conv2_weights_dim, batch_norm_10_tmp_3_dim, 12, 1, 1, 1, 0);
+	autox_conv2d(batch_norm_9_tmp_4, (float*)((int8_t*)weights) + 2376, (float*)((int8_t*)weights) + 2388, batch_norm_10_tmp_3, batch_norm_9_tmp_4_dim, stage_2_3_conv2_weights_dim, batch_norm_10_tmp_3_dim, 12, 1, 1, 1, 0);
 	free(batch_norm_9_tmp_4);
 
 	float* batch_norm_11_tmp_4 = (float*)calloc(9408, sizeof(float));
-	autox_conv2d(batch_norm_10_tmp_3, weights + 2496, weights + 2508, batch_norm_11_tmp_4, batch_norm_10_tmp_3_dim, stage_2_3_conv3_weights_dim, batch_norm_11_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(batch_norm_10_tmp_3, (float*)((int8_t*)weights) + 2496, (float*)((int8_t*)weights) + 2508, batch_norm_11_tmp_4, batch_norm_10_tmp_3_dim, stage_2_3_conv3_weights_dim, batch_norm_11_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(batch_norm_10_tmp_3);
 
 	float* p_19[] = { split_1_tmp_0, batch_norm_11_tmp_4, };
@@ -463,15 +461,15 @@ void shufflenetv2_x_0_25(const uint8_t* image, const uint16_t ssize_h, const uin
 	free(transpose_2_tmp_0);
 
 	float* batch_norm_12_tmp_4 = (float*)calloc(9408, sizeof(float));
-	autox_conv2d(split_2_tmp_1, weights + 2652, weights + 2664, batch_norm_12_tmp_4, split_2_tmp_1_dim, stage_2_4_conv1_weights_dim, batch_norm_12_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(split_2_tmp_1, (float*)((int8_t*)weights) + 2652, (float*)((int8_t*)weights) + 2664, batch_norm_12_tmp_4, split_2_tmp_1_dim, stage_2_4_conv1_weights_dim, batch_norm_12_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(split_2_tmp_1);
 
 	float* batch_norm_13_tmp_3 = (float*)calloc(9408, sizeof(float));
-	autox_conv2d(batch_norm_12_tmp_4, weights + 2808, weights + 2820, batch_norm_13_tmp_3, batch_norm_12_tmp_4_dim, stage_2_4_conv2_weights_dim, batch_norm_13_tmp_3_dim, 12, 1, 1, 1, 0);
+	autox_conv2d(batch_norm_12_tmp_4, (float*)((int8_t*)weights) + 2808, (float*)((int8_t*)weights) + 2820, batch_norm_13_tmp_3, batch_norm_12_tmp_4_dim, stage_2_4_conv2_weights_dim, batch_norm_13_tmp_3_dim, 12, 1, 1, 1, 0);
 	free(batch_norm_12_tmp_4);
 
 	float* batch_norm_14_tmp_4 = (float*)calloc(9408, sizeof(float));
-	autox_conv2d(batch_norm_13_tmp_3, weights + 2928, weights + 2940, batch_norm_14_tmp_4, batch_norm_13_tmp_3_dim, stage_2_4_conv3_weights_dim, batch_norm_14_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(batch_norm_13_tmp_3, (float*)((int8_t*)weights) + 2928, (float*)((int8_t*)weights) + 2940, batch_norm_14_tmp_4, batch_norm_13_tmp_3_dim, stage_2_4_conv3_weights_dim, batch_norm_14_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(batch_norm_13_tmp_3);
 
 	float* p_25[] = { split_2_tmp_0, batch_norm_14_tmp_4, };
@@ -487,23 +485,23 @@ void shufflenetv2_x_0_25(const uint8_t* image, const uint16_t ssize_h, const uin
 	free(concat_3_tmp_0);
 
 	float* batch_norm_15_tmp_3 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(transpose_3_tmp_0, weights + 3084, weights + 3108, batch_norm_15_tmp_3, reshape2_7_tmp_0_dim, stage_3_1_conv4_weights_dim, batch_norm_15_tmp_3_dim, 24, 1, 2, 1, 0);
+	autox_conv2d(transpose_3_tmp_0, (float*)((int8_t*)weights) + 3084, (float*)((int8_t*)weights) + 3108, batch_norm_15_tmp_3, reshape2_7_tmp_0_dim, stage_3_1_conv4_weights_dim, batch_norm_15_tmp_3_dim, 24, 1, 2, 1, 0);
 	// free(transpose_3_tmp_0);
 
 	float* batch_norm_17_tmp_4 = (float*)calloc(18816, sizeof(float));
-	autox_conv2d(transpose_3_tmp_0, weights + 3324, weights + 3348, batch_norm_17_tmp_4, reshape2_7_tmp_0_dim, stage_3_1_conv1_weights_dim, batch_norm_17_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(transpose_3_tmp_0, (float*)((int8_t*)weights) + 3324, (float*)((int8_t*)weights) + 3348, batch_norm_17_tmp_4, reshape2_7_tmp_0_dim, stage_3_1_conv1_weights_dim, batch_norm_17_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(transpose_3_tmp_0);
 
 	float* batch_norm_18_tmp_3 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(batch_norm_17_tmp_4, weights + 3924, weights + 3948, batch_norm_18_tmp_3, batch_norm_17_tmp_4_dim, stage_3_1_conv2_weights_dim, batch_norm_18_tmp_3_dim, 24, 1, 2, 1, 0);
+	autox_conv2d(batch_norm_17_tmp_4, (float*)((int8_t*)weights) + 3924, (float*)((int8_t*)weights) + 3948, batch_norm_18_tmp_3, batch_norm_17_tmp_4_dim, stage_3_1_conv2_weights_dim, batch_norm_18_tmp_3_dim, 24, 1, 2, 1, 0);
 	free(batch_norm_17_tmp_4);
 
 	float* batch_norm_16_tmp_4 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(batch_norm_15_tmp_3, weights + 4164, weights + 4188, batch_norm_16_tmp_4, batch_norm_15_tmp_3_dim, stage_3_1_conv5_weights_dim, batch_norm_16_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(batch_norm_15_tmp_3, (float*)((int8_t*)weights) + 4164, (float*)((int8_t*)weights) + 4188, batch_norm_16_tmp_4, batch_norm_15_tmp_3_dim, stage_3_1_conv5_weights_dim, batch_norm_16_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(batch_norm_15_tmp_3);
 
 	float* batch_norm_19_tmp_4 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(batch_norm_18_tmp_3, weights + 4764, weights + 4788, batch_norm_19_tmp_4, batch_norm_18_tmp_3_dim, stage_3_1_conv3_weights_dim, batch_norm_19_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(batch_norm_18_tmp_3, (float*)((int8_t*)weights) + 4764, (float*)((int8_t*)weights) + 4788, batch_norm_19_tmp_4, batch_norm_18_tmp_3_dim, stage_3_1_conv3_weights_dim, batch_norm_19_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(batch_norm_18_tmp_3);
 
 	float* p_32[] = { batch_norm_16_tmp_4, batch_norm_19_tmp_4, };
@@ -526,15 +524,15 @@ void shufflenetv2_x_0_25(const uint8_t* image, const uint16_t ssize_h, const uin
 	free(transpose_4_tmp_0);
 
 	float* batch_norm_20_tmp_4 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(split_3_tmp_1, weights + 5364, weights + 5388, batch_norm_20_tmp_4, split_3_tmp_1_dim, stage_3_2_conv1_weights_dim, batch_norm_20_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(split_3_tmp_1, (float*)((int8_t*)weights) + 5364, (float*)((int8_t*)weights) + 5388, batch_norm_20_tmp_4, split_3_tmp_1_dim, stage_3_2_conv1_weights_dim, batch_norm_20_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(split_3_tmp_1);
 
 	float* batch_norm_21_tmp_3 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(batch_norm_20_tmp_4, weights + 5964, weights + 5988, batch_norm_21_tmp_3, batch_norm_20_tmp_4_dim, stage_3_2_conv2_weights_dim, batch_norm_21_tmp_3_dim, 24, 1, 1, 1, 0);
+	autox_conv2d(batch_norm_20_tmp_4, (float*)((int8_t*)weights) + 5964, (float*)((int8_t*)weights) + 5988, batch_norm_21_tmp_3, batch_norm_20_tmp_4_dim, stage_3_2_conv2_weights_dim, batch_norm_21_tmp_3_dim, 24, 1, 1, 1, 0);
 	free(batch_norm_20_tmp_4);
 
 	float* batch_norm_22_tmp_4 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(batch_norm_21_tmp_3, weights + 6204, weights + 6228, batch_norm_22_tmp_4, batch_norm_21_tmp_3_dim, stage_3_2_conv3_weights_dim, batch_norm_22_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(batch_norm_21_tmp_3, (float*)((int8_t*)weights) + 6204, (float*)((int8_t*)weights) + 6228, batch_norm_22_tmp_4, batch_norm_21_tmp_3_dim, stage_3_2_conv3_weights_dim, batch_norm_22_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(batch_norm_21_tmp_3);
 
 	float* p_38[] = { split_3_tmp_0, batch_norm_22_tmp_4, };
@@ -557,15 +555,15 @@ void shufflenetv2_x_0_25(const uint8_t* image, const uint16_t ssize_h, const uin
 	free(transpose_5_tmp_0);
 
 	float* batch_norm_23_tmp_4 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(split_4_tmp_1, weights + 6804, weights + 6828, batch_norm_23_tmp_4, split_4_tmp_1_dim, stage_3_3_conv1_weights_dim, batch_norm_23_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(split_4_tmp_1, (float*)((int8_t*)weights) + 6804, (float*)((int8_t*)weights) + 6828, batch_norm_23_tmp_4, split_4_tmp_1_dim, stage_3_3_conv1_weights_dim, batch_norm_23_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(split_4_tmp_1);
 
 	float* batch_norm_24_tmp_3 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(batch_norm_23_tmp_4, weights + 7404, weights + 7428, batch_norm_24_tmp_3, batch_norm_23_tmp_4_dim, stage_3_3_conv2_weights_dim, batch_norm_24_tmp_3_dim, 24, 1, 1, 1, 0);
+	autox_conv2d(batch_norm_23_tmp_4, (float*)((int8_t*)weights) + 7404, (float*)((int8_t*)weights) + 7428, batch_norm_24_tmp_3, batch_norm_23_tmp_4_dim, stage_3_3_conv2_weights_dim, batch_norm_24_tmp_3_dim, 24, 1, 1, 1, 0);
 	free(batch_norm_23_tmp_4);
 
 	float* batch_norm_25_tmp_4 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(batch_norm_24_tmp_3, weights + 7644, weights + 7668, batch_norm_25_tmp_4, batch_norm_24_tmp_3_dim, stage_3_3_conv3_weights_dim, batch_norm_25_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(batch_norm_24_tmp_3, (float*)((int8_t*)weights) + 7644, (float*)((int8_t*)weights) + 7668, batch_norm_25_tmp_4, batch_norm_24_tmp_3_dim, stage_3_3_conv3_weights_dim, batch_norm_25_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(batch_norm_24_tmp_3);
 
 	float* p_44[] = { split_4_tmp_0, batch_norm_25_tmp_4, };
@@ -588,15 +586,15 @@ void shufflenetv2_x_0_25(const uint8_t* image, const uint16_t ssize_h, const uin
 	free(transpose_6_tmp_0);
 
 	float* batch_norm_26_tmp_4 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(split_5_tmp_1, weights + 8244, weights + 8268, batch_norm_26_tmp_4, split_5_tmp_1_dim, stage_3_4_conv1_weights_dim, batch_norm_26_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(split_5_tmp_1, (float*)((int8_t*)weights) + 8244, (float*)((int8_t*)weights) + 8268, batch_norm_26_tmp_4, split_5_tmp_1_dim, stage_3_4_conv1_weights_dim, batch_norm_26_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(split_5_tmp_1);
 
 	float* batch_norm_27_tmp_3 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(batch_norm_26_tmp_4, weights + 8844, weights + 8868, batch_norm_27_tmp_3, batch_norm_26_tmp_4_dim, stage_3_4_conv2_weights_dim, batch_norm_27_tmp_3_dim, 24, 1, 1, 1, 0);
+	autox_conv2d(batch_norm_26_tmp_4, (float*)((int8_t*)weights) + 8844, (float*)((int8_t*)weights) + 8868, batch_norm_27_tmp_3, batch_norm_26_tmp_4_dim, stage_3_4_conv2_weights_dim, batch_norm_27_tmp_3_dim, 24, 1, 1, 1, 0);
 	free(batch_norm_26_tmp_4);
 
 	float* batch_norm_28_tmp_4 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(batch_norm_27_tmp_3, weights + 9084, weights + 9108, batch_norm_28_tmp_4, batch_norm_27_tmp_3_dim, stage_3_4_conv3_weights_dim, batch_norm_28_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(batch_norm_27_tmp_3, (float*)((int8_t*)weights) + 9084, (float*)((int8_t*)weights) + 9108, batch_norm_28_tmp_4, batch_norm_27_tmp_3_dim, stage_3_4_conv3_weights_dim, batch_norm_28_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(batch_norm_27_tmp_3);
 
 	float* p_50[] = { split_5_tmp_0, batch_norm_28_tmp_4, };
@@ -619,15 +617,15 @@ void shufflenetv2_x_0_25(const uint8_t* image, const uint16_t ssize_h, const uin
 	free(transpose_7_tmp_0);
 
 	float* batch_norm_29_tmp_4 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(split_6_tmp_1, weights + 9684, weights + 9708, batch_norm_29_tmp_4, split_6_tmp_1_dim, stage_3_5_conv1_weights_dim, batch_norm_29_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(split_6_tmp_1, (float*)((int8_t*)weights) + 9684, (float*)((int8_t*)weights) + 9708, batch_norm_29_tmp_4, split_6_tmp_1_dim, stage_3_5_conv1_weights_dim, batch_norm_29_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(split_6_tmp_1);
 
 	float* batch_norm_30_tmp_3 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(batch_norm_29_tmp_4, weights + 10284, weights + 10308, batch_norm_30_tmp_3, batch_norm_29_tmp_4_dim, stage_3_5_conv2_weights_dim, batch_norm_30_tmp_3_dim, 24, 1, 1, 1, 0);
+	autox_conv2d(batch_norm_29_tmp_4, (float*)((int8_t*)weights) + 10284, (float*)((int8_t*)weights) + 10308, batch_norm_30_tmp_3, batch_norm_29_tmp_4_dim, stage_3_5_conv2_weights_dim, batch_norm_30_tmp_3_dim, 24, 1, 1, 1, 0);
 	free(batch_norm_29_tmp_4);
 
 	float* batch_norm_31_tmp_4 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(batch_norm_30_tmp_3, weights + 10524, weights + 10548, batch_norm_31_tmp_4, batch_norm_30_tmp_3_dim, stage_3_5_conv3_weights_dim, batch_norm_31_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(batch_norm_30_tmp_3, (float*)((int8_t*)weights) + 10524, (float*)((int8_t*)weights) + 10548, batch_norm_31_tmp_4, batch_norm_30_tmp_3_dim, stage_3_5_conv3_weights_dim, batch_norm_31_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(batch_norm_30_tmp_3);
 
 	float* p_56[] = { split_6_tmp_0, batch_norm_31_tmp_4, };
@@ -650,15 +648,15 @@ void shufflenetv2_x_0_25(const uint8_t* image, const uint16_t ssize_h, const uin
 	free(transpose_8_tmp_0);
 
 	float* batch_norm_32_tmp_4 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(split_7_tmp_1, weights + 11124, weights + 11148, batch_norm_32_tmp_4, split_7_tmp_1_dim, stage_3_6_conv1_weights_dim, batch_norm_32_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(split_7_tmp_1, (float*)((int8_t*)weights) + 11124, (float*)((int8_t*)weights) + 11148, batch_norm_32_tmp_4, split_7_tmp_1_dim, stage_3_6_conv1_weights_dim, batch_norm_32_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(split_7_tmp_1);
 
 	float* batch_norm_33_tmp_3 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(batch_norm_32_tmp_4, weights + 11724, weights + 11748, batch_norm_33_tmp_3, batch_norm_32_tmp_4_dim, stage_3_6_conv2_weights_dim, batch_norm_33_tmp_3_dim, 24, 1, 1, 1, 0);
+	autox_conv2d(batch_norm_32_tmp_4, (float*)((int8_t*)weights) + 11724, (float*)((int8_t*)weights) + 11748, batch_norm_33_tmp_3, batch_norm_32_tmp_4_dim, stage_3_6_conv2_weights_dim, batch_norm_33_tmp_3_dim, 24, 1, 1, 1, 0);
 	free(batch_norm_32_tmp_4);
 
 	float* batch_norm_34_tmp_4 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(batch_norm_33_tmp_3, weights + 11964, weights + 11988, batch_norm_34_tmp_4, batch_norm_33_tmp_3_dim, stage_3_6_conv3_weights_dim, batch_norm_34_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(batch_norm_33_tmp_3, (float*)((int8_t*)weights) + 11964, (float*)((int8_t*)weights) + 11988, batch_norm_34_tmp_4, batch_norm_33_tmp_3_dim, stage_3_6_conv3_weights_dim, batch_norm_34_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(batch_norm_33_tmp_3);
 
 	float* p_62[] = { split_7_tmp_0, batch_norm_34_tmp_4, };
@@ -681,15 +679,15 @@ void shufflenetv2_x_0_25(const uint8_t* image, const uint16_t ssize_h, const uin
 	free(transpose_9_tmp_0);
 
 	float* batch_norm_35_tmp_4 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(split_8_tmp_1, weights + 12564, weights + 12588, batch_norm_35_tmp_4, split_8_tmp_1_dim, stage_3_7_conv1_weights_dim, batch_norm_35_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(split_8_tmp_1, (float*)((int8_t*)weights) + 12564, (float*)((int8_t*)weights) + 12588, batch_norm_35_tmp_4, split_8_tmp_1_dim, stage_3_7_conv1_weights_dim, batch_norm_35_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(split_8_tmp_1);
 
 	float* batch_norm_36_tmp_3 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(batch_norm_35_tmp_4, weights + 13164, weights + 13188, batch_norm_36_tmp_3, batch_norm_35_tmp_4_dim, stage_3_7_conv2_weights_dim, batch_norm_36_tmp_3_dim, 24, 1, 1, 1, 0);
+	autox_conv2d(batch_norm_35_tmp_4, (float*)((int8_t*)weights) + 13164, (float*)((int8_t*)weights) + 13188, batch_norm_36_tmp_3, batch_norm_35_tmp_4_dim, stage_3_7_conv2_weights_dim, batch_norm_36_tmp_3_dim, 24, 1, 1, 1, 0);
 	free(batch_norm_35_tmp_4);
 
 	float* batch_norm_37_tmp_4 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(batch_norm_36_tmp_3, weights + 13404, weights + 13428, batch_norm_37_tmp_4, batch_norm_36_tmp_3_dim, stage_3_7_conv3_weights_dim, batch_norm_37_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(batch_norm_36_tmp_3, (float*)((int8_t*)weights) + 13404, (float*)((int8_t*)weights) + 13428, batch_norm_37_tmp_4, batch_norm_36_tmp_3_dim, stage_3_7_conv3_weights_dim, batch_norm_37_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(batch_norm_36_tmp_3);
 
 	float* p_68[] = { split_8_tmp_0, batch_norm_37_tmp_4, };
@@ -712,15 +710,15 @@ void shufflenetv2_x_0_25(const uint8_t* image, const uint16_t ssize_h, const uin
 	free(transpose_10_tmp_0);
 
 	float* batch_norm_38_tmp_4 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(split_9_tmp_1, weights + 14004, weights + 14028, batch_norm_38_tmp_4, split_9_tmp_1_dim, stage_3_8_conv1_weights_dim, batch_norm_38_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(split_9_tmp_1, (float*)((int8_t*)weights) + 14004, (float*)((int8_t*)weights) + 14028, batch_norm_38_tmp_4, split_9_tmp_1_dim, stage_3_8_conv1_weights_dim, batch_norm_38_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(split_9_tmp_1);
 
 	float* batch_norm_39_tmp_3 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(batch_norm_38_tmp_4, weights + 14604, weights + 14628, batch_norm_39_tmp_3, batch_norm_38_tmp_4_dim, stage_3_8_conv2_weights_dim, batch_norm_39_tmp_3_dim, 24, 1, 1, 1, 0);
+	autox_conv2d(batch_norm_38_tmp_4, (float*)((int8_t*)weights) + 14604, (float*)((int8_t*)weights) + 14628, batch_norm_39_tmp_3, batch_norm_38_tmp_4_dim, stage_3_8_conv2_weights_dim, batch_norm_39_tmp_3_dim, 24, 1, 1, 1, 0);
 	free(batch_norm_38_tmp_4);
 
 	float* batch_norm_40_tmp_4 = (float*)calloc(4704, sizeof(float));
-	autox_conv2d(batch_norm_39_tmp_3, weights + 14844, weights + 14868, batch_norm_40_tmp_4, batch_norm_39_tmp_3_dim, stage_3_8_conv3_weights_dim, batch_norm_40_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(batch_norm_39_tmp_3, (float*)((int8_t*)weights) + 14844, (float*)((int8_t*)weights) + 14868, batch_norm_40_tmp_4, batch_norm_39_tmp_3_dim, stage_3_8_conv3_weights_dim, batch_norm_40_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(batch_norm_39_tmp_3);
 
 	float* p_74[] = { split_9_tmp_0, batch_norm_40_tmp_4, };
@@ -736,23 +734,23 @@ void shufflenetv2_x_0_25(const uint8_t* image, const uint16_t ssize_h, const uin
 	free(concat_11_tmp_0);
 
 	float* batch_norm_41_tmp_3 = (float*)calloc(2352, sizeof(float));
-	autox_conv2d(transpose_11_tmp_0, weights + 15444, weights + 15492, batch_norm_41_tmp_3, reshape2_23_tmp_0_dim, stage_4_1_conv4_weights_dim, batch_norm_41_tmp_3_dim, 48, 1, 2, 1, 0);
+	autox_conv2d(transpose_11_tmp_0, (float*)((int8_t*)weights) + 15444, (float*)((int8_t*)weights) + 15492, batch_norm_41_tmp_3, reshape2_23_tmp_0_dim, stage_4_1_conv4_weights_dim, batch_norm_41_tmp_3_dim, 48, 1, 2, 1, 0);
 	// free(transpose_11_tmp_0);
 
 	float* batch_norm_43_tmp_4 = (float*)calloc(9408, sizeof(float));
-	autox_conv2d(transpose_11_tmp_0, weights + 15924, weights + 15972, batch_norm_43_tmp_4, reshape2_23_tmp_0_dim, stage_4_1_conv1_weights_dim, batch_norm_43_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(transpose_11_tmp_0, (float*)((int8_t*)weights) + 15924, (float*)((int8_t*)weights) + 15972, batch_norm_43_tmp_4, reshape2_23_tmp_0_dim, stage_4_1_conv1_weights_dim, batch_norm_43_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(transpose_11_tmp_0);
 
 	float* batch_norm_44_tmp_3 = (float*)calloc(2352, sizeof(float));
-	autox_conv2d(batch_norm_43_tmp_4, weights + 18276, weights + 18324, batch_norm_44_tmp_3, batch_norm_43_tmp_4_dim, stage_4_1_conv2_weights_dim, batch_norm_44_tmp_3_dim, 48, 1, 2, 1, 0);
+	autox_conv2d(batch_norm_43_tmp_4, (float*)((int8_t*)weights) + 18276, (float*)((int8_t*)weights) + 18324, batch_norm_44_tmp_3, batch_norm_43_tmp_4_dim, stage_4_1_conv2_weights_dim, batch_norm_44_tmp_3_dim, 48, 1, 2, 1, 0);
 	free(batch_norm_43_tmp_4);
 
 	float* batch_norm_42_tmp_4 = (float*)calloc(2352, sizeof(float));
-	autox_conv2d(batch_norm_41_tmp_3, weights + 18756, weights + 18804, batch_norm_42_tmp_4, batch_norm_41_tmp_3_dim, stage_4_1_conv5_weights_dim, batch_norm_42_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(batch_norm_41_tmp_3, (float*)((int8_t*)weights) + 18756, (float*)((int8_t*)weights) + 18804, batch_norm_42_tmp_4, batch_norm_41_tmp_3_dim, stage_4_1_conv5_weights_dim, batch_norm_42_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(batch_norm_41_tmp_3);
 
 	float* batch_norm_45_tmp_4 = (float*)calloc(2352, sizeof(float));
-	autox_conv2d(batch_norm_44_tmp_3, weights + 21108, weights + 21156, batch_norm_45_tmp_4, batch_norm_44_tmp_3_dim, stage_4_1_conv3_weights_dim, batch_norm_45_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(batch_norm_44_tmp_3, (float*)((int8_t*)weights) + 21108, (float*)((int8_t*)weights) + 21156, batch_norm_45_tmp_4, batch_norm_44_tmp_3_dim, stage_4_1_conv3_weights_dim, batch_norm_45_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(batch_norm_44_tmp_3);
 
 	float* p_81[] = { batch_norm_42_tmp_4, batch_norm_45_tmp_4, };
@@ -775,15 +773,15 @@ void shufflenetv2_x_0_25(const uint8_t* image, const uint16_t ssize_h, const uin
 	free(transpose_12_tmp_0);
 
 	float* batch_norm_46_tmp_4 = (float*)calloc(2352, sizeof(float));
-	autox_conv2d(split_10_tmp_1, weights + 23460, weights + 23508, batch_norm_46_tmp_4, split_10_tmp_1_dim, stage_4_2_conv1_weights_dim, batch_norm_46_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(split_10_tmp_1, (float*)((int8_t*)weights) + 23460, (float*)((int8_t*)weights) + 23508, batch_norm_46_tmp_4, split_10_tmp_1_dim, stage_4_2_conv1_weights_dim, batch_norm_46_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(split_10_tmp_1);
 
 	float* batch_norm_47_tmp_3 = (float*)calloc(2352, sizeof(float));
-	autox_conv2d(batch_norm_46_tmp_4, weights + 25812, weights + 25860, batch_norm_47_tmp_3, batch_norm_46_tmp_4_dim, stage_4_2_conv2_weights_dim, batch_norm_47_tmp_3_dim, 48, 1, 1, 1, 0);
+	autox_conv2d(batch_norm_46_tmp_4, (float*)((int8_t*)weights) + 25812, (float*)((int8_t*)weights) + 25860, batch_norm_47_tmp_3, batch_norm_46_tmp_4_dim, stage_4_2_conv2_weights_dim, batch_norm_47_tmp_3_dim, 48, 1, 1, 1, 0);
 	free(batch_norm_46_tmp_4);
 
 	float* batch_norm_48_tmp_4 = (float*)calloc(2352, sizeof(float));
-	autox_conv2d(batch_norm_47_tmp_3, weights + 26292, weights + 26340, batch_norm_48_tmp_4, batch_norm_47_tmp_3_dim, stage_4_2_conv3_weights_dim, batch_norm_48_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(batch_norm_47_tmp_3, (float*)((int8_t*)weights) + 26292, (float*)((int8_t*)weights) + 26340, batch_norm_48_tmp_4, batch_norm_47_tmp_3_dim, stage_4_2_conv3_weights_dim, batch_norm_48_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(batch_norm_47_tmp_3);
 
 	float* p_87[] = { split_10_tmp_0, batch_norm_48_tmp_4, };
@@ -806,15 +804,15 @@ void shufflenetv2_x_0_25(const uint8_t* image, const uint16_t ssize_h, const uin
 	free(transpose_13_tmp_0);
 
 	float* batch_norm_49_tmp_4 = (float*)calloc(2352, sizeof(float));
-	autox_conv2d(split_11_tmp_1, weights + 28644, weights + 28692, batch_norm_49_tmp_4, split_11_tmp_1_dim, stage_4_3_conv1_weights_dim, batch_norm_49_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(split_11_tmp_1, (float*)((int8_t*)weights) + 28644, (float*)((int8_t*)weights) + 28692, batch_norm_49_tmp_4, split_11_tmp_1_dim, stage_4_3_conv1_weights_dim, batch_norm_49_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(split_11_tmp_1);
 
 	float* batch_norm_50_tmp_3 = (float*)calloc(2352, sizeof(float));
-	autox_conv2d(batch_norm_49_tmp_4, weights + 30996, weights + 31044, batch_norm_50_tmp_3, batch_norm_49_tmp_4_dim, stage_4_3_conv2_weights_dim, batch_norm_50_tmp_3_dim, 48, 1, 1, 1, 0);
+	autox_conv2d(batch_norm_49_tmp_4, (float*)((int8_t*)weights) + 30996, (float*)((int8_t*)weights) + 31044, batch_norm_50_tmp_3, batch_norm_49_tmp_4_dim, stage_4_3_conv2_weights_dim, batch_norm_50_tmp_3_dim, 48, 1, 1, 1, 0);
 	free(batch_norm_49_tmp_4);
 
 	float* batch_norm_51_tmp_4 = (float*)calloc(2352, sizeof(float));
-	autox_conv2d(batch_norm_50_tmp_3, weights + 31476, weights + 31524, batch_norm_51_tmp_4, batch_norm_50_tmp_3_dim, stage_4_3_conv3_weights_dim, batch_norm_51_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(batch_norm_50_tmp_3, (float*)((int8_t*)weights) + 31476, (float*)((int8_t*)weights) + 31524, batch_norm_51_tmp_4, batch_norm_50_tmp_3_dim, stage_4_3_conv3_weights_dim, batch_norm_51_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(batch_norm_50_tmp_3);
 
 	float* p_93[] = { split_11_tmp_0, batch_norm_51_tmp_4, };
@@ -837,15 +835,15 @@ void shufflenetv2_x_0_25(const uint8_t* image, const uint16_t ssize_h, const uin
 	free(transpose_14_tmp_0);
 
 	float* batch_norm_52_tmp_4 = (float*)calloc(2352, sizeof(float));
-	autox_conv2d(split_12_tmp_1, weights + 33828, weights + 33876, batch_norm_52_tmp_4, split_12_tmp_1_dim, stage_4_4_conv1_weights_dim, batch_norm_52_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(split_12_tmp_1, (float*)((int8_t*)weights) + 33828, (float*)((int8_t*)weights) + 33876, batch_norm_52_tmp_4, split_12_tmp_1_dim, stage_4_4_conv1_weights_dim, batch_norm_52_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(split_12_tmp_1);
 
 	float* batch_norm_53_tmp_3 = (float*)calloc(2352, sizeof(float));
-	autox_conv2d(batch_norm_52_tmp_4, weights + 36180, weights + 36228, batch_norm_53_tmp_3, batch_norm_52_tmp_4_dim, stage_4_4_conv2_weights_dim, batch_norm_53_tmp_3_dim, 48, 1, 1, 1, 0);
+	autox_conv2d(batch_norm_52_tmp_4, (float*)((int8_t*)weights) + 36180, (float*)((int8_t*)weights) + 36228, batch_norm_53_tmp_3, batch_norm_52_tmp_4_dim, stage_4_4_conv2_weights_dim, batch_norm_53_tmp_3_dim, 48, 1, 1, 1, 0);
 	free(batch_norm_52_tmp_4);
 
 	float* batch_norm_54_tmp_4 = (float*)calloc(2352, sizeof(float));
-	autox_conv2d(batch_norm_53_tmp_3, weights + 36660, weights + 36708, batch_norm_54_tmp_4, batch_norm_53_tmp_3_dim, stage_4_4_conv3_weights_dim, batch_norm_54_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(batch_norm_53_tmp_3, (float*)((int8_t*)weights) + 36660, (float*)((int8_t*)weights) + 36708, batch_norm_54_tmp_4, batch_norm_53_tmp_3_dim, stage_4_4_conv3_weights_dim, batch_norm_54_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(batch_norm_53_tmp_3);
 
 	float* p_99[] = { split_12_tmp_0, batch_norm_54_tmp_4, };
@@ -861,19 +859,19 @@ void shufflenetv2_x_0_25(const uint8_t* image, const uint16_t ssize_h, const uin
 	free(concat_15_tmp_0);
 
 	float* batch_norm_55_tmp_4 = (float*)calloc(25088, sizeof(float));
-	autox_conv2d(transpose_15_tmp_0, weights + 39012, weights + 39524, batch_norm_55_tmp_4, reshape2_31_tmp_0_dim, conv5_weights_dim, batch_norm_55_tmp_4_dim, 1, 0, 1, 1, 1);
+	autox_conv2d(transpose_15_tmp_0, (float*)((int8_t*)weights) + 39012, (float*)((int8_t*)weights) + 39524, batch_norm_55_tmp_4, reshape2_31_tmp_0_dim, conv5_weights_dim, batch_norm_55_tmp_4_dim, 1, 0, 1, 1, 1);
 	free(transpose_15_tmp_0);
 
 	float* pool2d_1_tmp_0 = (float*)calloc(512, sizeof(float));
-	autox_pool2d(batch_norm_55_tmp_4, pool2d_1_tmp_0, batch_norm_55_tmp_4_dim, pool2d_1_tmp_0_dim, 1, 1, 0, 1, 0);
+	autox_pool2d(batch_norm_55_tmp_4, pool2d_1_tmp_0, batch_norm_55_tmp_4_dim, pool2d_1_tmp_0_dim, 1, 1, 0, 1, 1);
 	free(batch_norm_55_tmp_4);
 
 	float* linear_1_tmp_0 = (float*)calloc(1000, sizeof(float));
-	autox_matmul(pool2d_1_tmp_0, weights + 88676, linear_1_tmp_0, flatten_0_tmp_0_dim, fc6_weights_dim, linear_1_tmp_0_dim, 0, 0, 2, 2, 2);
+	autox_matmul(pool2d_1_tmp_0, (float*)((int8_t*)weights) + 88676, linear_1_tmp_0, flatten_0_tmp_0_dim, fc6_weights_dim, linear_1_tmp_0_dim, 0, 0, 2, 2, 2);
 	free(pool2d_1_tmp_0);
 
 	float* linear_1_tmp_1 = (float*)calloc(1000, sizeof(float));
-	autox_elementwise_add(linear_1_tmp_0, weights + 600676, linear_1_tmp_1, linear_1_tmp_0_dim, fc6_offset_dim, linear_1_tmp_1_dim, 1, 2, 1, 2);
+	autox_elementwise_add(linear_1_tmp_0, (float*)((int8_t*)weights) + 600676, linear_1_tmp_1, linear_1_tmp_0_dim, fc6_offset_dim, linear_1_tmp_1_dim, 1, 2, 1, 2);
 	free(linear_1_tmp_0);
 
 	uint32_t input_ddim[] = {1000};

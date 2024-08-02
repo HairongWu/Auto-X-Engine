@@ -1,3 +1,4 @@
+#include "../include/autox_nn.h"
 
 void autox_normalize_image(uint8_t* p, float* out, uint16_t p_h, uint16_t p_w, uint8_t p_c)
 {

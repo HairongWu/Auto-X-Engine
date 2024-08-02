@@ -38,6 +38,7 @@ if __name__ == "__main__":
 
     output_tensor = predictor.get_output(0)
     print(output_tensor.numpy())
+    print(output_tensor.numpy().shape)
 
     ops, dim_dict, weights_dict = read_nb(os.path.join(config.Global.save_inference_dir, "model.nb"))
 

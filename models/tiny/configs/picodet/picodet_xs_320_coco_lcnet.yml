@@ -16,11 +16,9 @@ snapshot_epoch: 10
 LCNet:
   scale: 0.35
   feature_maps: [3, 4, 5]
-  act: relu6
 
 LCPAN:
   out_channels: 96
-  act: relu6
 
 PicoHeadV2:
   conv_feat:
@@ -32,10 +30,7 @@ PicoHeadV2:
     norm_type: bn
     share_cls_reg: True
     use_se: True
-    act: relu6
   feat_in_chan: 96
-  act: relu6
-  num_classes: 25
 
 TrainReader:
   batch_size: 128

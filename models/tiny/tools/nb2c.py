@@ -7,16 +7,16 @@ op_mapping = {
     'split':'autox_split','matmul_v2':'autox_matmul',
     'elementwise_add':'autox_elementwise_add','softmax':'autox_softmax',
     'hard_sigmoid':'autox_hard_sigmoid', 'elementwise_mul':'autox_elementwise_mul',
-    'nearest_interp_v2':'autox_nearest_interp_v2', 'sigmoid':'autox_sigmoid',
+    'nearest_interp_v2':'autox_nearest_interp', 'sigmoid':'autox_sigmoid',
     'scale':'autox_scale','sqrt':'autox_sqrt','elementwise_div':'autox_elementwise_div',
     'multiclass_nms3':'autox_multiclass_nms3','relu':'autox_relu',
     'fusion_elementwise_add_activation':'autox_fusion_elementwise_add_activation',
-    'bilinear_interp_v2':'autox_bilinear_interp_v2','arg_max':'autox_argmax',
+    'bilinear_interp_v2':'autox_bilinear_interp','arg_max':'autox_argmax',
     'swish':'autox_swish','layer_norm':'autox_layer_norm',
 }
 
 attrs = ['act_type','dilations','groups','paddings','strides','adaptive','ksize','pooling_type','axis','start_axis','stop_axis',
-             'trans_x','trans_y']
+             'trans_x','trans_y','scale','align_corners','offset','slope','bias','bias_after_scale','beta','begin_norm_axis','epsilon']
 
 ignore_layers = ['feed','shape','slice','fill_constant','reshape2','flatten_contiguous_range', 'fetch', 'assign', 'squeeze2']
 
@@ -38,12 +38,6 @@ def nb2c(output_dir, ops, weights_dict, dim_dict):
     for op in ops:
         if op.type in ignore_layers:
             continue
-
-        for i in op.inputs:
-            for arg in i.arguments:
-                if arg in weights_dict:
-                    for f in weights_dict[arg]:
-                        fw.write(struct.pack('f',f))
 
         operator = ''
         
@@ -68,7 +62,8 @@ def nb2c(output_dir, ops, weights_dict, dim_dict):
                 operator = operator + '};\n'
 
         for i in op.outputs:
-            if op.type == "softmax" or  op.type == "hard_sigmoid" or op.type == "swish":
+            if op.type == "softmax" or  op.type == "hard_sigmoid" or op.type == "swish" \
+                or op.type == "scale" or op.type == "sqrt" or op.type == "sigmoid" or op.type == "relu":
                 continue
             if 'XShape' == i.parameter:
                 continue
@@ -96,10 +91,13 @@ def nb2c(output_dir, ops, weights_dict, dim_dict):
         outputs = []
 
         attributes = {}
+
         for i in op.inputs:
             for arg in i.arguments:
                 if arg in weights_dict:
-                    weights.append("weights + " + str(index))
+                    for f in weights_dict[arg]:
+                        fw.write(struct.pack('f',f))
+                    weights.append("(float*)((int8_t*)weights) + " + str(index))
                     index = index + abs(reduce(mul, dim_dict[arg]))
                     weights_name.append(arg)
                 else:
@@ -206,7 +204,8 @@ def nb2c(output_dir, ops, weights_dict, dim_dict):
             operator = operator + ", "
             operator = operator + attributes['adaptive'][0]
             operator = operator + ", "
-            if attributes['pooling_type'] == "avg":
+
+            if attributes['pooling_type'] == '"avg"':
                 operator = operator + str(1)
             else:
                 operator = operator + str(0)
@@ -229,8 +228,8 @@ def nb2c(output_dir, ops, weights_dict, dim_dict):
             operator = operator + "axis_%d, "%(para_index)
             operator = operator + str(len(attributes['axis'].split(',')))
             operator = operator + ", "
-        elif op.type == "softmax" or op.type == "hard_sigmoid" or op.type == "swish" \
-            or op.type == "scale" or op.type == "sqrt" or op.type == "sigmoid":
+        elif op.type == "hard_sigmoid" or op.type == "swish" \
+            or op.type == "scale" or op.type == "sqrt" or op.type == "sigmoid" or op.type == "relu":
             for i in inputs:
                 operator = operator + i.replace('.','_')
                 operator = operator + ", "
@@ -239,9 +238,25 @@ def nb2c(output_dir, ops, weights_dict, dim_dict):
                 operator = operator + i.replace('.','_')
                 operator = operator + "_dim, "
             
+            operator = operator + str(len(dim_dict[inputs[0]]))
+            operator = operator + ", "
+            
             for key in attributes:
                 operator = operator + attributes[key]
                 operator = operator + ", "
+        elif op.type == "softmax":
+            for i in inputs:
+                operator = operator + i.replace('.','_')
+                operator = operator + ", "
+            
+            for i in inputs:
+                operator = operator + i.replace('.','_')
+                operator = operator + "_dim[0], "
+            for i in inputs:
+                operator = operator + i.replace('.','_')
+                operator = operator + "_dim[1], "
+            
+
         elif op.type == "concat":
             operator = operator + 'p_%d'%(para_index)
             operator = operator + ", "
@@ -308,7 +323,7 @@ def nb2c(output_dir, ops, weights_dict, dim_dict):
                 operator = operator + i.replace('.','_')
                 operator = operator + "_dim, "
             for i in weights_name:
-                operator = operator + i
+                operator = operator + i.replace('.','_')
                 operator = operator + "_dim, "
             for i in outputs:
                 operator = operator + i.replace('.','_')
@@ -317,21 +332,69 @@ def nb2c(output_dir, ops, weights_dict, dim_dict):
             for key in attributes:
                 operator = operator + attributes[key]
                 operator = operator + ", "
-
-            operator = operator + str(len(dim_dict[inputs[0]]))
-            operator = operator + ", "
+            for i in inputs:
+                operator = operator + str(len(dim_dict[i]))
+                operator = operator + ", "
             if len(weights_name) > 0:
                 operator = operator + str(len(dim_dict[weights_name[0]]))
                 operator = operator + ", "
             operator = operator + str(len(dim_dict[outputs[0]]))
             operator = operator + ", "
-        else:
+        elif op.type == "nearest_interp_v2" or op.type == "bilinear_interp_v2":
+            for i in inputs:
+                operator = operator + i.replace('.','_')
+                operator = operator + ", "
+                free_str = free_str + '\tfree(%s);\n'%(i.replace('.','_'))
+            for i in outputs:
+                operator = operator + i.replace('.','_')
+                operator = operator + ", "
+            
+            for i in inputs:
+                operator = operator + i.replace('.','_')
+                operator = operator + "_dim, "
+            for i in outputs:
+                operator = operator + i.replace('.','_')
+                operator = operator + "_dim, "
+            
+            if len(attributes['scale']) > 0:
+                operator = operator + attributes['scale'][0]
+            else:
+                operator = operator + attributes['scale']
+            operator = operator + ", "
+            operator = operator + attributes['align_corners']
+            operator = operator + ", "
+        elif op.type == "layer_norm":
             for i in inputs:
                 operator = operator + i.replace('.','_')
                 operator = operator + ", "
                 free_str = free_str + '\tfree(%s);\n'%(i.replace('.','_'))
             for i in weights:
                 operator = operator + i
+                operator = operator + ", "
+
+            operator = operator + outputs[0].replace('.','_')
+            operator = operator + ", "
+            
+            for i in inputs:
+                operator = operator + i.replace('.','_')
+                operator = operator + "_dim, "
+            for i in weights_name:
+                operator = operator + i.replace('.','_')
+                operator = operator + "_dim, "
+
+            operator = operator + outputs[0].replace('.','_')
+            operator = operator + "_dim, "
+            
+            for key in attributes:
+                operator = operator + attributes[key]
+                operator = operator + ", "
+        else:
+            for i in inputs:
+                operator = operator + i.replace('.','_')
+                operator = operator + ", "
+                free_str = free_str + '\tfree(%s);\n'%(i.replace('.','_'))
+            for i in weights:
+                operator = operator + i.replace('.','_')
                 operator = operator + ", "
             for i in outputs:
                 operator = operator + i.replace('.','_')

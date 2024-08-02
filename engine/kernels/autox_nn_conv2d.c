@@ -447,7 +447,7 @@ void fill_bias_act(float* tensor,
 }
 
 // The convolution operator consumes an input tensor and a filter, and computes the output.
-void autox_conv2d(float* din, float* dout, const float* bias, float* weights, uint16_t* x_dims, uint16_t* w_dims, uint16_t* o_dims,
+void autox_conv2d(float* din, const float* bias, const float* weights, float* dout, uint16_t* x_dims, uint16_t* w_dims, uint16_t* o_dims,
 	uint16_t group, uint8_t paddings, uint8_t strides, uint8_t dilations, int8_t act_type)
 {
 	INIT_PARAM

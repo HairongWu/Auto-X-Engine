@@ -99,6 +99,30 @@
     <ClCompile Include="..\..\..\engine\models\autox_model_tinypose.c">
       <Filter>源文件\models</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_hwc2chw.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_normalize_image.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_resize_image.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_interp.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_hardsigmoid.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_swish.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_layer_norm.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_relu.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\engine\include\autox_nn.h">

@@ -1,4 +1,4 @@
-
+#include "../include/autox_nn.h"
 
 void autox_hwc2chw(const float* src, float* dst, uint16_t height, uint16_t width, uint8_t channels) {
 

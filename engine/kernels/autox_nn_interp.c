@@ -1,4 +1,4 @@
-#include "autox_nn_ansi.h"
+#include "../include/autox_nn.h"
 
 void nearest_interp(const float* input_data,
 	float* output_data,
@@ -42,15 +42,16 @@ void nearest_interp(const float* input_data,
 	}
 }
 
-void autox_nearest_interp_v2_ansi(float* X,
+void autox_nearest_interp(float* X,
                        float* Out,
-					   uint16_t* intput1_dims,
+					   uint16_t* intput_dims,
+					   uint16_t* out_dims,
 					   float scale,
 					   int8_t align_corners) {
-	int n = intput1_dims[0];
-	int c = intput1_dims[1];
-	int in_h = intput1_dims[2];
-	int in_w = intput1_dims[3];
+	int n = intput_dims[0];
+	int c = intput_dims[1];
+	int in_h = intput_dims[2];
+	int in_w = intput_dims[3];
 	float scale_h = scale;
 	float scale_w = scale;
 	int out_h = -1;
@@ -523,17 +524,17 @@ void bilinear_interp(const float* input_data,
 	free(buf);
 }
 
-void autox_bilinear_interp_ansi(float* X,
+void autox_bilinear_interp(float* X,
 	float* Out,
-	uint16_t* intput1_dims,
+	uint16_t* intput_dims,
 	uint16_t* out_dims,
 	float scale,
 	int8_t align_corners,
 	int align_mode) {
-	int n = intput1_dims[0];
-	int c = intput1_dims[1];
-	int in_h = intput1_dims[2];
-	int in_w = intput1_dims[3];
+	int n = intput_dims[0];
+	int c = intput_dims[1];
+	int in_h = intput_dims[2];
+	int in_w = intput_dims[3];
 	int out_h = out_dims[2];
 	int out_w = out_dims[3];
 	if (scale > 0) {

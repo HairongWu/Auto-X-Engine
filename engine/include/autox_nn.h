@@ -204,6 +204,10 @@ extern "C" {
         float BETA,
         float* C, int ldc);
 
+    void autox_hwc2chw(const float* src, float* dst, uint16_t height, uint16_t width, uint8_t channels);
+    void autox_normalize_image(uint8_t* p, float* out, uint16_t p_h, uint16_t p_w, uint8_t p_c);
+    void autox_resize_image(const uint8_t* src, uint8_t* dst, uint16_t ssize_h, uint16_t ssize_w, uint16_t dsize_h, uint16_t dsize_w);
+
     void autox_argmax(const float* input,
         float* output,
         const uint32_t* input_ddim,
@@ -218,7 +222,7 @@ extern "C" {
     void autox_conv2d_depthwise(const float* i_data, float* o_data, const float* w_data, const float* b_data,
         uint16_t* x_dims, uint16_t* w_dims, uint16_t* o_dims, const int stride, int dilations, int paddings, int flag_bias, int act_param);
 
-    void autox_conv2d(float* din, float* dout, const float* bias, float* weights, uint16_t* x_dims, uint16_t* w_dims, uint16_t* o_dims,
+    void autox_conv2d(float* din, const float* bias, const float* weights, float* dout, uint16_t* x_dims, uint16_t* w_dims, uint16_t* o_dims,
         uint16_t group, uint8_t paddings, uint8_t strides, uint8_t dilations, int8_t act_type);
 
     void autox_elementwise_add(float* x_data,
@@ -226,6 +230,13 @@ extern "C" {
         float* out_data, uint16_t* x_dims, uint16_t* y_dims, uint16_t* z_dims, int axis, uint16_t x_dims_size,
         uint16_t y_dims_size, uint16_t z_dims_size);
 
+    void autox_elementwise_mul(float* x_data,
+        float* y_data,
+        float* out_data, uint16_t* x_dims, uint16_t* y_dims, uint16_t* z_dims, int axis, uint16_t x_dims_size,
+        uint16_t y_dims_size, uint16_t z_dims_size);
+
+    void autox_hard_sigmoid(float* data, uint32_t* dims, uint8_t dim_size, float offset, float slope);
+    void autox_swish(float* x_data, uint32_t* dims, uint8_t dim_size, float beta);
     void autox_im2col(const float* data_im,
         int channels,
         int height,
@@ -236,15 +247,33 @@ extern "C" {
         int dilation,
         float* data_col);
 
+    void autox_bilinear_interp(float* X,
+        float* Out,
+        uint16_t* intput_dims,
+        uint16_t* out_dims,
+        float scale,
+        int8_t align_corners,
+        int align_mode);
+    void autox_nearest_interp(float* X,
+        float* Out,
+        uint16_t* intput_dims,
+        uint16_t* out_dims,
+        float scale,
+        int8_t align_corners);
+
+    void autox_layer_norm(float* out, float* mean, float* rstd,
+        float* inp, float* weight, float* bias,
+        int B, int T, int C);
     void autox_matmul(const float* X, const float* Y, float* Out, uint16_t* x_dims,
         uint16_t* y_dims, uint16_t* o_dims, int8_t x_transpose, int8_t y_transpose,
         uint8_t x_dims_size, uint8_t y_dims_size, uint8_t o_dims_size);
 
     void autox_pool2d(const float* input_data, float* output_data, uint16_t* x_dims, uint16_t* o_dims, const uint8_t ksize,
         const uint8_t stride, const uint8_t padding, const uint8_t adaptive, const uint8_t type);
-    void autox_scale(float* data, uint32_t size, float scale, float bias, int8_t bias_before);
-    void autox_sqrt(float* data, uint32_t size);
-    void autox_sigmoid(float* data, uint32_t size);
+    void autox_relu(float* x_data, uint32_t* dims, uint8_t dim_size);
+    void autox_scale(float* data, uint32_t* dims, uint8_t dim_size, float bias, int8_t bias_before, float scale);
+    void autox_sqrt(float* data, uint32_t* dims, uint8_t dim_size);
+    void autox_sigmoid(float* data, uint32_t* dims, uint8_t dim_size);
 
     void autox_split(float* input, float** output, uint16_t* in_dim, uint16_t* output_ddim[], int32_t axis,
         uint16_t input_dims_size, uint16_t output_size, uint16_t output_ddim_size);
@@ -260,6 +289,11 @@ extern "C" {
         float* value_cache, int kv_dim, int kv_mul, int head_size, int loff);
     void autox_swiglu(float* hb, float* hb2, uint32_t hidden_dim);
     void autox_softmax(float* x, uint32_t height, uint32_t width);
+
+    void autox_fusion_elementwise_add_activation(float* x_data,
+        float* y_data,
+        float* out_data, uint16_t* x_dims, uint16_t* y_dims, uint16_t* z_dims, int axis, uint16_t x_dims_size,
+        uint16_t y_dims_size, uint16_t z_dims_size);
 #ifdef  __cplusplus
 }
 #endif

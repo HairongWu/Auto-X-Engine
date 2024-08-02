@@ -46,17 +46,58 @@ int main()
 	uint16_t frame_w = 224;
 	uint16_t frame_c = 3;
 
-	char* buffer = read_file("./model.bin");
+	char* buffer = read_file("./shufflenetv2_x_0_25.bin");
 	// char* frame = read_file("./image.bin");
-	uint8_t* frame = (uint8_t*)calloc(224 * 224 * 3, 1);
-	for (int i = 0; i < 224 * 224 * 3; i++)
+	float* frame = (float*)calloc(frame_h * frame_w * frame_c, sizeof(float));
+	for (int i = 0; i < frame_h * frame_w * frame_c; i++)
 		frame[i] = 1;
-	float Out = -1;
-	shufflenetv2_x_0_25(frame, frame_h, frame_w, (float*)buffer, &Out);
-	printf("%f", Out);
+	float cls = -1;
+	shufflenetv2_x_0_25(frame, frame_h, frame_w, (void*)buffer, &cls);
+	printf("%f\n", cls);
 
-	char checkpoint_path[256] = "";
-	char tokenizer_path[256] = "";
-	char prompt[256] = "";
-	run_llama3(checkpoint_path, tokenizer_path, prompt);
+	frame_h = 320;
+	frame_w = 320;
+	frame_c = 3;
+
+	buffer = read_file("./picodet_xs_320.bin");
+	// char* frame = read_file("./image.bin");
+	frame = (float*)calloc(frame_h * frame_w * frame_c, sizeof(float));
+	for (int i = 0; i < frame_h * frame_w * frame_c; i++)
+		frame[i] = 1;
+	float *dets = (float*)calloc(1*80 * 2125, sizeof(float));
+	float* boxes = (float*)calloc(1 * 2125 * 4, sizeof(float));
+	picodet_xs_320(frame, frame_h, frame_w, (void*)buffer, dets, boxes);
+	free(dets);
+	free(boxes);
+
+	frame_h = 96;
+	frame_w = 128;
+	frame_c = 3;
+
+	buffer = read_file("./tinypose_128x96.bin");
+	// char* frame = read_file("./image.bin");
+	frame = (float*)calloc(frame_h * frame_w * frame_c, sizeof(float));
+	for (int i = 0; i < frame_h * frame_w * frame_c; i++)
+		frame[i] = 1;
+	float* kp = (float*)calloc(17, sizeof(float));
+	// tinypose_128x96(frame, frame_h, frame_w, (float*)buffer,kp);
+	free(kp);
+
+	//frame_h = 48;
+	//frame_w = 128;
+	//frame_c = 3;
+
+	//buffer = read_file("./japan_PP_OCRv3_rec.bin");
+	//// char* frame = read_file("./image.bin");
+	//frame = (uint8_t*)calloc(frame_h * frame_w * frame_c, 1);
+	//for (int i = 0; i < frame_h * frame_w * frame_c; i++)
+	//	frame[i] = 1;
+	//Out = -1;
+	//japan_PP_OCRv3_rec(frame, frame_h, frame_w, (float*)buffer, &Out);
+	//printf("%f", Out);
+
+	//char checkpoint_path[256] = "stories15M.bin";
+	//char tokenizer_path[256] = "tokenizer.bin";
+	//char prompt[256] = "Once upon a time";
+	//run_llama3(checkpoint_path, tokenizer_path, prompt);
 }

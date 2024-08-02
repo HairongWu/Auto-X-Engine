@@ -1,6 +1,6 @@
-#include "autox_nn_ansi.h"
+#include "../include/autox_nn.h"
 
-void autox_nn_layernorm_ansi(float* out, float* mean, float* rstd,
+void autox_layer_norm(float* out, float* mean, float* rstd,
                        float* inp, float* weight, float* bias,
                        int B, int T, int C) {
     float eps = 1e-5f;

@@ -177,7 +177,7 @@ void autox_matmul(const float* X, const float* Y, float* Out, uint16_t* x_dims,
 	uint16_t* y_dims, uint16_t* o_dims, int8_t x_transpose, int8_t y_transpose, 
 	uint8_t x_dims_size, uint8_t y_dims_size, uint8_t o_dims_size) {
 	INIT_PARAM;
-  float alpha = 0;
+  float alpha = 1.0;
 	const float* x_data = X;
 	const float* y_data = Y;
 	float* o_data = Out;
