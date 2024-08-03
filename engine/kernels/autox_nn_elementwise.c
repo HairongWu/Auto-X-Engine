@@ -9,7 +9,7 @@ static int8_t condition_one(void* isa_op, void* naive_op) {
 static int8_t condition_two(void* isa_op, void* naive_op) {
 	return ((isa_op == NULL) && (naive_op != NULL));
 }
-
+static bool condition_three(void* isa_act) { return (isa_act != NULL); }
 __m256 mul_ps_inline(__m256 a, __m256 b) {
 	return _mm256_mul_ps(a, b);
 }
@@ -27,6 +27,14 @@ void storeu_ps_inline(float* b, __m256 a) {
 __m256 set1_ps_inline(float a) {
 	return _mm256_set1_ps(a);
 }
+
+float NaiveRelu(float a) {
+	return a > 0 ? a : 0;
+}
+__m256 Relu(const __m256 a) {
+	__m256 tmp = _mm256_set1_ps(0.0f);
+	return _mm256_max_ps(a, tmp);
+}
 float NaiveMul(float l, float r) {
 	return l * r;
 }
@@ -36,6 +44,10 @@ float NaiveAdd(float l, float r) {
 
 __m256 (*isa_op)(__m256, __m256) = &mul_ps_inline;
 float (*naive_op)(float, float) = &NaiveMul;
+
+float (*naive_active)(float) = &NaiveRelu;
+__m256 (*isa_active)(const __m256) = &Relu;
+bool has_active = true;
 
 void do_isa_elementwise(const float* dinx,
 	const float* diny,
@@ -57,6 +69,7 @@ void do_isa_elementwise(const float* dinx,
 		(void*)naive_op);
 	int8_t condition2 = condition_two((void*)isa_op,
 		(void*)naive_op);
+	bool condition3 = condition_three((void*)(isa_active));
 
 	if (condition1) {
 		__m256 rbx, rby;
@@ -87,13 +100,25 @@ void do_isa_elementwise(const float* dinx,
 				doutz0 = isa_op(dinx0, diny0);
 			}
 
+			if (has_active && condition3) {
+				doutz0 = isa_active(doutz0);
+			}
+			else if (has_active) {
+				float* tmp_data = (float*)(&doutz0);
+				for (int ii = 0; ii < element_num; ii++) {
+					tmp_data[ii] = naive_active(tmp_data[ii]);
+				}
+			}
+
 			storeu_ps_inline((float*)(dout_ptr), doutz0);
 			dout_ptr += element_num;
 		}
 		if (remain > 0) {
 			for (int p = 0; p < remain; p++) {
 				float tmp = naive_op(*dinx_ptr, *diny_ptr);
-				
+				if (has_active) {
+					tmp = naive_active(tmp);
+				}
 				*dout_ptr = tmp;
 				dout_ptr++;
 				if (!IS_X_SINGLE) {
@@ -108,7 +133,9 @@ void do_isa_elementwise(const float* dinx,
 	else if (condition2) {
 		for (int p = 0; p < num; p++) {
 			float tmp = naive_op(*dinx_ptr, *diny_ptr);
-			
+			if (has_active) {
+				tmp = naive_active(tmp);
+			}
 			*dout_ptr = tmp;
 			dout_ptr++;
 			if (!IS_X_SINGLE) {
@@ -625,6 +652,7 @@ void autox_elementwise_mul(float* x_data,
 
 	isa_op = &mul_ps_inline;
 	naive_op = &NaiveMul;
+	has_active = false;
 	elementwise_op(x_data, y_data,out_data, axis,x_dims, y_dims,z_dims, x_dims_size,y_dims_size,z_dims_size);
 }
 
@@ -635,6 +663,7 @@ void autox_elementwise_add(float* x_data,
 {
 	isa_op = &add_ps_inline;
 	naive_op = &NaiveAdd;
+	has_active = false;
 	elementwise_op(x_data, y_data,out_data, axis,x_dims, y_dims,z_dims, x_dims_size,y_dims_size,z_dims_size);
 }
 
@@ -643,5 +672,8 @@ void autox_fusion_elementwise_add_activation(float* x_data,
 	float* out_data, uint16_t* x_dims, uint16_t* y_dims, uint16_t* z_dims, int axis, uint16_t x_dims_size,
 	uint16_t y_dims_size, uint16_t z_dims_size)
 {
-	
+	isa_op = &add_ps_inline;
+	naive_op = &NaiveAdd;
+	has_active = true;
+	elementwise_op(x_data, y_data, out_data, axis, x_dims, y_dims, z_dims, x_dims_size, y_dims_size, z_dims_size);
 }

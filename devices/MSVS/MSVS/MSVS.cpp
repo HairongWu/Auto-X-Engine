@@ -80,20 +80,21 @@ int main()
 	for (int i = 0; i < frame_h * frame_w * frame_c; i++)
 		frame[i] = 1;
 	float* kp = (float*)calloc(17, sizeof(float));
-	// tinypose_128x96(frame, frame_h, frame_w, (float*)buffer,kp);
+	tinypose_128x96(frame, frame_h, frame_w, (float*)buffer,kp);
+	for (int i = 0; i < 17; i++) printf("%f ", kp[i]);
 	free(kp);
 
-	//frame_h = 48;
-	//frame_w = 128;
-	//frame_c = 3;
+	frame_h = 48;
+	frame_w = 128;
+	frame_c = 3;
 
-	//buffer = read_file("./japan_PP_OCRv3_rec.bin");
-	//// char* frame = read_file("./image.bin");
-	//frame = (uint8_t*)calloc(frame_h * frame_w * frame_c, 1);
-	//for (int i = 0; i < frame_h * frame_w * frame_c; i++)
-	//	frame[i] = 1;
-	//Out = -1;
-	//japan_PP_OCRv3_rec(frame, frame_h, frame_w, (float*)buffer, &Out);
+	buffer = read_file("./japan_PP_OCRv3_rec.bin");
+	// char* frame = read_file("./image.bin");
+	frame = (float*)calloc(frame_h * frame_w * frame_c, sizeof(float));
+	for (int i = 0; i < frame_h * frame_w * frame_c; i++)
+		frame[i] = 1;
+	float* rec = (float*)calloc(1*16*4401, sizeof(float));
+	japan_PP_OCRv3_rec(frame, frame_h, frame_w, (float*)buffer, rec);
 	//printf("%f", Out);
 
 	//char checkpoint_path[256] = "stories15M.bin";

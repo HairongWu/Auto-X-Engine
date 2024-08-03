@@ -874,8 +874,8 @@ void shufflenetv2_x_0_25(const float* x, const uint16_t ssize_h, const uint16_t 
 	autox_elementwise_add(linear_1_tmp_0, (float*)((int8_t*)weights) + 600676, linear_1_tmp_1, linear_1_tmp_0_dim, fc6_offset_dim, linear_1_tmp_1_dim, 1, 2, 1, 2);
 	free(linear_1_tmp_0);
 
-	uint32_t input_ddim[] = {1000};
-	uint32_t output_ddim[] = {1};
+	uint16_t input_ddim[] = {1000};
+	uint16_t output_ddim[] = {1};
 
 	autox_argmax(linear_1_tmp_1,Out,input_ddim,output_ddim,1,1,0);
 	free(linear_1_tmp_1);

@@ -210,8 +210,8 @@ extern "C" {
 
     void autox_argmax(const float* input,
         float* output,
-        const uint32_t* input_ddim,
-        const uint32_t* output_ddim,
+        const uint16_t* input_ddim,
+        const uint16_t* output_ddim,
         const uint8_t input_ddim_size,
         const uint8_t output_ddim_size,
         int8_t axis);

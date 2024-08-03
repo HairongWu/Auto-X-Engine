@@ -12,13 +12,14 @@ op_mapping = {
     'multiclass_nms3':'autox_multiclass_nms3','relu':'autox_relu',
     'fusion_elementwise_add_activation':'autox_fusion_elementwise_add_activation',
     'bilinear_interp_v2':'autox_bilinear_interp','arg_max':'autox_argmax',
-    'swish':'autox_swish','layer_norm':'autox_layer_norm',
+    'swish':'autox_swish','layer_norm':'autox_layer_norm', 'slice':'autox_slice'
 }
 
 attrs = ['act_type','dilations','groups','paddings','strides','adaptive','ksize','pooling_type','axis','start_axis','stop_axis',
-             'trans_x','trans_y','scale','align_corners','offset','slope','bias','bias_after_scale','beta','begin_norm_axis','epsilon']
+             'trans_x','trans_y','scale','align_corners','offset','slope','bias','bias_after_scale','beta','begin_norm_axis'
+             ,'epsilon','axes','decrease_axis','ends','starts']
 
-ignore_layers = ['feed','shape','slice','fill_constant','reshape2','flatten_contiguous_range', 'fetch', 'assign', 'squeeze2']
+ignore_layers = ['feed','shape', 'fill_constant','reshape2','flatten_contiguous_range', 'fetch', 'assign', 'squeeze2']
 
 def nb2c(output_dir, ops, weights_dict, dim_dict):
     fw = open(os.path.join(output_dir, "model.bin"), "wb")
@@ -307,7 +308,7 @@ def nb2c(output_dir, ops, weights_dict, dim_dict):
             operator = operator + ", "
 
         elif op.type == "elementwise_add" or op.type == "matmul_v2" or op.type == "elementwise_mul"\
-            or op.type == "elementwise_div":
+            or op.type == "elementwise_div" or op.type == "fusion_elementwise_add_activation":
             for i in inputs:
                 operator = operator + i.replace('.','_')
                 operator = operator + ", "
