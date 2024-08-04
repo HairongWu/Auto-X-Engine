@@ -147,6 +147,7 @@
     <ClCompile Include="..\..\..\engine\kernels\autox_nn_rope_rotation.c" />
     <ClCompile Include="..\..\..\engine\kernels\autox_nn_scale.c" />
     <ClCompile Include="..\..\..\engine\kernels\autox_nn_sigmoid.c" />
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_slice.c" />
     <ClCompile Include="..\..\..\engine\kernels\autox_nn_softmax.c" />
     <ClCompile Include="..\..\..\engine\kernels\autox_nn_split.c" />
     <ClCompile Include="..\..\..\engine\kernels\autox_nn_sqrt.c" />

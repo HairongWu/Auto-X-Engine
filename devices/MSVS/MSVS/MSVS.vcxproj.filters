@@ -39,9 +39,6 @@
     <ClCompile Include="..\..\..\engine\kernels\autox_nn_conv2d.c">
       <Filter>源文件\nn</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_conv2d_depthwise.c">
-      <Filter>源文件\nn</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\engine\kernels\autox_nn_elementwise.c">
       <Filter>源文件\nn</Filter>
     </ClCompile>
@@ -121,6 +118,12 @@
       <Filter>源文件\nn</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\engine\kernels\autox_nn_relu.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_conv2d_depthwise.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_slice.c">
       <Filter>源文件\nn</Filter>
     </ClCompile>
   </ItemGroup>

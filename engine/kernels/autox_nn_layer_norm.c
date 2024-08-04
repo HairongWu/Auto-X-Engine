@@ -1,80 +1,147 @@
 #include "../include/autox_nn.h"
 
-void autox_layer_norm(float* out, float* mean, float* rstd,
-                       float* inp, float* weight, float* bias,
-                       int B, int T, int C) {
-    float eps = 1e-5f;
-    for (int b = 0; b < B; b++) {
-        for (int t = 0; t < T; t++) {
-            // seek to the input position inp[b,t,:]
-            float* x = inp + b * T * C + t * C;
-            // calculate the mean
-            float m = 0.0f;
-            for (int i = 0; i < C; i++) {
-                m += x[i];
-            }
-            m = m/C;
-            // calculate the variance (without any bias correction)
-            float v = 0.0f;
-            for (int i = 0; i < C; i++) {
-                float xshift = x[i] - m;
-                v += xshift * xshift;
-            }
-            v = v/C;
-            // calculate the rstd
-            float s = 1.0f / sqrtf(v + eps);
-            // seek to the output position in out[b,t,:]
-            float* out_bt = out + b * T * C + t * C;
-            for (int i = 0; i < C; i++) {
-                float n = (s * (x[i] - m)); // normalized output
-                float o = n * weight[i] + bias[i]; // scale and shift it
-                out_bt[i] = o; // write
-            }
-            // cache the mean and rstd for the backward pass later
-            mean[b * T + t] = m;
-            rstd[b * T + t] = s;
+// The overall computation can be split into two stages. 
+// The first stage is standardization, which makes the normalized elements have zero mean and unit variances. 
+// The second stage then scales and shifts the outcome of the first stage
+#define YMM_FLOAT_BLOCK 8
+
+void autox_layer_norm(float* x,
+    const float* bias,
+    const float* scale,
+    float* out,
+    int height,
+    const float epsilon,
+    int right) {
+    __m256 sum;
+    __m256 mean_vec, var_vec;
+    __m128 hi, lo;
+    __m256 tmp;
+    size_t offset;
+    size_t j;
+    int block = YMM_FLOAT_BLOCK;
+    const int rest = right % block;
+    const int end = right - rest;
+
+    __m256 reverse_num_vec =
+        _mm256_div_ps(_mm256_set1_ps(1.0), _mm256_set1_ps(right));
+    __m256 epsilon_vec = _mm256_set1_ps(epsilon);
+    int rest_mask =
+        ((-1) & (~((~0U) >> (sizeof(int) * 8 - (block - rest))))) & 0x0ff;
+    __m256i mask_vec = _mm256_set_epi32(rest_mask & 0x80 ? 0xffffffff : 0,
+        rest_mask & 0x40 ? 0xffffffff : 0,
+        rest_mask & 0x20 ? 0xffffffff : 0,
+        rest_mask & 0x10 ? 0xffffffff : 0,
+        rest_mask & 0x8 ? 0xffffffff : 0,
+        rest_mask & 0x4 ? 0xffffffff : 0,
+        rest_mask & 0x2 ? 0xffffffff : 0,
+        rest_mask & 0x1 ? 0xffffffff : 0);
+
+    for (int i = 0; i < height; ++i) {
+        offset = i * right;
+
+        /* get mean */
+        sum = _mm256_setzero_ps();
+        for (j = offset; j < end + offset; j += block) {
+            sum = _mm256_add_ps(sum, _mm256_loadu_ps((const float*)x + j));
         }
-    }
-}
+        if (rest != 0) {
+            j = offset + right - block;
+            tmp = _mm256_loadu_ps((const float*)x + j);
+            tmp = _mm256_blendv_ps(_mm256_setzero_ps(),
+                tmp,
+                *(__m256*) & mask_vec);  // NOLINT
+            sum = _mm256_add_ps(sum, tmp);
+        }
+        hi = _mm256_extractf128_ps(sum, 1);
+        lo = _mm256_extractf128_ps(sum, 0);
+        sum = _mm256_add_ps(
+            sum,
+            _mm256_insertf128_ps(
+                _mm256_insertf128_ps(_mm256_setzero_ps(), hi, 0), lo, 1));
+        sum = _mm256_hadd_ps(sum, sum);
+        sum = _mm256_hadd_ps(sum, sum);
+        mean_vec = _mm256_mul_ps(sum, reverse_num_vec);
+        //mean[i] = *(float*)(&mean_vec);
 
-void layernorm_backward(float* dinp, float* dweight, float* dbias,
-                        float* dout, float* inp, float* weight, float* mean, float* rstd,
-                        int B, int T, int C) {
-    for (int b = 0; b < B; b++) {
-        for (int t = 0; t < T; t++) {
-            float* dout_bt = dout + b * T * C + t * C;
-            float* inp_bt = inp + b * T * C + t * C;
-            float* dinp_bt = dinp + b * T * C + t * C;
-            float mean_bt = mean[b * T + t];
-            float rstd_bt = rstd[b * T + t];
+        /* get variance */
+        sum = _mm256_setzero_ps();
+        for (j = offset; j < end + offset; j += block) {
+            tmp = _mm256_sub_ps(_mm256_loadu_ps((const float*)x + j), mean_vec);
+            tmp = _mm256_mul_ps(tmp, tmp);
+            sum = _mm256_add_ps(sum, tmp);
+        }
+        if (rest != 0) {
+            j = offset + right - block;
+            tmp = _mm256_sub_ps(_mm256_loadu_ps((const float*)x + j), mean_vec);
+            tmp = _mm256_mul_ps(tmp, tmp);
+            tmp = _mm256_blendv_ps(_mm256_setzero_ps(),
+                tmp,
+                *(__m256*) & mask_vec);  // NOLINT
+            sum = _mm256_add_ps(sum, tmp);
+        }
+        hi = _mm256_extractf128_ps(sum, 1);
+        lo = _mm256_extractf128_ps(sum, 0);
+        sum = _mm256_add_ps(
+            sum,
+            _mm256_insertf128_ps(
+                _mm256_insertf128_ps(_mm256_setzero_ps(), hi, 0), lo, 1));
+        sum = _mm256_hadd_ps(sum, sum);
+        sum = _mm256_hadd_ps(sum, sum);
+        var_vec = _mm256_mul_ps(sum, reverse_num_vec);
+        //var[i] = *(float*)(&var_vec);
 
-            // first: two reduce operations
-            float dnorm_mean = 0.0f;
-            float dnorm_norm_mean = 0.0f;
-            for (int i = 0; i < C; i++) {
-                float norm_bti = (inp_bt[i] - mean_bt) * rstd_bt;
-                float dnorm_i = weight[i] * dout_bt[i];
-                dnorm_mean += dnorm_i;
-                dnorm_norm_mean += dnorm_i * norm_bti;
+        /* get x_norm and calculate output*/
+        for (j = offset; j < end + offset; j += block) {
+            tmp = _mm256_sub_ps(_mm256_loadu_ps((const float*)x + j), mean_vec);
+            tmp = _mm256_div_ps(tmp,
+                _mm256_sqrt_ps(_mm256_add_ps(var_vec, epsilon_vec)));
+            _mm256_storeu_ps((float*)(out) + j, tmp);
+        }
+        if (rest != 0) {
+            j = offset + right - block;
+            tmp = _mm256_sub_ps(_mm256_loadu_ps((const float*)x + j), mean_vec);
+            tmp = _mm256_div_ps(tmp,
+                _mm256_sqrt_ps(_mm256_add_ps(var_vec, epsilon_vec)));
+            _mm256_storeu_ps((float*)(out) + j, tmp);
+        }
+
+        if (scale) {
+            if (rest != 0) {
+                j = offset + right - block;
+                tmp = _mm256_loadu_ps((const float*)out + j);
             }
-            dnorm_mean = dnorm_mean / C;
-            dnorm_norm_mean = dnorm_norm_mean / C;
+            for (j = offset; j < end + offset; j += block) {
+                _mm256_storeu_ps(
+                    (float*)(out) + j,
+                    _mm256_mul_ps(_mm256_loadu_ps((const float*)out + j),
+                        _mm256_loadu_ps((const float*)scale + j - offset)));
+            }
+            if (rest != 0) {
+                j = offset + right - block;
+                _mm256_storeu_ps(
+                    (float*)(out) + j,
+                    _mm256_mul_ps(tmp,
+                        _mm256_loadu_ps((const float*)scale + j - offset)));
+            }
+        }
 
-            // now iterate again and accumulate all the gradients
-            for (int i = 0; i < C; i++) {
-                float norm_bti = (inp_bt[i] - mean_bt) * rstd_bt;
-                float dnorm_i = weight[i] * dout_bt[i];
-                // gradient contribution to bias
-                dbias[i] += dout_bt[i];
-                // gradient contribution to weight
-                dweight[i] += norm_bti * dout_bt[i];
-                // gradient contribution to input
-                float dval = 0.0f;
-                dval += dnorm_i; // term 1
-                dval -= dnorm_mean; // term 2
-                dval -= norm_bti * dnorm_norm_mean; // term 3
-                dval *= rstd_bt; // final scale
-                dinp_bt[i] += dval;
+        if (bias) {
+            if (rest != 0) {
+                j = offset + right - block;
+                tmp = _mm256_loadu_ps((const float*)out + j);
+            }
+            for (j = offset; j < end + offset; j += block) {
+                _mm256_storeu_ps(
+                    (float*)(out) + j,
+                    _mm256_add_ps(_mm256_loadu_ps((const float*)out + j),
+                        _mm256_loadu_ps((const float*)bias + j - offset)));
+            }
+            if (rest != 0) {
+                j = offset + right - block;
+                _mm256_storeu_ps(
+                    (float*)(out) + j,
+                    _mm256_add_ps(tmp,
+                        _mm256_loadu_ps((const float*)bias + j - offset)));
             }
         }
     }

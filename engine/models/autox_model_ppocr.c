@@ -340,7 +340,7 @@ void japan_PP_OCRv3_rec(const float* x, const uint16_t ssize_h, const uint16_t s
 
 	float* pool2d_0_tmp_0 = (float*)calloc(256, sizeof(float));
 	autox_pool2d(batch_norm_23_tmp_4, pool2d_0_tmp_0, batch_norm_23_tmp_4_dim, pool2d_0_tmp_0_dim, 1, 1, 0, 1, 1);
-	free(batch_norm_23_tmp_4);
+	//free(batch_norm_23_tmp_4);
 
 	float* relu_0_tmp_0 = (float*)calloc(64, sizeof(float));
 	autox_conv2d(pool2d_0_tmp_0, (float*)((int8_t*)weights) + 438336, (float*)((int8_t*)weights) + 438400, relu_0_tmp_0, pool2d_0_tmp_0_dim, conv2d_24_w_0_dim, relu_0_tmp_0_dim, 1, 0, 1, 1, 1);
@@ -367,7 +367,7 @@ void japan_PP_OCRv3_rec(const float* x, const uint16_t ssize_h, const uint16_t s
 
 	float* pool2d_1_tmp_0 = (float*)calloc(512, sizeof(float));
 	autox_pool2d(batch_norm_25_tmp_4, pool2d_1_tmp_0, batch_norm_25_tmp_4_dim, pool2d_1_tmp_0_dim, 1, 1, 0, 1, 1);
-	free(batch_norm_25_tmp_4);
+	//free(batch_norm_25_tmp_4);
 
 	float* relu_1_tmp_0 = (float*)calloc(128, sizeof(float));
 	autox_conv2d(pool2d_1_tmp_0, (float*)((int8_t*)weights) + 616320, (float*)((int8_t*)weights) + 616448, relu_1_tmp_0, pool2d_1_tmp_0_dim, conv2d_28_w_0_dim, relu_1_tmp_0_dim, 1, 0, 1, 1, 1);
@@ -409,10 +409,8 @@ void japan_PP_OCRv3_rec(const float* x, const uint16_t ssize_h, const uint16_t s
 	autox_transpose(batch_norm_28_tmp_2, transpose_0_tmp_0, flatten_0_tmp_0_dim, transpose_0_tmp_0_dim, axis_42, 3);
 	//free(batch_norm_28_tmp_2);
 
-	float* layer_norm_5_tmp_0 = (float*)calloc(1, sizeof(float));
-	float* layer_norm_5_tmp_1 = (float*)calloc(1, sizeof(float));
 	float* layer_norm_5_tmp_2 = (float*)calloc(120, sizeof(float));
-	autox_layer_norm(transpose_0_tmp_0, (float*)((int8_t*)weights) + 1313464, (float*)((int8_t*)weights) + 1313584, layer_norm_5_tmp_0, transpose_0_tmp_0_dim, layer_norm_0_b_0_dim, layer_norm_0_w_0_dim, layer_norm_5_tmp_0_dim, 2, 1e-05);
+	autox_layer_norm(transpose_0_tmp_0, (float*)((int8_t*)weights) + 1313464, (float*)((int8_t*)weights) + 1313584, layer_norm_5_tmp_2, 1, 1e-05, 120);
 	free(transpose_0_tmp_0);
 
 	float* linear_13_tmp_0 = (float*)calloc(360, sizeof(float));
@@ -426,30 +424,41 @@ void japan_PP_OCRv3_rec(const float* x, const uint16_t ssize_h, const uint16_t s
 	float* transpose_1_tmp_0 = (float*)calloc(360, sizeof(float));
 	uint16_t axis_46[] = { 2, 0, 3, 1, 4 };
 	autox_transpose(linear_13_tmp_1, transpose_1_tmp_0, reshape2_0_tmp_0_dim, transpose_1_tmp_0_dim, axis_46, 5);
+	for (int i = 0; i < 360; i++) printf("%d,%f\n", i,transpose_1_tmp_0[i]);
 	free(linear_13_tmp_1);
 
-	//autox_scale(transpose_1_tmp_0_slice_0, transpose_1_tmp_0_slice_0_dim, 4, 0, 1, 0.2581989);
+	float* o_data[] = { NULL ,NULL ,NULL };
+	autox_slice(transpose_1_tmp_0, o_data, transpose_1_tmp_0_dim, transpose_1_tmp_0_slice_0_dim, 5, 4);
+	float* transpose_1_tmp_0_slice_0 = o_data[0];
+	float* transpose_1_tmp_0_slice_1 = o_data[1];
+	float* transpose_1_tmp_0_slice_2 = o_data[2];
+	
+	autox_scale(transpose_1_tmp_0_slice_0, transpose_1_tmp_0_slice_0_dim, 4, 0, 0, 0.2581989);
 
 	float* transpose_2_tmp_0 = (float*)calloc(120, sizeof(float));
 	uint16_t axis_48[] = { 0, 1, 3, 2 };
-	//autox_transpose(transpose_1_tmp_0_slice_1, transpose_2_tmp_0, transpose_1_tmp_0_slice_1_dim, transpose_2_tmp_0_dim, axis_48, 4);
+	autox_transpose(transpose_1_tmp_0_slice_1, transpose_2_tmp_0, transpose_1_tmp_0_slice_1_dim, transpose_2_tmp_0_dim, axis_48, 4);
+	for (int i = 0; i < 10; i++) printf("%f\n", transpose_2_tmp_0[i]);
 	//free(transpose_1_tmp_0_slice_1);
 
 	float* matmul_v2_0_tmp_0 = (float*)calloc(8, sizeof(float));
-	//autox_matmul(transpose_1_tmp_0_slice_0, transpose_2_tmp_0, matmul_v2_0_tmp_0, tmp_0_dim, transpose_2_tmp_0_dim, matmul_v2_0_tmp_0_dim, 0, 0, 4, 4, 4);
+	autox_matmul(transpose_1_tmp_0_slice_0, transpose_2_tmp_0, matmul_v2_0_tmp_0, tmp_0_dim, transpose_2_tmp_0_dim, matmul_v2_0_tmp_0_dim, 0, 0, 4, 4, 4);
 	//free(transpose_1_tmp_0_slice_0);
 	free(transpose_2_tmp_0);
 
 	autox_softmax(matmul_v2_0_tmp_0, matmul_v2_0_tmp_0_dim[0], matmul_v2_0_tmp_0_dim[1]);
 
 	float* matmul_v2_1_tmp_0 = (float*)calloc(120, sizeof(float));
-	//autox_matmul(matmul_v2_0_tmp_0, transpose_1_tmp_0_slice_2, matmul_v2_1_tmp_0, dropout_7_tmp_0_dim, transpose_1_tmp_0_slice_2_dim, matmul_v2_1_tmp_0_dim, 0, 0, 4, 4, 4);
+	autox_matmul(matmul_v2_0_tmp_0, transpose_1_tmp_0_slice_2, matmul_v2_1_tmp_0, dropout_7_tmp_0_dim, transpose_1_tmp_0_slice_2_dim, matmul_v2_1_tmp_0_dim, 0, 0, 4, 4, 4);
 	free(matmul_v2_0_tmp_0);
 	//free(transpose_1_tmp_0_slice_2);
+
+	free(transpose_1_tmp_0);
 
 	float* transpose_3_tmp_0 = (float*)calloc(120, sizeof(float));
 	uint16_t axis_52[] = { 0, 2, 1, 3 };
 	autox_transpose(matmul_v2_1_tmp_0, transpose_3_tmp_0, matmul_v2_1_tmp_0_dim, transpose_3_tmp_0_dim, axis_52, 4);
+	for (int i = 0; i < 10; i++) printf("%f\n", transpose_3_tmp_0[i]);
 	free(matmul_v2_1_tmp_0);
 
 	float* linear_14_tmp_0 = (float*)calloc(120, sizeof(float));
@@ -465,10 +474,8 @@ void japan_PP_OCRv3_rec(const float* x, const uint16_t ssize_h, const uint16_t s
 	free(transpose_0_tmp_0);
 	free(dropout_8_tmp_0);
 
-	float* layer_norm_6_tmp_0 = (float*)calloc(1, sizeof(float));
-	float* layer_norm_6_tmp_1 = (float*)calloc(1, sizeof(float));
 	float* layer_norm_6_tmp_2 = (float*)calloc(120, sizeof(float));
-	autox_layer_norm(tmp_1, (float*)((int8_t*)weights) + 1371784, (float*)((int8_t*)weights) + 1371904, layer_norm_6_tmp_0, tmp_1_dim, layer_norm_1_b_0_dim, layer_norm_1_w_0_dim, layer_norm_6_tmp_0_dim, 2, 1e-05);
+	autox_layer_norm(tmp_1, (float*)((int8_t*)weights) + 1371784, (float*)((int8_t*)weights) + 1371904, layer_norm_6_tmp_2, 1, 1e-05, 120);
 	free(tmp_1);
 
 	float* linear_15_tmp_0 = (float*)calloc(240, sizeof(float));
@@ -494,10 +501,8 @@ void japan_PP_OCRv3_rec(const float* x, const uint16_t ssize_h, const uint16_t s
 	free(tmp_1);
 	free(dropout_10_tmp_0);
 
-	float* layer_norm_7_tmp_0 = (float*)calloc(1, sizeof(float));
-	float* layer_norm_7_tmp_1 = (float*)calloc(1, sizeof(float));
 	float* layer_norm_7_tmp_2 = (float*)calloc(120, sizeof(float));
-	autox_layer_norm(tmp_2, (float*)((int8_t*)weights) + 1429984, (float*)((int8_t*)weights) + 1430104, layer_norm_7_tmp_0, tmp_2_dim, layer_norm_2_b_0_dim, layer_norm_2_w_0_dim, layer_norm_7_tmp_0_dim, 2, 1e-05);
+	autox_layer_norm(tmp_2, (float*)((int8_t*)weights) + 1429984, (float*)((int8_t*)weights) + 1430104, layer_norm_7_tmp_2, 1, 1e-05, 120);
 	free(tmp_2);
 
 	float* linear_17_tmp_0 = (float*)calloc(360, sizeof(float));
@@ -550,10 +555,8 @@ void japan_PP_OCRv3_rec(const float* x, const uint16_t ssize_h, const uint16_t s
 	free(tmp_2);
 	free(dropout_12_tmp_0);
 
-	float* layer_norm_8_tmp_0 = (float*)calloc(1, sizeof(float));
-	float* layer_norm_8_tmp_1 = (float*)calloc(1, sizeof(float));
 	float* layer_norm_8_tmp_2 = (float*)calloc(120, sizeof(float));
-	autox_layer_norm(tmp_4, (float*)((int8_t*)weights) + 1488304, (float*)((int8_t*)weights) + 1488424, layer_norm_8_tmp_0, tmp_4_dim, layer_norm_3_b_0_dim, layer_norm_3_w_0_dim, layer_norm_8_tmp_0_dim, 2, 1e-05);
+	autox_layer_norm(tmp_4, (float*)((int8_t*)weights) + 1488304, (float*)((int8_t*)weights) + 1488424, layer_norm_8_tmp_2, 1, 1e-05, 120);
 	free(tmp_4);
 
 	float* linear_19_tmp_0 = (float*)calloc(240, sizeof(float));
@@ -579,10 +582,8 @@ void japan_PP_OCRv3_rec(const float* x, const uint16_t ssize_h, const uint16_t s
 	free(tmp_4);
 	free(dropout_14_tmp_0);
 
-	float* layer_norm_9_tmp_0 = (float*)calloc(1, sizeof(float));
-	float* layer_norm_9_tmp_1 = (float*)calloc(1, sizeof(float));
 	float* layer_norm_9_tmp_2 = (float*)calloc(120, sizeof(float));
-	autox_layer_norm(tmp_5, (float*)((int8_t*)weights) + 1546504, (float*)((int8_t*)weights) + 1546624, layer_norm_9_tmp_0, tmp_5_dim, layer_norm_4_b_0_dim, layer_norm_4_w_0_dim, layer_norm_9_tmp_0_dim, 2, 1e-06);
+	autox_layer_norm(tmp_5, (float*)((int8_t*)weights) + 1546504, (float*)((int8_t*)weights) + 1546624, layer_norm_9_tmp_2, 1, 1e-06, 120);
 	free(tmp_5);
 
 	float* transpose_7_tmp_0 = (float*)calloc(120, sizeof(float));

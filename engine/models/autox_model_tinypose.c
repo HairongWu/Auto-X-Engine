@@ -1672,7 +1672,8 @@ void tinypose_128x96(const float* x, const uint16_t ssize_h, const uint16_t ssiz
 	free(tmp_0);
 	free(nearest_interp_v2_0_tmp_0);
 
-	autox_relu(tmp_1, tmp_1_dim, 4);
+	float*	relu_14_tmp_0 = (float*)calloc(30720, sizeof(float));
+	autox_relu_noreplace(tmp_1, relu_14_tmp_0, tmp_1_dim, 4);
 
 	float* batch_norm_23_tmp_2 = (float*)calloc(7680, sizeof(float));
 	autox_conv2d(tmp_1, (float*)((int8_t*)weights) + 20000, (float*)((int8_t*)weights) + 20040, batch_norm_23_tmp_2, tmp_1_dim, conv2d_23_w_0_dim, batch_norm_23_tmp_2_dim, 40, 1, 2, 1, 0);
@@ -1691,8 +1692,8 @@ void tinypose_128x96(const float* x, const uint16_t ssize_h, const uint16_t ssiz
 	float* split_5_tmp_1 = (float*)calloc(15360, sizeof(float));
 	float* p_45[] = { split_5_tmp_0, split_5_tmp_1, };
 	uint16_t* p_45_dim[] = { split_5_tmp_0_dim, split_5_tmp_1_dim, };
-	autox_split(tmp_1, p_45, relu_14_tmp_0_dim, p_45_dim, 1, 4, 2, 4);
-	free(tmp_1);
+	autox_split(relu_14_tmp_0, p_45, relu_14_tmp_0_dim, p_45_dim, 1, 4, 2, 4);
+	free(relu_14_tmp_0);
 
 	float* relu_16_tmp_0 = (float*)calloc(15360, sizeof(float));
 	autox_conv2d(split_5_tmp_1, (float*)((int8_t*)weights) + 23680, (float*)((int8_t*)weights) + 23700, relu_16_tmp_0, split_5_tmp_1_dim, conv2d_25_w_0_dim, relu_16_tmp_0_dim, 1, 0, 1, 1, 1);
@@ -1834,7 +1835,8 @@ void tinypose_128x96(const float* x, const uint16_t ssize_h, const uint16_t ssiz
 	free(tmp_4);
 	free(nearest_interp_v2_1_tmp_0);
 
-	autox_relu(tmp_5, tmp_5_dim, 4);
+	float*	relu_24_tmp_0 = (float*)calloc(30720, sizeof(float));
+	autox_relu_noreplace(tmp_5, relu_24_tmp_0, tmp_5_dim, 4);
 
 	float* batch_norm_38_tmp_2 = (float*)calloc(7680, sizeof(float));
 	autox_conv2d(tmp_5, (float*)((int8_t*)weights) + 36360, (float*)((int8_t*)weights) + 36400, batch_norm_38_tmp_2, tmp_5_dim, conv2d_38_w_0_dim, batch_norm_38_tmp_2_dim, 40, 1, 2, 1, 0);
@@ -1862,8 +1864,8 @@ void tinypose_128x96(const float* x, const uint16_t ssize_h, const uint16_t ssiz
 	float* split_9_tmp_1 = (float*)calloc(15360, sizeof(float));
 	float* p_80[] = { split_9_tmp_0, split_9_tmp_1, };
 	uint16_t* p_80_dim[] = { split_9_tmp_0_dim, split_9_tmp_1_dim, };
-	autox_split(tmp_5, p_80, relu_24_tmp_0_dim, p_80_dim, 1, 4, 2, 4);
-	free(tmp_5);
+	autox_split(relu_24_tmp_0, p_80, relu_24_tmp_0_dim, p_80_dim, 1, 4, 2, 4);
+	free(relu_24_tmp_0);
 
 	float* relu_27_tmp_0 = (float*)calloc(15360, sizeof(float));
 	autox_conv2d(split_9_tmp_1, (float*)((int8_t*)weights) + 40840, (float*)((int8_t*)weights) + 40860, relu_27_tmp_0, split_9_tmp_1_dim, conv2d_42_w_0_dim, relu_27_tmp_0_dim, 1, 0, 1, 1, 1);
@@ -2079,7 +2081,8 @@ void tinypose_128x96(const float* x, const uint16_t ssize_h, const uint16_t ssiz
 	free(tmp_9);
 	free(nearest_interp_v2_3_tmp_0);
 
-	autox_relu(tmp_10, tmp_10_dim, 4);
+	float*	relu_39_tmp_0 = (float*)calloc(30720, sizeof(float));
+	autox_relu_noreplace(tmp_10, relu_39_tmp_0, tmp_10_dim, 4);
 
 	float* batch_norm_62_tmp_2 = (float*)calloc(7680, sizeof(float));
 	autox_conv2d(tmp_10, (float*)((int8_t*)weights) + 100440, (float*)((int8_t*)weights) + 100480, batch_norm_62_tmp_2, tmp_10_dim, conv2d_62_w_0_dim, batch_norm_62_tmp_2_dim, 40, 1, 2, 1, 0);
@@ -2145,8 +2148,8 @@ void tinypose_128x96(const float* x, const uint16_t ssize_h, const uint16_t ssiz
 	float* split_15_tmp_1 = (float*)calloc(15360, sizeof(float));
 	float* p_139[] = { split_15_tmp_0, split_15_tmp_1, };
 	uint16_t* p_139_dim[] = { split_15_tmp_0_dim, split_15_tmp_1_dim, };
-	autox_split(tmp_10, p_139, relu_39_tmp_0_dim, p_139_dim, 1, 4, 2, 4);
-	free(tmp_10);
+	autox_split(relu_39_tmp_0, p_139, relu_39_tmp_0_dim, p_139_dim, 1, 4, 2, 4);
+	free(relu_39_tmp_0);
 
 	float* relu_43_tmp_0 = (float*)calloc(15360, sizeof(float));
 	autox_conv2d(split_15_tmp_1, (float*)((int8_t*)weights) + 139760, (float*)((int8_t*)weights) + 139780, relu_43_tmp_0, split_15_tmp_1_dim, conv2d_71_w_0_dim, relu_43_tmp_0_dim, 1, 0, 1, 1, 1);
@@ -2368,7 +2371,8 @@ void tinypose_128x96(const float* x, const uint16_t ssize_h, const uint16_t ssiz
 	free(tmp_18);
 	free(nearest_interp_v2_6_tmp_0);
 
-	autox_relu(tmp_19, tmp_19_dim, 4);
+	float*	relu_55_tmp_0 = (float*)calloc(30720, sizeof(float));
+	autox_relu_noreplace(tmp_19, relu_55_tmp_0, tmp_19_dim, 4);
 
 	float* batch_norm_91_tmp_2 = (float*)calloc(7680, sizeof(float));
 	autox_conv2d(tmp_19, (float*)((int8_t*)weights) + 186400, (float*)((int8_t*)weights) + 186440, batch_norm_91_tmp_2, tmp_19_dim, conv2d_91_w_0_dim, batch_norm_91_tmp_2_dim, 40, 1, 2, 1, 0);
@@ -2434,8 +2438,8 @@ void tinypose_128x96(const float* x, const uint16_t ssize_h, const uint16_t ssiz
 	float* split_21_tmp_1 = (float*)calloc(15360, sizeof(float));
 	float* p_199[] = { split_21_tmp_0, split_21_tmp_1, };
 	uint16_t* p_199_dim[] = { split_21_tmp_0_dim, split_21_tmp_1_dim, };
-	autox_split(tmp_19, p_199, relu_55_tmp_0_dim, p_199_dim, 1, 4, 2, 4);
-	free(tmp_19);
+	autox_split(relu_55_tmp_0, p_199, relu_55_tmp_0_dim, p_199_dim, 1, 4, 2, 4);
+	free(relu_55_tmp_0);
 
 	float* relu_59_tmp_0 = (float*)calloc(15360, sizeof(float));
 	autox_conv2d(split_21_tmp_1, (float*)((int8_t*)weights) + 225720, (float*)((int8_t*)weights) + 225740, relu_59_tmp_0, split_21_tmp_1_dim, conv2d_100_w_0_dim, relu_59_tmp_0_dim, 1, 0, 1, 1, 1);
@@ -2657,7 +2661,8 @@ void tinypose_128x96(const float* x, const uint16_t ssize_h, const uint16_t ssiz
 	free(tmp_27);
 	free(nearest_interp_v2_9_tmp_0);
 
-	autox_relu(tmp_28, tmp_28_dim, 4);
+	float*	relu_71_tmp_0 = (float*)calloc(30720, sizeof(float));
+	autox_relu_noreplace(tmp_28, relu_71_tmp_0, tmp_28_dim, 4);
 
 	float* batch_norm_120_tmp_2 = (float*)calloc(7680, sizeof(float));
 	autox_conv2d(tmp_28, (float*)((int8_t*)weights) + 272360, (float*)((int8_t*)weights) + 272400, batch_norm_120_tmp_2, tmp_28_dim, conv2d_120_w_0_dim, batch_norm_120_tmp_2_dim, 40, 1, 2, 1, 0);
@@ -2679,7 +2684,7 @@ void tinypose_128x96(const float* x, const uint16_t ssize_h, const uint16_t ssiz
 
 	float* batch_norm_122_tmp_2 = (float*)calloc(3840, sizeof(float));
 	autox_conv2d(transpose_26_tmp_0, (float*)((int8_t*)weights) + 276040, (float*)((int8_t*)weights) + 276120, batch_norm_122_tmp_2, reshape2_53_tmp_0_dim, conv2d_122_w_0_dim, batch_norm_122_tmp_2_dim, 1, 0, 1, 1, 0);
-	free(transpose_26_tmp_0);
+	//free(transpose_26_tmp_0);
 
 	float* nearest_interp_v2_10_tmp_0 = (float*)calloc(15360, sizeof(float));
 	autox_nearest_interp(batch_norm_122_tmp_2, nearest_interp_v2_10_tmp_0, batch_norm_122_tmp_2_dim, nearest_interp_v2_10_tmp_0_dim, 2, 0);
@@ -2723,8 +2728,8 @@ void tinypose_128x96(const float* x, const uint16_t ssize_h, const uint16_t ssiz
 	float* split_27_tmp_1 = (float*)calloc(15360, sizeof(float));
 	float* p_259[] = { split_27_tmp_0, split_27_tmp_1, };
 	uint16_t* p_259_dim[] = { split_27_tmp_0_dim, split_27_tmp_1_dim, };
-	autox_split(tmp_28, p_259, relu_71_tmp_0_dim, p_259_dim, 1, 4, 2, 4);
-	free(tmp_28);
+	autox_split(relu_71_tmp_0, p_259, relu_71_tmp_0_dim, p_259_dim, 1, 4, 2, 4);
+	free(relu_71_tmp_0);
 
 	float* relu_75_tmp_0 = (float*)calloc(15360, sizeof(float));
 	autox_conv2d(split_27_tmp_1, (float*)((int8_t*)weights) + 311680, (float*)((int8_t*)weights) + 311700, relu_75_tmp_0, split_27_tmp_1_dim, conv2d_129_w_0_dim, relu_75_tmp_0_dim, 1, 0, 1, 1, 1);
@@ -2849,7 +2854,7 @@ void tinypose_128x96(const float* x, const uint16_t ssize_h, const uint16_t ssiz
 	free(concat_30_tmp_0);
 
 	float* relu_74_tmp_0 = (float*)calloc(7680, sizeof(float));
-	autox_fusion_elementwise_add_activation(tmp_33, transpose_30_tmp_0, relu_74_tmp_0, tmp_33_dim, reshape2_53_tmp_0_dim, relu_74_tmp_0_dim, -1, 4, 4, 4);
+	autox_fusion_elementwise_add_activation(tmp_33, transpose_26_tmp_0, relu_74_tmp_0, tmp_33_dim, reshape2_53_tmp_0_dim, relu_74_tmp_0_dim, -1, 4, 4, 4);
 	free(tmp_33);
 	//free(transpose_30_tmp_0);
 
@@ -2946,7 +2951,8 @@ void tinypose_128x96(const float* x, const uint16_t ssize_h, const uint16_t ssiz
 	free(tmp_36);
 	free(nearest_interp_v2_12_tmp_0);
 
-	autox_relu(tmp_37, tmp_37_dim, 4);
+	float*	relu_87_tmp_0 = (float*)calloc(30720, sizeof(float));
+	autox_relu_noreplace(tmp_37, relu_87_tmp_0, tmp_37_dim, 4);
 
 	float* batch_norm_149_tmp_2 = (float*)calloc(7680, sizeof(float));
 	autox_conv2d(tmp_37, (float*)((int8_t*)weights) + 358320, (float*)((int8_t*)weights) + 358360, batch_norm_149_tmp_2, tmp_37_dim, conv2d_149_w_0_dim, batch_norm_149_tmp_2_dim, 40, 1, 2, 1, 0);
@@ -3021,8 +3027,8 @@ void tinypose_128x96(const float* x, const uint16_t ssize_h, const uint16_t ssiz
 	float* split_33_tmp_1 = (float*)calloc(15360, sizeof(float));
 	float* p_321[] = { split_33_tmp_0, split_33_tmp_1, };
 	uint16_t* p_321_dim[] = { split_33_tmp_0_dim, split_33_tmp_1_dim, };
-	autox_split(tmp_37, p_321, relu_87_tmp_0_dim, p_321_dim, 1, 4, 2, 4);
-	free(tmp_37);
+	autox_split(relu_87_tmp_0, p_321, relu_87_tmp_0_dim, p_321_dim, 1, 4, 2, 4);
+	free(relu_87_tmp_0);
 
 	float* relu_92_tmp_0 = (float*)calloc(15360, sizeof(float));
 	autox_conv2d(split_33_tmp_1, (float*)((int8_t*)weights) + 399240, (float*)((int8_t*)weights) + 399260, relu_92_tmp_0, split_33_tmp_1_dim, conv2d_160_w_0_dim, relu_92_tmp_0_dim, 1, 0, 1, 1, 1);
@@ -3318,7 +3324,8 @@ void tinypose_128x96(const float* x, const uint16_t ssize_h, const uint16_t ssiz
 	free(tmp_46);
 	free(nearest_interp_v2_16_tmp_0);
 
-	autox_relu(tmp_47, tmp_47_dim, 4);
+	float*	relu_108_tmp_0 = (float*)calloc(30720, sizeof(float));
+	autox_relu_noreplace(tmp_47, relu_108_tmp_0, tmp_47_dim, 4);
 
 	float* batch_norm_187_tmp_2 = (float*)calloc(7680, sizeof(float));
 	autox_conv2d(tmp_47, (float*)((int8_t*)weights) + 616480, (float*)((int8_t*)weights) + 616520, batch_norm_187_tmp_2, tmp_47_dim, conv2d_187_w_0_dim, batch_norm_187_tmp_2_dim, 40, 1, 2, 1, 0);
@@ -3473,8 +3480,8 @@ void tinypose_128x96(const float* x, const uint16_t ssize_h, const uint16_t ssiz
 	float* split_41_tmp_1 = (float*)calloc(15360, sizeof(float));
 	float* p_417[] = { split_41_tmp_0, split_41_tmp_1, };
 	uint16_t* p_417_dim[] = { split_41_tmp_0_dim, split_41_tmp_1_dim, };
-	autox_split(tmp_47, p_417, relu_108_tmp_0_dim, p_417_dim, 1, 4, 2, 4);
-	free(tmp_47);
+	autox_split(relu_108_tmp_0, p_417, relu_108_tmp_0_dim, p_417_dim, 1, 4, 2, 4);
+	free(relu_108_tmp_0);
 
 	float* relu_116_tmp_0 = (float*)calloc(15360, sizeof(float));
 	autox_conv2d(split_41_tmp_1, (float*)((int8_t*)weights) + 837560, (float*)((int8_t*)weights) + 837580, relu_116_tmp_0, split_41_tmp_1_dim, conv2d_210_w_0_dim, relu_116_tmp_0_dim, 1, 0, 1, 1, 1);
@@ -3776,7 +3783,8 @@ void tinypose_128x96(const float* x, const uint16_t ssize_h, const uint16_t ssiz
 	free(tmp_62);
 	free(nearest_interp_v2_22_tmp_0);
 
-	autox_relu(tmp_63, tmp_63_dim, 4);
+	float* relu_132_tmp_0 = (float*)calloc(30720, sizeof(float));
+	autox_relu_noreplace(tmp_63, relu_132_tmp_0, tmp_63_dim, 4);
 
 	float* batch_norm_237_tmp_2 = (float*)calloc(7680, sizeof(float));
 	autox_conv2d(tmp_63, (float*)((int8_t*)weights) + 1003280, (float*)((int8_t*)weights) + 1003320, batch_norm_237_tmp_2, tmp_63_dim, conv2d_237_w_0_dim, batch_norm_237_tmp_2_dim, 40, 1, 2, 1, 0);
@@ -3989,8 +3997,8 @@ void tinypose_128x96(const float* x, const uint16_t ssize_h, const uint16_t ssiz
 	free(relu_142_tmp_0);
 
 	float* tmp_78 = (float*)calloc(30720, sizeof(float));
-	autox_elementwise_add(tmp_63, bilinear_interp_v2_2_tmp_0, tmp_78, relu_132_tmp_0_dim, bilinear_interp_v2_2_tmp_0_dim, tmp_78_dim, -1, 4, 4, 4);
-	free(tmp_63);
+	autox_elementwise_add(relu_132_tmp_0, bilinear_interp_v2_2_tmp_0, tmp_78, relu_132_tmp_0_dim, bilinear_interp_v2_2_tmp_0_dim, tmp_78_dim, -1, 4, 4, 4);
+	free(relu_132_tmp_0);
 	free(bilinear_interp_v2_2_tmp_0);
 
 	float* batch_norm_266_tmp_2 = (float*)calloc(30720, sizeof(float));
@@ -4001,10 +4009,7 @@ void tinypose_128x96(const float* x, const uint16_t ssize_h, const uint16_t ssiz
 	autox_conv2d(batch_norm_266_tmp_2, (float*)((int8_t*)weights) + 1297840, (float*)((int8_t*)weights) + 1297880, relu_143_tmp_0, batch_norm_266_tmp_2_dim, conv2d_267_w_0_dim, relu_143_tmp_0_dim, 1, 0, 1, 1, 1);
 	free(batch_norm_266_tmp_2);
 
-	float* conv2d_441_tmp_1 = (float*)calloc(13056, sizeof(float));
-	autox_conv2d(relu_143_tmp_0, (float*)((int8_t*)weights) + 1299480, (float*)((int8_t*)weights) + 1299497, conv2d_441_tmp_1, relu_143_tmp_0_dim, conv2d_268_w_0_dim, conv2d_441_tmp_1_dim, 1, 0, 1, 1, 0);
+	autox_conv2d(relu_143_tmp_0, (float*)((int8_t*)weights) + 1299480, (float*)((int8_t*)weights) + 1299497, Out, relu_143_tmp_0_dim, conv2d_268_w_0_dim, conv2d_441_tmp_1_dim, 1, 0, 1, 1, 0);
 	free(relu_143_tmp_0);
 
-	autox_argmax(conv2d_441_tmp_1, Out, reshape2_98_tmp_0_dim, argmax_0_tmp_0_dim, 3, 2, -1);
-	free(conv2d_441_tmp_1);
 }

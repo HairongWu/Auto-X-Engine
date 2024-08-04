@@ -235,8 +235,8 @@ extern "C" {
         float* out_data, uint16_t* x_dims, uint16_t* y_dims, uint16_t* z_dims, int axis, uint16_t x_dims_size,
         uint16_t y_dims_size, uint16_t z_dims_size);
 
-    void autox_hard_sigmoid(float* data, uint32_t* dims, uint8_t dim_size, float offset, float slope);
-    void autox_swish(float* x_data, uint32_t* dims, uint8_t dim_size, float beta);
+    void autox_hard_sigmoid(float* data, uint16_t* dims, uint8_t dim_size, float offset, float slope);
+    void autox_swish(float* x_data, uint16_t* dims, uint8_t dim_size, float beta);
     void autox_im2col(const float* data_im,
         int channels,
         int height,
@@ -261,20 +261,27 @@ extern "C" {
         float scale,
         int8_t align_corners);
 
-    void autox_layer_norm(float* out, float* mean, float* rstd,
-        float* inp, float* weight, float* bias,
-        int B, int T, int C);
+    void autox_layer_norm(float* x,
+        const float* bias,
+        const float* scale,
+        float* out,
+        int height,
+        const float epsilon,
+        int right);
+
     void autox_matmul(const float* X, const float* Y, float* Out, uint16_t* x_dims,
         uint16_t* y_dims, uint16_t* o_dims, int8_t x_transpose, int8_t y_transpose,
         uint8_t x_dims_size, uint8_t y_dims_size, uint8_t o_dims_size);
 
     void autox_pool2d(const float* input_data, float* output_data, uint16_t* x_dims, uint16_t* o_dims, const uint8_t ksize,
         const uint8_t stride, const uint8_t padding, const uint8_t adaptive, const uint8_t type);
-    void autox_relu(float* x_data, uint32_t* dims, uint8_t dim_size);
-    void autox_scale(float* data, uint32_t* dims, uint8_t dim_size, float bias, int8_t bias_before, float scale);
-    void autox_sqrt(float* data, uint32_t* dims, uint8_t dim_size);
-    void autox_sigmoid(float* data, uint32_t* dims, uint8_t dim_size);
+    void autox_relu(float* x_data, uint16_t* dims, uint8_t dim_size);
+    void autox_relu_noreplace(float* x_data, float* y_data, uint16_t* dims, uint8_t dim_size);
 
+    void autox_scale(float* data, uint16_t* dims, uint8_t dim_size, float bias, int8_t bias_before, float scale);
+    void autox_sqrt(float* data, uint16_t* dims, uint8_t dim_size);
+    void autox_sigmoid(float* data, uint16_t* dims, uint8_t dim_size);
+    void autox_slice(float* x_data, float* o_data[], uint16_t* in_dims, uint16_t* out_dims, uint8_t in_dim_size, uint8_t out_dim_size);
     void autox_split(float* input, float** output, uint16_t* in_dim, uint16_t* output_ddim[], int32_t axis,
         uint16_t input_dims_size, uint16_t output_size, uint16_t output_ddim_size);
 

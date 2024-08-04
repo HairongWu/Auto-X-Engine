@@ -29,20 +29,25 @@ void autox_pool2d(const float *input_data, float *output_data, uint16_t* x_dims,
                 hstart = AdaptStartIndex(ph, input_height, output_height);
                 hend = AdaptEndIndex(ph, input_height, output_height);
             }
-            else {
-                hstart = ph * stride - padding;
-                hend = min(hstart + ksize, input_height);
-                hstart = max(hstart, 0);
-            }
             for (uint16_t pw = 0; pw < output_width; ++pw) {
+                int pool_size = 1;
                 if (adaptive) {
                     wstart = AdaptStartIndex(pw, input_width, output_width);
                     wend = AdaptEndIndex(pw, input_width, output_width);
                 }
                 else {
+                    hstart = ph * stride - padding;
                     wstart = pw * stride - padding;
-                    wend = min(wstart + ksize, input_width);
+                    hend = min(hstart + ksize,
+                        input_height + padding);
+                    wend =
+                        min(wstart + ksize, input_width + padding);
+                    pool_size = (hend - hstart) * (wend - wstart);
+
                     wstart = max(wstart, 0);
+                    hstart = max(hstart, 0);
+                    hend = min(hend, input_height);
+                    wend = min(wend, input_width);
                 }
 
                 float ele = 0.0;
@@ -71,12 +76,11 @@ void autox_pool2d(const float *input_data, float *output_data, uint16_t* x_dims,
                         }
                     }
                 }
-
+                if (adaptive) {
+                    pool_size = (hend - hstart) * (wend - wstart);
+                }
                 if (type == 1)
                 {
-                    uint16_t pool_size = (adaptive)
-                        ? (hend - hstart) * (wend - wstart)
-                        : ksize * ksize;
                     ele /= pool_size;
                 }
                 else

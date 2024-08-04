@@ -158,17 +158,14 @@ static void activate_hardswish_inplace_bias(float* data,
 	float scale,
 	float threshold,
 	float offset) {
-#ifdef __AVX__
+
 	int cnt = channel_size >> 5;
 	int remain = channel_size & 31;
 	__m256 vec_zero = _mm256_set1_ps(0.f);
 	__m256 vec_scale = _mm256_set1_ps(1.0 / scale);
 	__m256 vec_threshold = _mm256_set1_ps(threshold);
 	__m256 vec_offset = _mm256_set1_ps(offset);
-#else
-	int cnt = channel_size >> 4;
-	int remain = channel_size & 15;
-#endif
+
 	__m128 vec_zero_128 = _mm_set1_ps(0.f);
 	__m128 vec_scale_128 = _mm_set1_ps(1.0 / scale);
 	__m128 vec_threshold_128 = _mm_set1_ps(threshold);
@@ -176,14 +173,14 @@ static void activate_hardswish_inplace_bias(float* data,
 	int cnt_4 = remain >> 2;
 	int rem_4 = remain & 3;
 	for (int i = 0; i < channel; i++) {
-#ifdef __AVX__
+
 		__m256 vec_bias = _mm256_set1_ps(bias[i]);
-#endif
+
 		__m128 vec_bias_128 = _mm_set1_ps(bias[i]);
 		float* tmp_data = data + i * channel_size;
 
 		for (int j = 0; j < cnt; j++) {
-#ifdef __AVX__
+
 			__m256 vin0 = _mm256_add_ps(_mm256_loadu_ps(tmp_data), vec_bias);
 			__m256 vin1 = _mm256_add_ps(_mm256_loadu_ps(tmp_data + 8), vec_bias);
 			__m256 vin2 = _mm256_add_ps(_mm256_loadu_ps(tmp_data + 16), vec_bias);
@@ -209,33 +206,7 @@ static void activate_hardswish_inplace_bias(float* data,
 			_mm256_storeu_ps(tmp_data + 16, _mm256_mul_ps(vres2, vsum2));
 			_mm256_storeu_ps(tmp_data + 24, _mm256_mul_ps(vres3, vsum3));
 			tmp_data += 32;
-#else
-			__m128 vin0 = _mm_add_ps(_mm_loadu_ps(tmp_data), vec_bias_128);
-			__m128 vin1 = _mm_add_ps(_mm_loadu_ps(tmp_data + 4), vec_bias_128);
-			__m128 vin2 = _mm_add_ps(_mm_loadu_ps(tmp_data + 8), vec_bias_128);
-			__m128 vin3 = _mm_add_ps(_mm_loadu_ps(tmp_data + 12), vec_bias_128);
-			__m128 vadd0 = _mm_add_ps(vin0, vec_offset_128);
-			__m128 vadd1 = _mm_add_ps(vin1, vec_offset_128);
-			__m128 vadd2 = _mm_add_ps(vin2, vec_offset_128);
-			__m128 vadd3 = _mm_add_ps(vin3, vec_offset_128);
-			__m128 vsum0 = _mm_mul_ps(vin0, vec_scale_128);
-			__m128 vsum1 = _mm_mul_ps(vin1, vec_scale_128);
-			__m128 vsum2 = _mm_mul_ps(vin2, vec_scale_128);
-			__m128 vsum3 = _mm_mul_ps(vin3, vec_scale_128);
-			__m128 vres0 =
-				_mm_min_ps(_mm_max_ps(vadd0, vec_zero_128), vec_threshold_128);
-			__m128 vres1 =
-				_mm_min_ps(_mm_max_ps(vadd1, vec_zero_128), vec_threshold_128);
-			__m128 vres2 =
-				_mm_min_ps(_mm_max_ps(vadd2, vec_zero_128), vec_threshold_128);
-			__m128 vres3 =
-				_mm_min_ps(_mm_max_ps(vadd3, vec_zero_128), vec_threshold_128);
-			_mm_storeu_ps(tmp_data, _mm_mul_ps(vres0, vsum0));
-			_mm_storeu_ps(tmp_data + 4, _mm_mul_ps(vres1, vsum1));
-			_mm_storeu_ps(tmp_data + 8, _mm_mul_ps(vres2, vsum2));
-			_mm_storeu_ps(tmp_data + 12, _mm_mul_ps(vres3, vsum3));
-			tmp_data += 16;
-#endif
+
 		}
 		for (int j = 0; j < cnt_4; j++) {
 			__m128 vin0 = _mm_add_ps(_mm_loadu_ps(tmp_data), vec_bias_128);
@@ -354,10 +325,6 @@ static void activate_none_inplace_bias(float* data,
 	__m256 vec_bias = { 0.f };
 	__m256 vec_data = { 0.f };
 #endif
-#ifdef __SSE__
-	__m128 vec_bias_128 = { 0.f };
-	__m128 vec_data_128 = { 0.f };
-#endif
 
 	for (j = 0; j < channel; j++) {
 		i = 0;
@@ -368,14 +335,6 @@ static void activate_none_inplace_bias(float* data,
 			vec_data = _mm256_loadu_ps(tmp_data + i);
 			vec_data = _mm256_add_ps(vec_bias, vec_data);
 			_mm256_storeu_ps(tmp_data + i, vec_data);
-		}
-#endif
-#ifdef __SSE__
-		vec_bias_128 = _mm_set1_ps(bias[j]);
-		for (; i + 3 < channel_size; i += 4) {
-			vec_data_128 = _mm_loadu_ps(tmp_data + i);
-			vec_data_128 = _mm_add_ps(vec_data_128, vec_bias_128);
-			_mm_storeu_ps(tmp_data + i, vec_data_128);
 		}
 #endif
 		for (; i < channel_size; i++) {
@@ -420,10 +379,10 @@ void fill_bias_act(float* tensor,
 		}
 		else {
 			// activate
-			if (act_type == 1) {
+			if (act_type == kRelu) {
 				activate_relu_inplace(tensor, len, relu_alpha, 0);
 			}
-			else if (act_type == 2) {
+			else if (act_type == kRelu6) {
 				activate_relu_inplace(tensor, len, relu_alpha, 1);
 			}
 			/*else if (act_type == lite_api::ActivationType::kLeakyRelu) {
@@ -461,7 +420,6 @@ void autox_conv2d(float* din, const float* bias, const float* weights, float* do
 		flag_1x1gemm_ = false;
 	}
 
-	bool flag_p = paddings <= strides;
 	//! select conv impl
 	if (dw_kernel && flag_dw &&
 		((flag_dw_5x5 && no_dilation) || (flag_dw_3x3 && (group & 3) == 0))) {

@@ -1,17 +1,13 @@
 #include "../include/autox_nn.h"
 
 
-void autox_slice(float *x_data, float *o_data, uint16_t *in_dims, uint16_t *out_dims, 
-        int8_t axis, int8_t decrease_axis, int8_t end, int8_t start) {
+void autox_slice(float *x_data, float *o_data[], uint16_t* in_dims, uint16_t* out_dims, uint8_t in_dim_size, uint8_t out_dim_size) 
+{
 
-    uint16_t extent = out_dims[0];
-
-    if (start < 0) {
-      start = (start + in_dims[axis]);
+    uint16_t slices = in_dims[0];
+    uint32_t size = count(out_dims, 0, out_dim_size);
+    for (uint16_t i = 0; i < slices; i++)
+    {
+        o_data[i] = x_data + i*size;
     }
-    start = max(start, 0);
-    uint16_t offset = start;
-
-    o_data = slice(x_data, offset, extent);
-
 }
