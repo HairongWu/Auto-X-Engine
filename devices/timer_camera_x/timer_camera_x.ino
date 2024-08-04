@@ -1,21 +1,9 @@
-/**
- * @file capture.ino
- * @author SeanKwok (shaoxiang@m5stack.com)
- * @brief TimerCAM Take Photo Test
- * @version 0.1
- * @date 2023-12-28
- *
- *
- * @Hardwares: TimerCAM
- * @Platform Version: Arduino M5Stack Board Manager v2.0.9
- * @Dependent Library:
- * TimerCam-arduino: https://github.com/m5stack/TimerCam-arduino
- */
+
 #include "M5TimerCAM.h"
 #include "esp_partition.h"
 #include "esp_spi_flash.h"
 
-//#include "shufflenetv2.h"
+#include "autox_models.h"
 
 const void *model_ptr;
 void setup() {
@@ -63,9 +51,35 @@ void loop() {
             ESP_LOGE(TAG, "malloc memory for image image_ptr failed");
         }
         TimerCAM.Camera.free();
+        
+        // uint8_t *dst = (uint8_t *)calloc(224*224* 3, sizeof(uint8_t));
+        // autox_resize_image(image_ptr, dst, TimerCAM.Camera.fb->height, TimerCAM.Camera.fb->width, 224, 224);
+        // free(image_ptr);
+        // float *out = (float *)calloc(224*224* 3, sizeof(float));
+        // autox_normalize_image(dst, out, 224, 224, 3);
+        // free(dst);
+        // float *x = (float *)calloc(224*224* 3, sizeof(float));
+        // autox_hwc2chw(out, x, 224, 224, 3);
+        // free(out);
 
-        float ret = -1;
-        //shufflenetv2(image_ptr, TimerCAM.Camera.fb->height, TimerCAM.Camera.fb->width, model_ptr, &ret);
-        Serial.println("ret:");
+        // float cls = -1;
+        // shufflenetv2_x_0_25(x, model_ptr, &cls);
+        // ESP_LOGE(TAG, "ret:%f", cls);
+
+        uint8_t *dst = (uint8_t *)calloc(320*320* 3, sizeof(uint8_t));
+        autox_resize_image(image_ptr, dst, TimerCAM.Camera.fb->height, TimerCAM.Camera.fb->width, 320, 320);
+        free(image_ptr);
+        float *out = (float *)calloc(320*320* 3, sizeof(float));
+        autox_normalize_image(dst, out, 320, 320, 3);
+        free(dst);
+        float *x = (float *)calloc(320*320* 3, sizeof(float));
+        autox_hwc2chw(out, x, 320, 320, 3);
+        free(out);
+
+        float *dets = (float*)calloc(1*80 * 2125, sizeof(float));
+	      float* boxes = (float*)calloc(1 * 2125 * 4, sizeof(float));
+        picodet_xs_320(x, model_ptr, dets, boxes);
+        free(dets);
+	      free(boxes);
     }
 }
