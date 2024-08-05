@@ -52,7 +52,7 @@ int main()
 	for (int i = 0; i < frame_h * frame_w * frame_c; i++)
 		frame[i] = 1;
 	float cls = -1;
-	shufflenetv2_x_0_25(frame, frame_h, frame_w, (void*)buffer, &cls);
+	shufflenetv2_x_0_25(frame, (void*)buffer, &cls);
 	printf("%f\n", cls);
 
 	frame_h = 320;
@@ -66,7 +66,7 @@ int main()
 		frame[i] = 1;
 	float *dets = (float*)calloc(1*80 * 2125, sizeof(float));
 	float* boxes = (float*)calloc(1 * 2125 * 4, sizeof(float));
-	picodet_xs_320(frame, frame_h, frame_w, (void*)buffer, dets, boxes);
+	picodet_xs_320(frame, (void*)buffer, dets, boxes);
 	free(dets);
 	free(boxes);
 
@@ -80,23 +80,24 @@ int main()
 	for (int i = 0; i < frame_h * frame_w * frame_c; i++)
 		frame[i] = 1;
 	float* heatmap = (float*)calloc(17*32*24, sizeof(float));
-	tinypose_128x96(frame, frame_h, frame_w, (float*)buffer, heatmap);
+	tinypose_128x96(frame, (float*)buffer, heatmap);
 	free(heatmap);
 
-	//frame_h = 48;
-	//frame_w = 1;
-	//frame_c = 3;
+	frame_h = 48;
+	frame_w = 1;
+	frame_c = 3;
 
-	//buffer = read_file("./japan_PP_OCRv3_rec.bin");
-	//// char* frame = read_file("./image.bin");
-	//frame = (float*)calloc(frame_h * frame_w * frame_c, sizeof(float));
-	//for (int i = 0; i < frame_h * frame_w * frame_c; i++)
-	//	frame[i] = 1;
-	//float* rec = (float*)calloc(1*16*4401, sizeof(float));
-	//japan_PP_OCRv3_rec(frame, frame_h, frame_w, (float*)buffer, rec);
+	buffer = read_file("./japan_PP_OCRv3_rec.bin");
+	// char* frame = read_file("./image.bin");
+	frame = (float*)calloc(frame_h * frame_w * frame_c, sizeof(float));
+	for (int i = 0; i < frame_h * frame_w * frame_c; i++)
+		frame[i] = 1;
+	float* rec = (float*)calloc(1*1*4401, sizeof(float));
+	japan_PP_OCRv3_rec(frame, (float*)buffer, rec);
+	free(rec);
 
-	//char checkpoint_path[256] = "stories15M.bin";
-	//char tokenizer_path[256] = "tokenizer.bin";
+	//char checkpoint_path[128] = "stories15M.bin";
+	//char tokenizer_path[128] = "tokenizer.bin";
 	//char prompt[256] = "Once upon a time";
 	//run_llama3(checkpoint_path, tokenizer_path, prompt);
 }

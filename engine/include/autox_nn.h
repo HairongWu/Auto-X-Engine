@@ -286,6 +286,7 @@ extern "C" {
         uint16_t input_dims_size, uint16_t output_size, uint16_t output_ddim_size);
 
     void autox_transpose(const float* input_ptr, float* output_ptr, uint16_t* in_dim, uint16_t* out_dim, uint16_t* axis, int permute);
+    void autox_transpose2(const float* input_ptr, float* output_ptr, uint16_t* in_dim, uint16_t* out_dim, uint16_t* axis, int permute);
 
     char* autox_tok_decode(Tokenizer* t, int prev_token, int token);
     int autox_tok_encode(Tokenizer* t, char* text, int8_t bos, int8_t eos, int* tokens, int* n_tokens);

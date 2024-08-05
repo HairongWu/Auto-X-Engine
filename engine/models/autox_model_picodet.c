@@ -1,6 +1,6 @@
 #include "../include/autox_models.h"
 
-void picodet_xs_320(const float* x, const uint16_t ssize_h, const uint16_t ssize_w, void* weights, float* dets, float* boxes)
+void picodet_xs_320(const float* x, void* weights, float* dets, float* boxes)
 {
 	uint16_t image_dim[] = { 1, 3, 320, 320 };
 	uint16_t batch_norm2d_0_b_0_dim[] = { 8 };

@@ -42,3 +42,20 @@ void autox_transpose(const float* input_ptr, float* output_ptr, uint16_t* in_dim
       }
     }
 }
+
+void autox_transpose2(const float* input_ptr, float* output_ptr, uint16_t* in_dim, uint16_t* out_dim, uint16_t* axis, int num_axes) {
+    int from_inds[32] = { 0 };
+    uint32_t size = count(in_dim, 0, num_axes);
+    for (int index = 0; index < size; index++) {
+        int from_index = index, to_index = 0;
+        for (int i = 0; i < num_axes; i++) {
+            from_inds[i] = from_index / in_dim[i];
+            from_index = from_index % in_dim[i];
+        }
+        for (int i = 0; i < num_axes; i++) {
+            to_index += from_inds[axis[i]] * out_dim[i];
+        }
+
+        *(output_ptr + to_index) = *(input_ptr + index);
+    }
+}

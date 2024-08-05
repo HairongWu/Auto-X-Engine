@@ -1,6 +1,6 @@
 #include "../include/autox_models.h"
 
-void tinypose_128x96(const float* x, const uint16_t ssize_h, const uint16_t ssize_w, void* weights, float* Out)
+void tinypose_128x96(const float* x, void* weights, float* Out)
 {
 	uint16_t image_dim[] = { 1, 3, 128, 96 };
 	uint16_t batch_norm2d_0_b_0_dim[] = { 32 };

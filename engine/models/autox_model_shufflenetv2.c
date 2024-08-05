@@ -1,6 +1,6 @@
 #include "../include/autox_models.h"
 
-void shufflenetv2_x_0_25(const float* x, const uint16_t ssize_h, const uint16_t ssize_w, void* weights, float* Out)
+void shufflenetv2_x_0_25(const float* x, void* weights, float* Out)
 {
 	uint16_t x_dim[] = { 1, 3, 224, 224 };
 	uint16_t batch_norm_0_tmp_4_dim[] = { 1, 24, 112, 112 };
