@@ -97,7 +97,16 @@ It is composed of three newly proposed parts, the strideformer backbone, the Agg
 ### Llama3.1
 
 
+### PPStructure
+
 ### OV-DINO
 
 
-### SAM2
+### Segment Anything Model 2
+
+
+### Stable Diffusion 3
+
+### Whisper
+
+### CodeGeeX4
