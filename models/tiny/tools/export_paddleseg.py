@@ -14,14 +14,19 @@
 
 import argparse
 import os
-
+import sys
 import paddle
 import yaml
+__dir__ = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.abspath(os.path.join(__dir__, '../')))
 
 from paddleseg.cvlibs import Config, SegBuilder
 from paddleseg.utils import logger, utils
 from paddleseg.deploy.export import WrappedModel
 
+from paddlelite.lite import *
+from naivebuffer import *
+from nb2c import *
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Export Inference Model.')
@@ -115,6 +120,26 @@ def main(args):
 
     logger.info(f'The inference model is saved in {args.save_dir}')
 
+    config2 = CxxConfig()
+    config2.set_model_dir(args.save_dir)
+    places = [Place(TargetType.X86, PrecisionType.FP32), Place(TargetType.Host, PrecisionType.FP32)]
+    config2.set_valid_places(places)
+    predictor = create_paddle_predictor(config2)
+    predictor.save_optimized_model(os.path.join(args.save_dir, "model"))
+
+
+    input_tensor = predictor.get_input(0)
+    input_tensor.from_numpy(np.ones([1,3, 512, 512]).astype('float32'))
+
+    predictor.run()
+
+    output_tensor = predictor.get_output(0)
+    print(output_tensor.numpy())
+    print(output_tensor.numpy().shape)
+
+    ops, dim_dict, weights_dict = read_nb(os.path.join(args.save_dir, "model.nb"))
+
+    nb2c(args.save_dir, ops, weights_dict, dim_dict)
 
 if __name__ == '__main__':
     args = parse_args()

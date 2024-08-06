@@ -24,9 +24,6 @@
     <ClCompile Include="MSVS.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\engine\models\autox_model_llama3.c">
-      <Filter>源文件\models</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\engine\models\autox_model_shufflenetv2.c">
       <Filter>源文件\models</Filter>
     </ClCompile>
@@ -48,31 +45,13 @@
     <ClCompile Include="..\..\..\engine\kernels\autox_nn_matmul.c">
       <Filter>源文件\nn</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_multi_head_attention.c">
-      <Filter>源文件\nn</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\engine\kernels\autox_nn_pool2d.c">
-      <Filter>源文件\nn</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_rmsnorm.c">
-      <Filter>源文件\nn</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_rope_rotation.c">
       <Filter>源文件\nn</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\engine\kernels\autox_nn_softmax.c">
       <Filter>源文件\nn</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\engine\kernels\autox_nn_split.c">
-      <Filter>源文件\nn</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_swiglu.c">
-      <Filter>源文件\nn</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_tokenizer.c">
-      <Filter>源文件\nn</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_transformer.c">
       <Filter>源文件\nn</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\engine\kernels\autox_nn_transpose.c">
@@ -124,6 +103,15 @@
       <Filter>源文件\nn</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\engine\kernels\autox_nn_slice.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\models\autox_model_mobileseg.c">
+      <Filter>源文件\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_hardswish.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\engine\kernels\autox_nn_reduce.c">
       <Filter>源文件\nn</Filter>
     </ClCompile>
   </ItemGroup>

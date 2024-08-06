@@ -96,6 +96,19 @@ int main()
 	japan_PP_OCRv3_rec(frame, (float*)buffer, rec);
 	free(rec);
 
+	//frame_h = 512;
+	//frame_w = 512;
+	//frame_c = 3;
+
+	//buffer = read_file("./mobileseg_tiny.bin");
+	//// char* frame = read_file("./image.bin");
+	//frame = (float*)calloc(frame_h * frame_w * frame_c, sizeof(float));
+	//for (int i = 0; i < frame_h * frame_w * frame_c; i++)
+	//	frame[i] = 1;
+	//rec = (float*)calloc(1 * 512 * 512, sizeof(float));
+	//mobileseg_tiny(frame, (float*)buffer, rec);
+	//free(rec);
+
 	//char checkpoint_path[128] = "stories15M.bin";
 	//char tokenizer_path[128] = "tokenizer.bin";
 	//char prompt[256] = "Once upon a time";

@@ -13,11 +13,13 @@ op_mapping = {
     'fusion_elementwise_add_activation':'autox_fusion_elementwise_add_activation',
     'bilinear_interp_v2':'autox_bilinear_interp','arg_max':'autox_argmax',
     'swish':'autox_swish','layer_norm':'autox_layer_norm', 'slice':'autox_slice'
+    , 'hard_swish':'autox_hard_swish', 'reduce_mean':'autox_reduce_mean', 'linear_interp_v2':'autox_linear_interp_v2'
+    , 'relu6':'autox_relu6'
 }
 
 attrs = ['act_type','dilations','groups','paddings','strides','adaptive','ksize','pooling_type','axis','start_axis','stop_axis',
              'trans_x','trans_y','scale','align_corners','offset','slope','bias','bias_after_scale','beta','begin_norm_axis'
-             ,'epsilon','axes','decrease_axis','ends','starts']
+             ,'epsilon','axes','decrease_axis','ends','starts','threshold']
 
 ignore_layers = ['feed','shape', 'fill_constant','reshape2','flatten_contiguous_range', 'fetch', 'assign', 'squeeze2']
 
@@ -26,7 +28,7 @@ def nb2c(output_dir, ops, weights_dict, dim_dict):
     fm = open(os.path.join(output_dir, "model.h"), "w")
     index = 0
     para_index = 0
-    fm.write('void model(const uint8_t *image, const uint16_t ssize_h, const uint16_t ssize_w, const float *weights, uint32_t *Out)\n{\n')
+    fm.write('void model(const uint8_t *image, const float *weights, uint32_t *Out)\n{\n')
     operator = ''
     for key in dim_dict:
         if len(dim_dict[key]) > 0 and 'fill_constant' not in key:
@@ -230,7 +232,9 @@ def nb2c(output_dir, ops, weights_dict, dim_dict):
             operator = operator + str(len(attributes['axis'].split(',')))
             operator = operator + ", "
         elif op.type == "hard_sigmoid" or op.type == "swish" \
-            or op.type == "scale" or op.type == "sqrt" or op.type == "sigmoid" or op.type == "relu":
+            or op.type == "scale" or op.type == "sqrt" \
+            or op.type == "sigmoid" or op.type == "relu"\
+            or op.type == "hard_swish" or op.type == "relu6":
             for i in inputs:
                 operator = operator + i.replace('.','_')
                 operator = operator + ", "

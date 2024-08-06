@@ -1,10 +1,10 @@
 #include "../include/autox_nn.h"
 
-int8_t is_a_ge_zero_and_a_lt_b(int a, int b) {
+static int8_t is_a_ge_zero_and_a_lt_b(int a, int b) {
 	return (unsigned)(a) < (unsigned)(b);
 }
 
-void im2col_common(const float* data_im,
+static void im2col_common(const float* data_im,
 	int channels,
 	int height,
 	int width,
@@ -51,7 +51,7 @@ void im2col_common(const float* data_im,
 	}
 }
 
-void im2col_s1(const float* data_im,
+static void im2col_s1(const float* data_im,
 	int channels,
 	int height,
 	int width,
@@ -111,7 +111,7 @@ void im2col_s1(const float* data_im,
 	}
 }
 
-void im2col_s2(const float* data_im,
+static void im2col_s2(const float* data_im,
 	int channels,
 	int height,
 	int width,

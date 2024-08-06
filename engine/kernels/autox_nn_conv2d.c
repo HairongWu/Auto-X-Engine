@@ -443,7 +443,7 @@ void autox_conv2d(float* din, const float* bias, const float* weights, float* do
 
 	if (!flag_1x1gemm_) {
 		int col_size = group * group_size_coldata;
-		col_data = (float*)malloc(col_size * sizeof(float));
+		col_data = (float*)calloc(col_size, sizeof(float));
 	}
 	for (int i = 0; i < num; i++) {
 		const float* din_batch = din + i * channel_in_size;

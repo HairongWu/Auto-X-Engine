@@ -15,3 +15,12 @@ void autox_relu_noreplace(float* x_data, float* y_data, uint16_t* dims, uint8_t 
 		y_data[i] = x_data[i] > 0 ? x_data[i] : 0;
 	}
 }
+
+void autox_relu6(float* x_data, uint16_t* dims, uint8_t dim_size, float coef)
+{
+	uint32_t size = count(dims, 0, dim_size);
+	for (int i = 0; i < size; i++) {
+		x_data[i] = x_data[i] > 0 ? x_data[i] : 0;
+		x_data[i] = x_data[i] < coef ? x_data[i] : coef;
+	}
+}

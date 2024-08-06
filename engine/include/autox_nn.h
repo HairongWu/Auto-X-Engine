@@ -236,6 +236,7 @@ extern "C" {
         uint16_t y_dims_size, uint16_t z_dims_size);
 
     void autox_hard_sigmoid(float* data, uint16_t* dims, uint8_t dim_size, float offset, float slope);
+    void autox_hard_swish(float* x_data, uint16_t* dims, uint8_t dim_size, float threshold, float scale, float offset);
     void autox_swish(float* x_data, uint16_t* dims, uint8_t dim_size, float beta);
     void autox_im2col(const float* data_im,
         int channels,
@@ -277,6 +278,10 @@ extern "C" {
         const uint8_t stride, const uint8_t padding, const uint8_t adaptive, const uint8_t type);
     void autox_relu(float* x_data, uint16_t* dims, uint8_t dim_size);
     void autox_relu_noreplace(float* x_data, float* y_data, uint16_t* dims, uint8_t dim_size);
+    void autox_relu6(float* x_data, uint16_t* dims, uint8_t dim_size, float coef);
+
+    void autox_reduce_mean(float* x_data,
+        float* out_data, uint16_t* x_dims, uint16_t* y_dims);
 
     void autox_scale(float* data, uint16_t* dims, uint8_t dim_size, float bias, int8_t bias_before, float scale);
     void autox_sqrt(float* data, uint16_t* dims, uint8_t dim_size);
@@ -288,14 +293,6 @@ extern "C" {
     void autox_transpose(const float* input_ptr, float* output_ptr, uint16_t* in_dim, uint16_t* out_dim, uint16_t* axis, int permute);
     void autox_transpose2(const float* input_ptr, float* output_ptr, uint16_t* in_dim, uint16_t* out_dim, uint16_t* axis, int permute);
 
-    char* autox_tok_decode(Tokenizer* t, int prev_token, int token);
-    int autox_tok_encode(Tokenizer* t, char* text, int8_t bos, int8_t eos, int* tokens, int* n_tokens);
-    float* autox_transformer(Transformer* transformer, int token, int pos);
-    void autox_rmsnorm(float* o, float* x, float* weight, uint32_t size);
-    void autox_rope_rotation(int pos, float* sq, float* sk, int dim, int kv_dim, int head_size);
-    void autox_multi_head_attention(int n_heads, int pos, int seq_len, float* sq, float* satt, float* sxb, float* key_cache,
-        float* value_cache, int kv_dim, int kv_mul, int head_size, int loff);
-    void autox_swiglu(float* hb, float* hb2, uint32_t hidden_dim);
     void autox_softmax(float* x, uint32_t height, uint32_t width);
 
     void autox_fusion_elementwise_add_activation(float* x_data,
