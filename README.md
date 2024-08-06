@@ -100,4 +100,4 @@ It is composed of three newly proposed parts, the strideformer backbone, the Agg
 ### OV-DINO
 
 
-### SMA2
+### SAM2
