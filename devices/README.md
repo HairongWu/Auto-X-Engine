@@ -10,7 +10,12 @@
 ## Sony Spresense
 
 <div  align="center">
-  <img src="./imgs/spresense.jpg" width="200"/>
+  <img src="./imgs/Spresense_HDR.png" width="200"/>
 </div>
 
+## PX4 Autopilot
+
+<div  align="center">
+  <img src="./imgs/px4.jpg" width="200"/>
+</div>
 
