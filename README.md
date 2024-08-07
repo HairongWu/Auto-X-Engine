@@ -127,6 +127,11 @@ Segment Anything Model 2 (SAM 2) is a foundation model towards solving promptabl
 
 ### Stable Diffusion 3
 
-### Whisper
-
 ### CodeGeeX4
+
+### SenseVoice
+
+### Cosyvoice
+
+
+### Duix
