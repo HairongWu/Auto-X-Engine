@@ -205,7 +205,7 @@ extern "C" {
         float* C, int ldc);
 
     void autox_hwc2chw(const float* src, float* dst, uint16_t height, uint16_t width, uint8_t channels);
-    void autox_normalize_image(uint8_t* p, float* out, uint16_t p_h, uint16_t p_w, uint8_t p_c);
+    void autox_normalize_image(uint8_t* p, float* out, uint32_t p_h, uint32_t p_w, uint8_t p_c);
     void autox_resize_image(const uint8_t* src, uint8_t* dst, uint16_t ssize_h, uint16_t ssize_w, uint16_t dsize_h, uint16_t dsize_w);
 
     void autox_argmax(const float* input,

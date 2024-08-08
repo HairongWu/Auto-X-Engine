@@ -98,9 +98,9 @@ def run(FLAGS, cfg):
 
 
     input_tensor = predictor.get_input(0)
-    input_tensor.from_numpy(np.ones([1,3, 96, 128]).astype('float32'))
-    # input_tensor2 = predictor.get_input(1)
-    # input_tensor2.from_numpy(np.ones([1, 2]).astype('float32'))
+    input_tensor.from_numpy(np.ones([1,3, 320, 320]).astype('float32'))
+    input_tensor2 = predictor.get_input(1)
+    input_tensor2.from_numpy(np.ones([1, 2]).astype('float32'))
 
     predictor.run()
 

@@ -876,6 +876,7 @@ void shufflenetv2_x_0_25(const float* x, void* weights, float* Out)
 
 	uint16_t input_ddim[] = {1000};
 	uint16_t output_ddim[] = {1};
+	autox_softmax(linear_1_tmp_1, linear_1_tmp_1_dim[0], linear_1_tmp_1_dim[1]);
 
 	autox_argmax(linear_1_tmp_1,Out,input_ddim,output_ddim,1,1,0);
 	free(linear_1_tmp_1);
