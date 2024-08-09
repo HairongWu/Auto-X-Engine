@@ -203,11 +203,25 @@ extern "C" {
         const float* B, int ldb,
         float BETA,
         float* C, int ldc);
+    void fill_bias_act(float* tensor,
+        const float* bias,
+        int channel,
+        int channel_size,
+        int act_type,
+        float relu_alpha);
+    void post_pose(float* heatmap, float* coord, uint16_t num_joints, uint16_t height, uint16_t width);
+    void autox_db_postprocess(const float* pred, float* dt_boxes, uint16_t frame_h, uint16_t frame_w, uint16_t height, uint16_t width, float thresh);
 
     void autox_hwc2chw(const float* src, float* dst, uint16_t height, uint16_t width, uint8_t channels);
-    void autox_normalize_image(uint8_t* p, float* out, uint32_t p_h, uint32_t p_w, uint8_t p_c);
-    void autox_resize_image(const uint8_t* src, uint8_t* dst, uint16_t ssize_h, uint16_t ssize_w, uint16_t dsize_h, uint16_t dsize_w);
-
+    void autox_normalize_image(uint8_t* p, float* out, uint32_t p_h, uint32_t p_w, uint8_t p_c, const float* means, const float* stds);
+    void autox_resize_nearest(const uint8_t* src_im, uint8_t* dst_im, uint16_t src_width, uint16_t src_height, uint8_t channels,
+        uint16_t dst_width, uint16_t dst_height);
+    void autox_resize_linear(const uint8_t* src_im, uint8_t* dst_im, uint16_t src_width, uint16_t src_height, uint8_t channels,
+        uint16_t dst_width, uint16_t dst_height);
+    void autox_resize_cubic(const uint8_t* src_im, uint8_t* dst_im, uint16_t src_width, uint16_t src_height, uint8_t channels,
+        uint16_t dst_width, uint16_t dst_height);
+    void autox_resize_type0(const uint8_t* src_im, uint8_t* dst_im, uint16_t src_width, uint16_t src_height, uint8_t channels,
+        uint16_t limit_side_len, const char* limit_type);
     void autox_argmax(const float* input,
         float* output,
         const uint16_t* input_ddim,

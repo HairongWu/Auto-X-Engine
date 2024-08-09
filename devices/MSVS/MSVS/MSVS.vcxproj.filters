@@ -19,116 +19,131 @@
     <Filter Include="源文件\models">
       <UniqueIdentifier>{29cc7b74-01c1-4589-9389-54f954b60382}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\utils">
+      <UniqueIdentifier>{3312ca28-75c1-40f8-8a74-a7725bf2202e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MSVS.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\engine\models\autox_model_shufflenetv2.c">
+    <ClCompile Include="..\..\..\lib\models\autox_model_picodet.c">
       <Filter>源文件\models</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_argmax.c">
-      <Filter>源文件\nn</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_concat.c">
-      <Filter>源文件\nn</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_conv2d.c">
-      <Filter>源文件\nn</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_elementwise.c">
-      <Filter>源文件\nn</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_im2col.c">
-      <Filter>源文件\nn</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_matmul.c">
-      <Filter>源文件\nn</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_pool2d.c">
-      <Filter>源文件\nn</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_softmax.c">
-      <Filter>源文件\nn</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_split.c">
-      <Filter>源文件\nn</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_transpose.c">
-      <Filter>源文件\nn</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\engine\models\autox_model_picodet.c">
+    <ClCompile Include="..\..\..\lib\models\autox_model_japan_rec.c">
       <Filter>源文件\models</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_sigmoid.c">
-      <Filter>源文件\nn</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_scale.c">
-      <Filter>源文件\nn</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_sqrt.c">
-      <Filter>源文件\nn</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\engine\models\autox_model_ppocr.c">
+    <ClCompile Include="..\..\..\lib\models\autox_model_shufflenetv2.c">
       <Filter>源文件\models</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\engine\models\autox_model_tinypose.c">
+    <ClCompile Include="..\..\..\lib\models\autox_model_tinypose.c">
       <Filter>源文件\models</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_hwc2chw.c">
+    <ClCompile Include="..\..\..\lib\utils\autox_image_hwc2chw.c">
+      <Filter>源文件\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\utils\autox_image_normalize.c">
+      <Filter>源文件\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\utils\autox_image_resize.c">
+      <Filter>源文件\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\utils\autox_image_warpaffine.c">
+      <Filter>源文件\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_argmax.c">
       <Filter>源文件\nn</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_normalize_image.c">
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_concat.c">
       <Filter>源文件\nn</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_resize_image.c">
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_conv2d.c">
       <Filter>源文件\nn</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_interp.c">
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_conv2d_depthwise.c">
       <Filter>源文件\nn</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_hardsigmoid.c">
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_elementwise.c">
       <Filter>源文件\nn</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_swish.c">
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_hardsigmoid.c">
       <Filter>源文件\nn</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_layer_norm.c">
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_hardswish.c">
       <Filter>源文件\nn</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_relu.c">
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_im2col.c">
       <Filter>源文件\nn</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_conv2d_depthwise.c">
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_interp.c">
       <Filter>源文件\nn</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_slice.c">
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_layer_norm.c">
       <Filter>源文件\nn</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\engine\models\autox_model_mobileseg.c">
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_matmul.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_pool2d.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_relu.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_scale.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_sigmoid.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_slice.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_softmax.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_split.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_sqrt.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_swish.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_transpose.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_conv2d_transpose.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\models\autox_model_multilingual_det.c">
       <Filter>源文件\models</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_hardswish.c">
-      <Filter>源文件\nn</Filter>
+    <ClCompile Include="..\..\..\lib\utils\autox_post_db_det.c">
+      <Filter>源文件\utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\engine\kernels\autox_nn_reduce.c">
-      <Filter>源文件\nn</Filter>
+    <ClCompile Include="..\..\..\lib\utils\autox_post_pose.c">
+      <Filter>源文件\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\utils\autox_post_ctc_decode.c">
+      <Filter>源文件\utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\engine\include\autox_nn.h">
+    <ClInclude Include="..\..\..\lib\include\autox_models.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\avx_ansi.h">
+    <ClInclude Include="..\..\..\lib\include\autox_nn.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\engine\include\autox_models.h">
+    <ClInclude Include="..\..\..\lib\include\avx_ansi.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="stb_image.h">
+    <ClInclude Include="..\..\..\lib\include\stb_image.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="stb_image_write.h">
+    <ClInclude Include="..\..\..\lib\include\stb_image_write.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

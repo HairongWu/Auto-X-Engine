@@ -14,7 +14,7 @@ op_mapping = {
     'bilinear_interp_v2':'autox_bilinear_interp','arg_max':'autox_argmax',
     'swish':'autox_swish','layer_norm':'autox_layer_norm', 'slice':'autox_slice'
     , 'hard_swish':'autox_hard_swish', 'reduce_mean':'autox_reduce_mean', 'linear_interp_v2':'autox_linear_interp_v2'
-    , 'relu6':'autox_relu6'
+    , 'relu6':'autox_relu6', 'conv2d_transpose':'autox_conv2d_transpose'
 }
 
 attrs = ['act_type','dilations','groups','paddings','strides','adaptive','ksize','pooling_type','axis','start_axis','stop_axis',
@@ -141,7 +141,7 @@ def nb2c(output_dir, ops, weights_dict, dim_dict):
         operator = operator +"\t"+ op_mapping[op.type]
         operator = operator + "("
         free_str = ''
-        if op.type == "conv2d" or op.type == "depthwise_conv2d":
+        if op.type == "conv2d" or op.type == "depthwise_conv2d" or op.type == "conv2d_transpose":
             for i in inputs:
                 operator = operator + i.replace('.','_')
                 operator = operator + ", "
@@ -156,9 +156,12 @@ def nb2c(output_dir, ops, weights_dict, dim_dict):
             for i in inputs:
                 operator = operator + i.replace('.','_')
                 operator = operator + "_dim, "
-
-            operator = operator + weights_name[1].replace('.','_')
-            operator = operator + "_dim, "
+            if len(weights_name) == 2:
+                operator = operator + weights_name[1].replace('.','_')
+                operator = operator + "_dim, "
+            elif  len(weights_name) == 1:
+                operator = operator + weights_name[0].replace('.','_')
+                operator = operator + "_dim, "
             for i in outputs:
                 operator = operator + i.replace('.','_')
                 operator = operator + "_dim, "

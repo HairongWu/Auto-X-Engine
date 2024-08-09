@@ -1,10 +1,6 @@
-#include "autox_nn_ansi.h"
+#include "../include/autox_nn.h"
 
 #define INIT_PARAM                                   \
-  auto& param = this->Param<param_t>();              \
-  auto x_dims = param.x->dims();                     \
-  auto w_dims = param.filter->dims();                \
-  auto o_dims = param.output->dims();                \
   int win = x_dims[3];                               \
   int hin = x_dims[2];                               \
   int chin = x_dims[1];                              \
@@ -14,58 +10,51 @@
   int chout = o_dims[1];                             \
   int kw = w_dims[3];                                \
   int kh = w_dims[2];                                \
-  int group = param.groups;                          \
   /* deconv weights layout: chin * chout * kh * kw*/ \
   int m = chout * kw * kh / group;                   \
   int n = hin * win;                                 \
   int k = chin / group;
 
 static bool is_a_ge_zero_and_a_lt_b(int a, int b) {
-  return static_cast<unsigned>(a) < static_cast<unsigned>(b);
+  return (unsigned)(a) < (unsigned)(b);
 }
 
 void col2im(const float* data_col,
             const int channels,
             const int height,
             const int width,
-            const int kernel_h,
-            const int kernel_w,
-            const int pad_h0,
-            const int pad_h1,
-            const int pad_w0,
-            const int pad_w1,
-            const int stride_h,
-            const int stride_w,
-            const int dilation_h,
-            const int dilation_w,
+            const int kernel,
+            const int pad,
+            const int stride,
+            const int dilation,
             float* data_im) {
   memset(data_im, 0, height * width * channels * sizeof(float));
   const int output_h =
-      (height + pad_h0 + pad_h1 - (dilation_h * (kernel_h - 1) + 1)) /
-          stride_h +
+      (height + pad + pad - (dilation * (kernel - 1) + 1)) /
+          stride +
       1;
   const int output_w =
-      (width + pad_w0 + pad_w1 - (dilation_w * (kernel_w - 1) + 1)) / stride_w +
+      (width + pad + pad - (dilation * (kernel - 1) + 1)) / stride +
       1;
   const int channel_size = height * width;
   for (int channel = channels; channel--; data_im += channel_size) {
-    for (int kernel_row = 0; kernel_row < kernel_h; kernel_row++) {
-      for (int kernel_col = 0; kernel_col < kernel_w; kernel_col++) {
-        int input_row = -pad_h0 + kernel_row * dilation_h;
+    for (int kernel_row = 0; kernel_row < kernel; kernel_row++) {
+      for (int kernel_col = 0; kernel_col < kernel; kernel_col++) {
+        int input_row = -pad + kernel_row * dilation;
         for (int output_rows = output_h; output_rows; output_rows--) {
           if (!is_a_ge_zero_and_a_lt_b(input_row, height)) {
             data_col += output_w;
           } else {
-            int input_col = -pad_w0 + kernel_col * dilation_w;
+            int input_col = -pad + kernel_col * dilation;
             for (int output_col = output_w; output_col; output_col--) {
               if (is_a_ge_zero_and_a_lt_b(input_col, width)) {
                 data_im[input_row * width + input_col] += *data_col;
               }
               data_col++;
-              input_col += stride_w;
+              input_col += stride;
             }
           }
-          input_row += stride_h;
+          input_row += stride;
         }
       }
     }
@@ -78,27 +67,21 @@ void conv_transpose_depthwise_s1(const float* dst,
                                  const int channels,
                                  const int height,
                                  const int width,
-                                 const int kernel_h,
-                                 const int kernel_w,
-                                 const int pad_h0,
-                                 const int pad_h1,
-                                 const int pad_w0,
-                                 const int pad_w1,
-                                 const int dilation_h,
-                                 const int dilation_w,
-                                 float* src,
-                                 X86Context* ctx) {
+                                 const int kernel,
+                                 const int pad,
+                                 const int dilation,
+                                 float* src) {
   memset(src, 0, height * width * channels * sizeof(float));
   const int output_h =
-      (height + pad_h0 + pad_h1 - (dilation_h * (kernel_h - 1) + 1)) + 1;
+      (height + pad + pad - (dilation * (kernel - 1) + 1)) + 1;
   const int output_w =
-      (width + pad_w0 + pad_w1 - (dilation_w * (kernel_w - 1) + 1)) + 1;
+      (width + pad + pad - (dilation * (kernel - 1) + 1)) + 1;
   float* zero_ptr =
-      static_cast<float*>(TargetMalloc(TARGET(kX86), width * sizeof(float)));
+      (float*)(malloc(width * sizeof(float)));
   memset(zero_ptr, 0, width * sizeof(float));
   const int ic_plane_size = height * width;
   const int oc_plane_size = output_h * output_w;
-  const int rr_plane_size = kernel_h * kernel_w;
+  const int rr_plane_size = kernel * kernel;
 
   __m256 vec_zero = _mm256_set1_ps(0.f);
   __m256 vec_width = _mm256_set1_ps(width * 1.0f);
@@ -107,12 +90,12 @@ void conv_transpose_depthwise_s1(const float* dst,
     int dst_z = c * oc_plane_size;
     int weight_z = c * rr_plane_size;
     int src_z = c * ic_plane_size;
-    for (int ky = 0; ky < kernel_h; ky++) {
-      int weight_y = ky * kernel_w;
-      for (int kx = 0; kx < kernel_w; kx++) {
+    for (int ky = 0; ky < kernel; ky++) {
+      int weight_y = ky * kernel;
+      for (int kx = 0; kx < kernel; kx++) {
         int weight_offset = weight_z + weight_y + kx;
         const float* weight_addr = weights + weight_offset;
-        for (int ih = -pad_h0 + ky * dilation_h, oh = 0; oh < output_h;
+        for (int ih = -pad + ky * dilation, oh = 0; oh < output_h;
              ih += 4, oh += 4) {
           int src_y = ih * width;
           int dst_y = oh * output_w;
@@ -130,7 +113,7 @@ void conv_transpose_depthwise_s1(const float* dst,
               boundary_y2 ? (src + src_z + width * 2 + src_y) : zero_ptr;
           float* src_addr_h3 =
               boundary_y3 ? (src + src_z + width * 3 + src_y) : zero_ptr;
-          int iw = -pad_w0 + kx * dilation_w;
+          int iw = -pad + kx * dilation;
           int i = 0;
 
           for (; i + 7 < output_w; i += 8, iw += 8) {
@@ -202,27 +185,21 @@ void conv_transpose_depthwise_s2(const float* dst,
                                  const int channels,
                                  const int height,
                                  const int width,
-                                 const int kernel_h,
-                                 const int kernel_w,
-                                 const int pad_h0,
-                                 const int pad_h1,
-                                 const int pad_w0,
-                                 const int pad_w1,
-                                 const int dilation_h,
-                                 const int dilation_w,
-                                 float* src,
-                                 X86Context* ctx) {
+                                 const int kernel,
+                                 const int pad,
+                                 const int dilation,
+                                 float* src) {
   memset(src, 0, height * width * channels * sizeof(float));
   const int output_h =
-      (height + pad_h0 + pad_h1 - (dilation_h * (kernel_h - 1) + 1)) / 2 + 1;
+      (height + pad + pad - (dilation * (kernel - 1) + 1)) / 2 + 1;
   const int output_w =
-      (width + pad_w0 + pad_w1 - (dilation_w * (kernel_w - 1) + 1)) / 2 + 1;
+      (width + pad + pad - (dilation * (kernel - 1) + 1)) / 2 + 1;
   float* zero_ptr =
-      static_cast<float*>(TargetMalloc(TARGET(kX86), width * sizeof(float)));
+      (float*)(malloc(width * sizeof(float)));
   memset(zero_ptr, 0, width * sizeof(float));
   const int ic_plane_size = height * width;
   const int oc_plane_size = output_h * output_w;
-  const int rr_plane_size = kernel_h * kernel_w;
+  const int rr_plane_size = kernel * kernel;
 
   __m256 vec_zero = _mm256_set1_ps(0.f);
   __m256 vec_width = _mm256_set1_ps(width * 1.0f);
@@ -233,12 +210,12 @@ void conv_transpose_depthwise_s2(const float* dst,
     int dst_z = c * oc_plane_size;
     int weight_z = c * rr_plane_size;
     int src_z = c * ic_plane_size;
-    for (int ky = 0; ky < kernel_h; ky++) {
-      int weight_y = ky * kernel_w;
-      for (int kx = 0; kx < kernel_w; kx++) {
+    for (int ky = 0; ky < kernel; ky++) {
+      int weight_y = ky * kernel;
+      for (int kx = 0; kx < kernel; kx++) {
         int weight_offset = weight_z + weight_y + kx;
         const float* weight_addr = weights + weight_offset;
-        for (int ih = -pad_h0 + ky * dilation_h, oh = 0; oh < output_h;
+        for (int ih = -pad + ky * dilation, oh = 0; oh < output_h;
              ih += 8, oh += 4) {
           int src_y = ih * width;
           int dst_y = oh * output_w;
@@ -256,7 +233,7 @@ void conv_transpose_depthwise_s2(const float* dst,
               boundary_y2 ? (src + src_z + width * 4 + src_y) : zero_ptr;
           float* src_addr_h3 =
               boundary_y3 ? (src + src_z + width * 6 + src_y) : zero_ptr;
-          int iw = -pad_w0 + kx * dilation_w;
+          int iw = -pad + kx * dilation;
           int i = 0;
 
           for (; i + 7 < output_w; i += 8, iw += 16) {
@@ -389,106 +366,34 @@ void conv_transpose_depthwise_s2(const float* dst,
   free(zero_ptr);
 }
 
-void fill_bias_act(float *tensor,
-                   const float *bias,
-                   int channel,
-                   int channel_size,
-                   bool flag_bias,
-                   const operators::ActivationParam *act_param) {
-  auto act_type = act_param->active_type;
-  float local_alpha = 0.f;
-  int len = channel * channel_size;
-
-  if ((act_param != nullptr) && (act_param->has_active)) {
-    if ((flag_bias) && (bias != nullptr)) {
-      // activate and bias
-      if (act_type == lite_api::ActivationType::kRelu) {
-        activate_relu_inplace_bias(
-            tensor, bias, channel, channel_size, local_alpha, 0);
-      } else if (act_type == lite_api::ActivationType::kRelu6) {
-        local_alpha = act_param->Relu_clipped_coef;
-        activate_relu_inplace_bias(
-            tensor, bias, channel, channel_size, local_alpha, 1);
-      } else if (act_type == lite_api::ActivationType::kLeakyRelu) {
-        local_alpha = act_param->Leaky_relu_alpha;
-        activate_lrelu_inplace_bias(
-            tensor, bias, channel, channel_size, local_alpha);
-      } else if (act_type == lite_api::ActivationType::kHardSwish) {
-        local_alpha = act_param->hard_swish_scale;
-        activate_hardswish_inplace_bias(tensor,
-                                        bias,
-                                        channel,
-                                        channel_size,
-                                        local_alpha,
-                                        act_param->hard_swish_threshold,
-                                        act_param->hard_swish_offset);
-      }
-    } else {
-      // activate
-      if (act_type == lite_api::ActivationType::kRelu) {
-        activate_relu_inplace(tensor, len, local_alpha, 0);
-      } else if (act_type == lite_api::ActivationType::kRelu6) {
-        local_alpha = act_param->Relu_clipped_coef;
-        activate_relu_inplace(tensor, len, local_alpha, 1);
-      } else if (act_type == lite_api::ActivationType::kLeakyRelu) {
-        local_alpha = act_param->Leaky_relu_alpha;
-        activate_lrelu_inplace(tensor, len, local_alpha);
-      } else if (act_type == lite_api::ActivationType::kHardSwish) {
-        local_alpha = act_param->hard_swish_scale;
-        activate_hardswish_inplace(tensor,
-                                   len,
-                                   local_alpha,
-                                   act_param->hard_swish_threshold,
-                                   act_param->hard_swish_offset);
-      }
-    }
-  } else {
-    // only add bias
-    if ((flag_bias) && (bias != nullptr))
-      activate_none_inplace_bias(tensor, bias, channel, channel_size);
-  }
-}
 
 #define DEPTHWISE_FUNCS                                                    \
-  din_batch, weights, chout, hout, wout, kh, kw, paddings[0], paddings[1], \
-      paddings[2], paddings[3], dilations[0], dilations[1], dout_batch, &ctx
+  din_batch, weights, chout, hout, wout, kh, paddings, \
+      dilations, dout_batch
       
 // The convolution transpose operator consumes an input tensor and a filter, and computes the output.
-void gautox_conv2d_transpose_ansi(
-        const struct ggml_compute_params * params,
-              struct ggml_tensor * dst) {
+void autox_conv2d_transpose(float* din, const float* bias, const float* weights, float* dout, uint16_t* x_dims, uint16_t* w_dims, uint16_t* o_dims,
+    uint16_t group, uint8_t paddings, uint8_t strides, uint8_t dilations, int8_t act_type) {
 
     INIT_PARAM
-    bool flag_bias = (param.bias != nullptr);
-    auto paddings = *param.paddings;
-    auto dilations = *param.dilations;
-    bool pads_equal =
-        (paddings[0] == paddings[1]) && (paddings[2] == paddings[3]);
+    bool flag_bias = (bias != NULL);
 
     int group_size_in = win * hin * chin / group;
     int group_size_weights = chin / group * chout / group * kw * kh;
     int group_size_coldata = m * n;
-    bool pads_all_qual = pads_equal && (paddings[0] == paddings[2]);
-    bool flag_1x1s1p1 = (kw == 1) && (kh == 1) && (param.strides[0] == 1) &&
-                        (param.strides[1] == 1) && pads_all_qual &&
-                        (paddings[0] == 0) && (dilations[0] == 1) &&
-                        (dilations[1] == 1);
-    auto din = param.x->data<float>();
-    auto dout = param.output->mutable_data<float>();
-    auto weights = param.filter->data<float>();
-    auto act_param = param.activation_param;
-    bool depthwise_s1 =
-        depthwise_ && (param.strides[0] == 1 && param.strides[1] == 1);
-    bool depthwise_s2 =
-        depthwise_ && (param.strides[0] == 2 && param.strides[1] == 2);
-    const float* bias_ptr =
-        flag_bias ? static_cast<const float*>(param.bias->data<float>())
-                    : nullptr;
-    float* col_data = nullptr;
+
+    bool flag_1x1s1p1 = (kw == 1) && (kh == 1) && (strides == 1) &&
+                        (paddings == 0) && (dilations == 1) &&
+                        (dilations == 1);
+
+    bool depthwise_s1 = (strides == 1);
+    bool depthwise_s2 = (strides == 2);
+
+    float* col_data = NULL;
 
     if (!flag_1x1s1p1) {
-        int col_size = param.groups * group_size_coldata;
-        col_data =(float*)calloc(col_size * sizeof(float));
+        int col_size = group * group_size_coldata;
+        col_data =(float*)calloc(col_size, sizeof(float));
     }
 
     for (int i = 0; i < num; i++) {
@@ -500,7 +405,7 @@ void gautox_conv2d_transpose_ansi(
         } else if (depthwise_s2) {
             conv_transpose_depthwise_s2(DEPTHWISE_FUNCS);
         } else {
-        paddle::lite::x86::math::Blas<lite::TargetType::kX86> matmul(ctx);
+
         if (flag_1x1s1p1) {
             col_data = dout_batch;
         }
@@ -508,7 +413,7 @@ void gautox_conv2d_transpose_ansi(
             const float* din_group = din_batch + g * group_size_in;
             const float* weights_group = weights + g * group_size_weights;
             float* coldata_group = col_data + g * group_size_coldata;
-            matmul.GEMM<float>(true,
+            gemm_cpu(true,
                             false,
                             m,
                             n,
@@ -528,21 +433,15 @@ void gautox_conv2d_transpose_ansi(
                                     hout,
                                     wout,
                                     kh,
-                                    kw,
-                                    paddings[0],
-                                    paddings[1],
-                                    paddings[2],
-                                    paddings[3],
-                                    param.strides[0],
-                                    param.strides[1],
-                                    dilations[0],
-                                    dilations[1],
+                                    paddings,
+                                    strides,
+                                    dilations,
                                     dout_batch);
         }
         }
         // bias and activate
         fill_bias_act(
-            dout_batch, bias_ptr, chout, wout * hout, flag_bias, &act_param);
+            dout_batch, bias, chout, wout * hout, flag_bias, act_type);
     }
     if (!flag_1x1s1p1) free(col_data);
 }
