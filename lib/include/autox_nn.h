@@ -313,6 +313,10 @@ extern "C" {
         float* y_data,
         float* out_data, uint16_t* x_dims, uint16_t* y_dims, uint16_t* z_dims, int axis, uint16_t x_dims_size,
         uint16_t y_dims_size, uint16_t z_dims_size);
+
+    float* autox_transformer(Transformer* transformer, int token, int pos);
+    char* autox_tok_decode(Tokenizer* t, int prev_token, int token);
+    int autox_tok_encode(Tokenizer* t, char* text, int8_t bos, int8_t eos, int* tokens, int* n_tokens);
 #ifdef  __cplusplus
 }
 #endif

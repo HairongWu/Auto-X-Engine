@@ -129,6 +129,27 @@
     <ClCompile Include="..\..\..\lib\utils\autox_post_ctc_decode.c">
       <Filter>源文件\utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\lib\models\autox_model_llama3.c">
+      <Filter>源文件\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_tokenizer.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_transformer.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_multi_head_attention.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_rmsnorm.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_rope_rotation.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_swiglu.c">
+      <Filter>源文件\nn</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\lib\include\autox_models.h">

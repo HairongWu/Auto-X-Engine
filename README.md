@@ -123,7 +123,7 @@ Segment Anything Model 2 (SAM 2) is a foundation model towards solving promptabl
 
 ### PPStructure
 
-### Llama3.1
+### Llama3
 
 ### Stable Diffusion 3
 

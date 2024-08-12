@@ -271,8 +271,8 @@ int main()
 
 	/////////////////////////////////////////////////////////////////////////
 
-	//char checkpoint_path[128] = "stories15M.bin";
-	//char tokenizer_path[128] = "tokenizer.bin";
+	//char checkpoint_path[128] = "llama3_8b_base.bin";
+	//char tokenizer_path[128] = "tokenizer_llama3.bin";
 	//char prompt[256] = "Once upon a time";
-	//run_llama3(checkpoint_path, tokenizer_path, prompt);
+	//run_llama3(checkpoint_path, tokenizer_path, prompt, 50);
 }

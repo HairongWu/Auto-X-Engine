@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\lib\models\autox_model_llama3.c" />
     <ClCompile Include="..\..\..\lib\models\autox_model_multilingual_det.c" />
     <ClCompile Include="..\..\..\lib\models\autox_model_picodet.c" />
     <ClCompile Include="..\..\..\lib\models\autox_model_japan_rec.c" />
@@ -144,15 +145,21 @@
     <ClCompile Include="..\..\..\lib\nn\autox_nn_interp.c" />
     <ClCompile Include="..\..\..\lib\nn\autox_nn_layer_norm.c" />
     <ClCompile Include="..\..\..\lib\nn\autox_nn_matmul.c" />
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_multi_head_attention.c" />
     <ClCompile Include="..\..\..\lib\nn\autox_nn_pool2d.c" />
     <ClCompile Include="..\..\..\lib\nn\autox_nn_relu.c" />
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_rmsnorm.c" />
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_rope_rotation.c" />
     <ClCompile Include="..\..\..\lib\nn\autox_nn_scale.c" />
     <ClCompile Include="..\..\..\lib\nn\autox_nn_sigmoid.c" />
     <ClCompile Include="..\..\..\lib\nn\autox_nn_slice.c" />
     <ClCompile Include="..\..\..\lib\nn\autox_nn_softmax.c" />
     <ClCompile Include="..\..\..\lib\nn\autox_nn_split.c" />
     <ClCompile Include="..\..\..\lib\nn\autox_nn_sqrt.c" />
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_swiglu.c" />
     <ClCompile Include="..\..\..\lib\nn\autox_nn_swish.c" />
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_tokenizer.c" />
+    <ClCompile Include="..\..\..\lib\nn\autox_nn_transformer.c" />
     <ClCompile Include="..\..\..\lib\nn\autox_nn_transpose.c" />
     <ClCompile Include="..\..\..\lib\utils\autox_image_hwc2chw.c" />
     <ClCompile Include="..\..\..\lib\utils\autox_image_normalize.c" />
