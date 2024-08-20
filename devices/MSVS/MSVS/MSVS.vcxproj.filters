@@ -22,6 +22,9 @@
     <Filter Include="源文件\utils">
       <UniqueIdentifier>{3312ca28-75c1-40f8-8a74-a7725bf2202e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\ggml">
+      <UniqueIdentifier>{e588ab23-8217-4f12-b5f2-f2be24b8bee2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MSVS.cpp">
@@ -30,7 +33,7 @@
     <ClCompile Include="..\..\..\lib\models\autox_model_picodet.c">
       <Filter>源文件\models</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lib\models\autox_model_japan_rec.c">
+    <ClCompile Include="..\..\..\lib\models\autox_model_ocr_rec.c">
       <Filter>源文件\models</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\lib\models\autox_model_shufflenetv2.c">
@@ -117,7 +120,7 @@
     <ClCompile Include="..\..\..\lib\nn\autox_nn_conv2d_transpose.c">
       <Filter>源文件\nn</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\lib\models\autox_model_multilingual_det.c">
+    <ClCompile Include="..\..\..\lib\models\autox_model_ocr_det.c">
       <Filter>源文件\models</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\lib\utils\autox_post_db_det.c">
@@ -150,6 +153,75 @@
     <ClCompile Include="..\..\..\lib\nn\autox_nn_swiglu.c">
       <Filter>源文件\nn</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\lib\models\autox_model_sam.c">
+      <Filter>源文件\models</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\utils\autox_pre_sam.c">
+      <Filter>源文件\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\utils\autox_post_iou.c">
+      <Filter>源文件\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_conv2d.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_mem.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_im2col.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_cont.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_mul_mat.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_add.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_repeat.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_norm.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_mul.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_scale.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_get_rel_pos.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_soft_max.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_win_part.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_win_unpart.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_unary.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_layer_norm_2d.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_sam_cos.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_sam_sin.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_transpose.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_cpy.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\lib\include\autox_models.h">
@@ -165,6 +237,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\lib\include\stb_image_write.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\lib\include\ggml.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

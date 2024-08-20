@@ -21,8 +21,6 @@ for k, v in model.items():
 
         print("Processing variable: " + name + " with shape: ", shape)
 
-        #data = tf.train.load_variable(dir_model, name).squeeze()
-        #data = v.numpy().squeeze()
         data = vvv.numpy()
 
         # data

@@ -211,6 +211,7 @@ extern "C" {
         float relu_alpha);
     void post_pose(float* heatmap, float* coord, uint16_t num_joints, uint16_t height, uint16_t width);
     void autox_db_postprocess(const float* pred, float* dt_boxes, uint16_t frame_h, uint16_t frame_w, uint16_t height, uint16_t width, float thresh);
+    float cal_overlap(const float* box1, const float* box2);
 
     void autox_hwc2chw(const float* src, float* dst, uint16_t height, uint16_t width, uint8_t channels);
     void autox_normalize_image(uint8_t* p, float* out, uint32_t p_h, uint32_t p_w, uint8_t p_c, const float* means, const float* stds);
@@ -294,9 +295,6 @@ extern "C" {
     void autox_relu_noreplace(float* x_data, float* y_data, uint16_t* dims, uint8_t dim_size);
     void autox_relu6(float* x_data, uint16_t* dims, uint8_t dim_size, float coef);
 
-    void autox_reduce_mean(float* x_data,
-        float* out_data, uint16_t* x_dims, uint16_t* y_dims);
-
     void autox_scale(float* data, uint16_t* dims, uint8_t dim_size, float bias, int8_t bias_before, float scale);
     void autox_sqrt(float* data, uint16_t* dims, uint8_t dim_size);
     void autox_sigmoid(float* data, uint16_t* dims, uint8_t dim_size);
@@ -317,6 +315,13 @@ extern "C" {
     float* autox_transformer(Transformer* transformer, int token, int pos);
     char* autox_tok_decode(Tokenizer* t, int prev_token, int token);
     int autox_tok_encode(Tokenizer* t, char* text, int8_t bos, int8_t eos, int* tokens, int* n_tokens);
+    void autox_swiglu(float* hb, float* hb2, uint32_t hidden_dim);
+    void autox_rope_rotation(int pos, float* sq, float* sk, int dim, int kv_dim, int head_size);
+    void autox_multi_head_attention(int n_heads, int pos, int seq_len, float* sq, float* satt, float* sxb, float* key_cache,
+        float* value_cache, int kv_dim, int kv_mul, int head_size, int loff);
+    void autox_rmsnorm(float* o, float* x, float* weight, uint32_t size);
+    void autox_conv2d_transpose(float* din, const float* bias, const float* weights, float* dout, uint16_t* x_dims, uint16_t* w_dims, uint16_t* o_dims,
+        uint16_t group, uint8_t paddings, uint8_t strides, uint8_t dilations, int8_t act_type);
 #ifdef  __cplusplus
 }
 #endif

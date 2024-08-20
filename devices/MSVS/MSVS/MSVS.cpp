@@ -44,6 +44,148 @@ char* read_file(const char* file_name) {
 	fclose(file);
 	return buf;
 }
+//
+//bool sam_write_masks(int nx, int ny, const char* fname, int ne[], float* low_res_masks, float* iou_data) {
+//
+//	const float intersection_threshold = mask_threshold + stability_score_offset;
+//	const float union_threshold = mask_threshold - stability_score_offset;
+//
+//	const int ne0 = ne[0];
+//	const int ne1 = ne[1];
+//	const int ne2 = ne[2];
+//
+//	// Remove padding and upscale masks to the original image size.
+//	// ref: https://github.com/facebookresearch/segment-anything/blob/efeab7296ab579d4a261e554eca80faf6b33924a/segment_anything/modeling/sam.py#L140
+//
+//	const float preprocess_scale = max(nx, ny) / (float)(n_img_size());
+//	const int cropped_nx = (int)(nx / preprocess_scale + 0.5f);
+//	const int cropped_ny = (int)(ny / preprocess_scale + 0.5f);
+//
+//	const float scale_x_1 = (float)ne0 / (float)n_img_size();
+//	const float scale_y_1 = (float)ne1 / (float)n_img_size();
+//
+//	const float scale_x_2 = (float)(cropped_nx) / (float)(nx);
+//	const float scale_y_2 = (float)(cropped_ny) / (float)(ny);
+//
+//	for (int i = 0; i < ne2; ++i) {
+//		if (iou_threshold > 0.f && iou_data[i] < iou_threshold) {
+//			printf("Skipping mask %d with iou %f below threshold %f\n", i, iou_data[i], iou_threshold);
+//			continue; // Filtering masks with iou below the threshold
+//		}
+//
+//		float* mask_data = calloc(n_img_size() * n_img_size(), sizeof(float));
+//		{
+//			const float* data = low_res_masks + i * ne0 * ne1;
+//
+//			for (int iy = 0; iy < n_img_size; ++iy) {
+//				for (int ix = 0; ix < n_img_size(); ++ix) {
+//					const float sx = max(scale_x_1 * (ix + 0.5f) - 0.5f, 0.0f);
+//					const float sy = max(scale_y_1 * (iy + 0.5f) - 0.5f, 0.0f);
+//
+//					const int x0 = max(0, (int)sx);
+//					const int y0 = max(0, (int)sy);
+//
+//					const int x1 = min(x0 + 1, ne0 - 1);
+//					const int y1 = min(y0 + 1, ne1 - 1);
+//
+//					const float dx = sx - x0;
+//					const float dy = sy - y0;
+//
+//					const int j00 = y0 * ne0 + x0;
+//					const int j01 = y0 * ne0 + x1;
+//					const int j10 = y1 * ne0 + x0;
+//					const int j11 = y1 * ne0 + x1;
+//
+//					const float v00 = data[j00];
+//					const float v01 = data[j01];
+//					const float v10 = data[j10];
+//					const float v11 = data[j11];
+//
+//					const float v0 = (1 - dx) * v00 + dx * v01;
+//					const float v1 = (1 - dx) * v10 + dx * v11;
+//
+//					const float v = (1 - dy) * v0 + dy * v1;
+//
+//					mask_data[iy * n_img_size() + ix] = v;
+//				}
+//			}
+//		}
+//
+//		int intersections = 0;
+//		int unions = 0;
+//		uint8_t* res = (uint8_t*)calloc(nx * ny, sizeof(float));
+//		int min_iy = ny;
+//		int max_iy = 0;
+//		int min_ix = nx;
+//		int max_ix = 0;
+//		{
+//			const float* data = mask_data;
+//
+//			for (int iy = 0; iy < ny; ++iy) {
+//				for (int ix = 0; ix < nx; ++ix) {
+//					const float sx = max(scale_x_2 * (ix + 0.5f) - 0.5f, 0.0f);
+//					const float sy = max(scale_y_2 * (iy + 0.5f) - 0.5f, 0.0f);
+//
+//					const int x0 = max(0, (int)sx);
+//					const int y0 = max(0, (int)sy);
+//
+//					const int x1 = min(x0 + 1, cropped_nx - 1);
+//					const int y1 = min(y0 + 1, cropped_ny - 1);
+//
+//					const float dx = sx - x0;
+//					const float dy = sy - y0;
+//
+//					const int j00 = y0 * n_img_size() + x0;
+//					const int j01 = y0 * n_img_size() + x1;
+//					const int j10 = y1 * n_img_size() + x0;
+//					const int j11 = y1 * n_img_size() + x1;
+//
+//					const float v00 = data[j00];
+//					const float v01 = data[j01];
+//					const float v10 = data[j10];
+//					const float v11 = data[j11];
+//
+//					const float v0 = (1 - dx) * v00 + dx * v01;
+//					const float v1 = (1 - dx) * v10 + dx * v11;
+//
+//					const float v = (1 - dy) * v0 + dy * v1;
+//
+//					if (v > intersection_threshold) {
+//						intersections++;
+//					}
+//					if (v > union_threshold) {
+//						unions++;
+//					}
+//					if (v > mask_threshold) {
+//						min_iy = min(min_iy, iy);
+//						max_iy = max(max_iy, iy);
+//						min_ix = min(min_ix, ix);
+//						max_ix = max(max_ix, ix);
+//
+//						res[iy * nx + ix] = 255;
+//					}
+//				}
+//			}
+//		}
+//
+//		const float stability_score = (float)(intersections) / (float)(unions);
+//		if (stability_score_threshold > 0.f && stability_score < stability_score_threshold) {
+//			printf("Skipping mask %d with stability score %f below threshold %f\n", i, stability_score, stability_score_threshold);
+//			continue; // Filtering masks with stability score below the threshold
+//		}
+//
+//		printf("Mask %d: iou = %f, stability_score = %f, bbox (%d, %d), (%d, %d)\n",
+//			i, iou_data[i], stability_score, min_ix, max_ix, min_iy, max_iy);
+//
+//		if (!stbi_write_png(fname, nx, ny, 1, res, nx)) {
+//			printf("%s: failed to write mask %s\n", __func__, fname);
+//			return false;
+//		}
+//	}
+//
+//
+//	return true;
+//}
 
 typedef struct
 {
@@ -53,30 +195,6 @@ typedef struct
 	float keypoints[34]; /*<! [x1, y1, x2, y2, ...] */
 } result_t;
 
-float cal_overlap(const float* box1, const float* box2)
-{
-	float xmin1 = box1[0];
-	float ymin1 = box1[1];
-	float xmax1 = box1[2];
-	float ymax1 = box1[3];
-	float xmin2 = box2[0];
-	float ymin2 = box2[1];
-	float xmax2 = box2[2];
-	float ymax2 = box2[3];
-
-	float s1 = (xmax1 - xmin1) * (ymax1 - ymin1);
-	float s2 = (xmax2 - xmin2) * (ymax2 - ymin2);
-
-	float xmin = max(xmin1, xmin2);
-	float ymin = max(ymin1, ymin2);
-	float xmax = min(xmax1, xmax2);
-	float ymax = min(ymax1, ymax2);
-
-	float w = max(0, xmax - xmin);
-	float h = max(0, ymax - ymin);
-	float a1 = w * h;
-	return a1 / max(s1, s2);
-}
 
 int main()
 {
@@ -87,7 +205,6 @@ int main()
 	uint16_t in_h = 224;
 	uint16_t in_w = 224;
 	///////////////////////////////////////////////////////////////////
-	char* buffer = read_file("./shufflenetv2_x_0_25.bin");
 	uint8_t* data = stbi_load("./Ball.jpg", &frame_w, &frame_h, &frame_c, 3);
 	if (!data) {
 		return 1;
@@ -105,11 +222,12 @@ int main()
 	free(out);
 
 	float cls = -1;
+	char* buffer = read_file("./shufflenetv2_x_0_25.bin");
 	shufflenetv2_x_0_25(x, (void*)buffer, &cls);
 	printf("%f\n", cls);
 
 	//////////////////////////////////////////////////////////////////////
-	buffer = read_file("./picodet_xs_320.bin");
+	
 	data = stbi_load("./000000000036.jpg", &frame_w, &frame_h, &frame_c, 3);
 	if (!data) {
 		return 1;
@@ -130,7 +248,7 @@ int main()
 	int box_num = 2125;
 	float* scores = (float*)calloc(1 * 80 * 2125, sizeof(float));
 	float* bboxes = (float*)calloc(1 * 2125 * 4, sizeof(float));
-
+	buffer = read_file("./picodet_xs_320.bin");
 	picodet_xs_320(x, (void*)buffer, scores, bboxes);
 
 	float im_scale_y = 320 / float(frame_h);
@@ -199,7 +317,7 @@ int main()
 			printf("%d, %f\n", detections[i].category, detections[i].prob);
 	free(detections);
 	//////////////////////////////////////////////////////////////////////////
-	buffer = read_file("./tinypose_128x96.bin");
+	
 	data = stbi_load("./hrnet_demo.jpg", &frame_w, &frame_h, &frame_c, 3);
 	if (!data) {
 		return 1;
@@ -217,6 +335,7 @@ int main()
 	free(out);
 
 	float* heatmap = (float*)calloc(17 * 32 * 24, sizeof(float));
+	buffer = read_file("./tinypose_128x96.bin");
 	tinypose_128x96(x, (float*)buffer, heatmap);
 	float* coords = (float*)calloc(17 * 2, sizeof(float));
 	post_pose(heatmap, coords, 17, 32, 24);
@@ -233,7 +352,7 @@ int main()
 	if (!data) {
 		return 1;
 	}
-	buffer = read_file("./multilingual_det.bin");
+	
 	dst = (uint8_t*)calloc(in_h * in_w * 3, sizeof(uint8_t));
 	autox_resize_type0(data, dst, frame_w, frame_h, frame_c, 736, "min");
 	free(data);
@@ -243,6 +362,8 @@ int main()
 	x = (float*)calloc(in_h * in_w * 3, sizeof(float));
 	autox_hwc2chw(out, x, in_h, in_w, 3);
 	float* pred = (float*)calloc(960 * 960, sizeof(float));
+
+	buffer = read_file("./multilingual_det.bin");
 	multilingual_det(x, (float*)buffer, pred);
 	float* dt_boxes = (float*)calloc(960 * 960, sizeof(float));
 	autox_db_postprocess(pred, dt_boxes, frame_h, frame_w, in_h, in_w, 0.3);
@@ -254,7 +375,7 @@ int main()
 	if (!data) {
 		return 1;
 	}
-	buffer = read_file("./japan_PP_OCRv3_rec.bin");
+	
 	dst = (uint8_t*)calloc(in_h * in_w * 3, sizeof(uint8_t));
 	autox_resize_linear(data, dst, frame_w, frame_h, frame_c, in_w, in_h);
 	free(data);
@@ -266,8 +387,29 @@ int main()
 	free(out);
 
 	float* rec = (float*)calloc(1 * 1 * 4401, sizeof(float));
+	buffer = read_file("./japan_PP_OCRv3_rec.bin");
 	japan_PP_OCRv3_rec(x, (float*)buffer, rec);
 	free(rec);
+	/////////////////////////////////////////////////////////////////////////
+	data = stbi_load("./example.jpg", &frame_w, &frame_h, &frame_c, 3);
+	if (!data) {
+		return 1;
+	}
+	
+	float* img1 = (float*)calloc(1024 * 1024, sizeof(float));
+	if (!sam_image_preprocess(data, img1, frame_w, frame_h, 1024, 1024)) {
+		fprintf(stderr, "%s: failed to preprocess image\n", __func__);
+		return AUTOX_FAIL;
+	}
+	free(data);
+
+	buffer = read_file("./ggml-model-f32.bin");
+	autox_sam(img1, buffer, frame_w, frame_h, 414.375f, 162.796875f);
+
+	//if (!sam_write_masks(hparams, frame_w, frame_h, fname_out)) {
+	//	fprintf(stderr, "%s: failed to write masks\n", __func__);
+	//	return 1;
+	//}
 
 	/////////////////////////////////////////////////////////////////////////
 
