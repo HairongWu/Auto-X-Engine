@@ -138,13 +138,16 @@
     <ClCompile Include="..\..\..\lib\ggml\ggml_mul.c" />
     <ClCompile Include="..\..\..\lib\ggml\ggml_mul_mat.c" />
     <ClCompile Include="..\..\..\lib\ggml\ggml_norm.c" />
+    <ClCompile Include="..\..\..\lib\ggml\ggml_permute.c" />
     <ClCompile Include="..\..\..\lib\ggml\ggml_repeat.c" />
+    <ClCompile Include="..\..\..\lib\ggml\ggml_reshape.c" />
     <ClCompile Include="..\..\..\lib\ggml\ggml_sam_cos.c" />
     <ClCompile Include="..\..\..\lib\ggml\ggml_sam_sin.c" />
     <ClCompile Include="..\..\..\lib\ggml\ggml_scale.c" />
     <ClCompile Include="..\..\..\lib\ggml\ggml_soft_max.c" />
     <ClCompile Include="..\..\..\lib\ggml\ggml_transpose.c" />
     <ClCompile Include="..\..\..\lib\ggml\ggml_unary.c" />
+    <ClCompile Include="..\..\..\lib\ggml\ggml_view.c" />
     <ClCompile Include="..\..\..\lib\ggml\ggml_win_part.c" />
     <ClCompile Include="..\..\..\lib\ggml\ggml_win_unpart.c" />
     <ClCompile Include="..\..\..\lib\models\autox_model_llama3.c" />
@@ -154,6 +157,7 @@
     <ClCompile Include="..\..\..\lib\models\autox_model_sam.c" />
     <ClCompile Include="..\..\..\lib\models\autox_model_shufflenetv2.c" />
     <ClCompile Include="..\..\..\lib\models\autox_model_tinypose.c" />
+    <ClCompile Include="..\..\..\lib\models\autox_model_whisper.c" />
     <ClCompile Include="..\..\..\lib\nn\autox_nn_argmax.c" />
     <ClCompile Include="..\..\..\lib\nn\autox_nn_concat.c" />
     <ClCompile Include="..\..\..\lib\nn\autox_nn_conv2d.c" />

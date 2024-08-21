@@ -223,3 +223,7 @@ struct ggml_tensor* ggml_gelu(
     struct ggml_tensor* a) {
     return ggml_unary(a, GGML_UNARY_OP_GELU);
 }
+struct ggml_tensor* ggml_gelu_inplace(
+    struct ggml_tensor* a) {
+    return ggml_unary_inplace(a, GGML_UNARY_OP_GELU);
+}

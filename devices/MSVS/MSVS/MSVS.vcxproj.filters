@@ -222,6 +222,18 @@
     <ClCompile Include="..\..\..\lib\ggml\ggml_cpy.c">
       <Filter>源文件\ggml</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_permute.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_reshape.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\ggml\ggml_view.c">
+      <Filter>源文件\ggml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\lib\models\autox_model_whisper.c">
+      <Filter>源文件\models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\lib\include\autox_models.h">

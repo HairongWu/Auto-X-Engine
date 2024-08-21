@@ -3,8 +3,6 @@
 #include "autox_nn.h"
 #include "ggml.h"
 
-#include <math.h>
-
 #ifdef  __cplusplus
 extern "C" {
 #endif

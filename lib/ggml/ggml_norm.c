@@ -75,3 +75,9 @@ struct ggml_tensor* ggml_norm(
     float eps) {
     return ggml_norm_impl(a, eps, false);
 }
+
+struct ggml_tensor* ggml_norm_inplace(
+    struct ggml_tensor* a,
+    float eps) {
+    return ggml_norm_impl(a, eps, true);
+}

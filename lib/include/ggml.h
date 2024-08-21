@@ -2,6 +2,7 @@
 #pragma once
 
 #include "autox_nn.h"
+#include <math.h>
 
 #define GGML_MAX_DIMS           4
 
@@ -96,59 +97,6 @@ struct ggml_tensor {
     void* data;
 };
 
-typedef struct {
-    const char* type_name;
-    int64_t                  blck_size;
-    int64_t                  blck_size_interleave; // interleave elements in blocks
-    size_t                   type_size;
-    bool                     is_quantized;
-} ggml_type_traits_t;
-
-//ggml_type_traits_t type_traits[GGML_TYPE_COUNT] = {
-//    [GGML_TYPE_I8] = {
-//        .type_name = "i8",
-//        .blck_size = 1,
-//        .type_size = sizeof(int8_t),
-//        .is_quantized = false,
-//    },
-//    [GGML_TYPE_I16] = {
-//        .type_name = "i16",
-//        .blck_size = 1,
-//        .type_size = sizeof(int16_t),
-//        .is_quantized = false,
-//    },
-//    [GGML_TYPE_I32] = {
-//        .type_name = "i32",
-//        .blck_size = 1,
-//        .type_size = sizeof(int32_t),
-//        .is_quantized = false,
-//    },
-//    [GGML_TYPE_I64] = {
-//        .type_name = "i64",
-//        .blck_size = 1,
-//        .type_size = sizeof(int64_t),
-//        .is_quantized = false,
-//    },
-//    [GGML_TYPE_F64] = {
-//        .type_name = "f64",
-//        .blck_size = 1,
-//        .type_size = sizeof(double),
-//        .is_quantized = false,
-//    },
-//    [GGML_TYPE_F32] = {
-//        .type_name = "f32",
-//        .blck_size = 1,
-//        .type_size = sizeof(float),
-//        .is_quantized = false,
-//    },
-//    [GGML_TYPE_F16] = {
-//        .type_name = "f16",
-//        .blck_size = 1,
-//        .type_size = sizeof(ggml_fp16_t),
-//        .is_quantized = false,
-//    }
-//};
-
 // FP16 <-> FP32
 // ref: https://github.com/Maratyszcza/FP16
 
@@ -228,11 +176,20 @@ inline int64_t ggml_nrows(const struct ggml_tensor* tensor) {
 }
 
 inline int64_t ggml_blck_size(enum ggml_type type) {
-    return 8;//type_traits[type].blck_size;
+    return 1;
 }
 
 inline size_t ggml_type_size(enum ggml_type type) {
-    return 4;//type_traits[type].type_size;
+    switch (type) {
+    case  GGML_TYPE_F32:
+        return sizeof(float);
+    case GGML_TYPE_F16:
+        return sizeof(ggml_fp16_t);
+    default:
+    {
+        return 0;
+    } break;
+    };
 }
 
 //inline static void ggml_vec_scale_f32(const int n, float * y, const float   v) { for (int i = 0; i < n; ++i) y[i] *= v;          }
@@ -347,6 +304,12 @@ static inline ggml_bf16_t ggml_compute_fp32_to_bf16(float s) {
 extern "C" {
 #endif
     //mem
+    struct ggml_tensor* ggml_new_tensor_impl(
+        enum   ggml_type      type,
+        int                   n_dims,
+        const int64_t* ne,
+        struct ggml_tensor* view_src,
+        size_t                view_offs);
     struct ggml_tensor* ggml_new_tensor(
         enum   ggml_type      type,
         int                   n_dims,
@@ -419,6 +382,9 @@ extern "C" {
     struct ggml_tensor* ggml_norm(
         struct ggml_tensor* a,
         float eps);
+    struct ggml_tensor* ggml_norm_inplace(
+        struct ggml_tensor* a,
+        float eps);
     struct ggml_tensor* ggml_mul(
         struct ggml_tensor* a,
         struct ggml_tensor* b);
@@ -454,7 +420,7 @@ extern "C" {
         int                   w);
     struct ggml_tensor* ggml_gelu(
         struct ggml_tensor* a);
-    struct ggml_tensor* ggml_relu_inplace(
+    struct ggml_tensor* ggml_gelu_inplace(
         struct ggml_tensor* a);
     struct ggml_tensor* ggml_layer_norm_2d(
         struct ggml_tensor* layer,
@@ -462,10 +428,16 @@ extern "C" {
         struct ggml_tensor* w,
         struct ggml_tensor* b,
         float                 eps);
-    static void ggml_sam_cos(struct ggml_tensor* dst, const struct ggml_tensor* src);
-    static void ggml_sam_sin(struct ggml_tensor* dst, const struct ggml_tensor* src);
+    struct ggml_tensor* ggml_sam_cos(
+        struct ggml_tensor* a);
+    struct ggml_tensor* ggml_sam_sin(
+        struct ggml_tensor* a);
     struct ggml_tensor* ggml_transpose(
         struct ggml_tensor* a);
+    struct ggml_tensor* ggml_conv_transpose_2d_p0(
+        struct ggml_tensor* a,
+        struct ggml_tensor* b,
+        int                   stride);
     struct ggml_tensor* ggml_relu_inplace(
         struct ggml_tensor* a);
     struct ggml_tensor* ggml_relu(
@@ -473,6 +445,57 @@ extern "C" {
     struct ggml_tensor* ggml_cpy(
         struct ggml_tensor* a,
         struct ggml_tensor* b);
+    struct ggml_tensor* ggml_layer_norm_2d(
+        struct ggml_tensor* layer,
+        int                   n_channels,
+        struct ggml_tensor* w,
+        struct ggml_tensor* b,
+        float                 eps);
+    struct ggml_tensor* ggml_permute(
+        struct ggml_tensor* a,
+        int                   axis0,
+        int                   axis1,
+        int                   axis2,
+        int                   axis3);
+    struct ggml_tensor* ggml_reshape_3d(
+        struct ggml_tensor* a,
+        int64_t               ne0,
+        int64_t               ne1,
+        int64_t               ne2);
+    struct ggml_tensor* ggml_reshape_4d(
+        struct ggml_tensor* a,
+        int64_t               ne0,
+        int64_t               ne1,
+        int64_t               ne2,
+        int64_t               ne3);
+    struct ggml_tensor* ggml_view_1d(
+        struct ggml_tensor* a,
+        int64_t               ne0,
+        size_t                offset);
+    struct ggml_tensor* ggml_view_2d(
+        struct ggml_tensor* a,
+        int64_t               ne0,
+        int64_t               ne1,
+        size_t                nb1,
+        size_t                offset);
+    struct ggml_tensor* ggml_view_3d(
+        struct ggml_tensor* a,
+        int64_t               ne0,
+        int64_t               ne1,
+        int64_t               ne2,
+        size_t                nb1,
+        size_t                nb2,
+        size_t                offset);
+    struct ggml_tensor* ggml_view_4d(
+        struct ggml_tensor* a,
+        int64_t               ne0,
+        int64_t               ne1,
+        int64_t               ne2,
+        int64_t               ne3,
+        size_t                nb1,
+        size_t                nb2,
+        size_t                nb3,
+        size_t                offset);
 #ifdef  __cplusplus
 }
 #endif
